@@ -1,0 +1,206 @@
+﻿<Page x:Class="Front.Servicios"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Front"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="Servicios">
+
+    <Page.Resources>
+
+        <!-- Botón redondeado -->
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0D1B40"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="15"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#123066"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#09152D"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DropShadowEffect x:Key="TableShadow"
+                          Color="Black"
+                          BlurRadius="20"
+                          ShadowDepth="4"
+                          Opacity="0.35"/>
+
+        <!-- Estilo para tarjetas -->
+        <Style x:Key="TarjetaHover" TargetType="Border">
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                 To="1.1" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                 To="1.1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                 To="1" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                 To="1" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TÍTULO -->
+        <Label Grid.Row="0"
+               Content="Nuestros servicios"
+               HorizontalAlignment="Center"
+               FontSize="50"
+               FontFamily="Segoe UI Variable Display Semibold"
+               Foreground="#0D1B40"
+               Margin="0,70,0,0"/>
+
+        <!-- TARJETAS -->
+        <Grid Grid.Row="1" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- TARJETA 1 -->
+            <Border x:Name="Tarjeta1"
+                    Style="{StaticResource TarjetaHover}"
+                    Grid.Column="0"
+                    MinWidth="250" MinHeight="250"
+                    Width="280" Height="280"
+                    Background="White"
+                    CornerRadius="25"
+                    Margin="12"
+                    Effect="{StaticResource TableShadow}"
+                    MouseEnter="Tarjeta_MouseEnter"
+                    MouseLeave="Tarjeta_MouseLeave">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                    <Image Source="Imagenes/clinica.png"
+                           Width="90" Height="90" Margin="0,10"/>
+                    <TextBlock Text="Centros médicos"
+                               FontSize="20"
+                               FontFamily="Segoe UI Variable Display Semibold"
+                               Foreground="#0D1B40"
+                               Margin="0,10"/>
+                    <Button Content="Ver más"
+                             Click="Tarjeta1_Click" 
+                            Width="120" Height="35"
+                            Style="{StaticResource RoundedButton}"
+                            Margin="0,10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- TARJETA 2 -->
+            <Border x:Name="Tarjeta2"
+                    Style="{StaticResource TarjetaHover}"
+                    Grid.Column="1"
+                    MinWidth="250" MinHeight="250"
+                    Width="280" Height="280"
+                    Background="White"
+                    CornerRadius="25"
+                    Margin="12"
+                    Effect="{StaticResource TableShadow}"
+                    MouseEnter="Tarjeta_MouseEnter"
+                    MouseLeave="Tarjeta_MouseLeave">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                    <Image Source="Imagenes/cora.png"
+                           Width="90" Height="90" Margin="0,10"/>
+                    <TextBlock Text="Signos vitales"
+                               FontSize="20"
+                               FontFamily="Segoe UI Variable Display Semibold"
+                               Foreground="#0D1B40"
+                               Margin="0,10"/>
+                    <Button Content="Ver más"
+                            Click="Tarjeta2_Click" 
+                            Width="120" Height="35"
+                            Style="{StaticResource RoundedButton}"
+                            Margin="0,10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- TARJETA 3 -->
+            <Border x:Name="Tarjeta3"
+                    Style="{StaticResource TarjetaHover}"
+                    Grid.Column="2"
+                    MinWidth="250" MinHeight="250"
+                    Width="280" Height="280"
+                    Background="White"
+                    CornerRadius="25"
+                    Margin="12"
+                    Effect="{StaticResource TableShadow}"
+                    MouseEnter="Tarjeta_MouseEnter"
+                    MouseLeave="Tarjeta_MouseLeave">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                    <Image Source="Imagenes/medicamento.png"
+                           Width="90" Height="90" Margin="0,10"/>
+                    <TextBlock Text="Medicamentos"
+                               FontSize="20"
+                               FontFamily="Segoe UI Variable Display Semibold"
+                               Foreground="#0D1B40"
+                               Margin="0,10"/>
+                    <Button Content="Ver más"
+                            Click="Tarjeta3_Click" 
+                            Width="120" Height="35"
+                            Style="{StaticResource RoundedButton}"
+                            Margin="0,10"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <!-- PUNTITOS -->
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0">
+            <Ellipse x:Name="Bolita1" Width="10" Height="10" Fill="#9AA6C2" Margin="6"/>
+            <Ellipse x:Name="Bolita2" Width="10" Height="10" Fill="#9AA6C2" Margin="6"/>
+            <Ellipse x:Name="Bolita3" Width="10" Height="10" Fill="#9AA6C2" Margin="6"/>
+        </StackPanel>
+    </Grid>
+</Page>
