@@ -131,16 +131,16 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="25.966"/>
-                <RowDefinition Height="24.498"/>
-                <RowDefinition Height="446.352"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
 
             <!-- Encabezado -->
             <Border Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
-                <TextBlock Text="MEDICAMENTOS"
+                <TextBlock Text="RECORDATORIOS"
                  FontSize="40"
                  Foreground="#0A204A"
                  HorizontalAlignment="Center"
@@ -149,35 +149,32 @@
 
 
             <!-- Formulario -->
-            <StackPanel Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
+            <!-- Formulario dividido en 2 columnas -->
+            <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
 
-                <Button Content="Crear Recordatorio"
-              Width="230"
-              Height="48"
-              FontSize="18"
-              HorizontalAlignment="Center"
-              Style="{StaticResource BotonRedondeado}"
-              Margin="0,0,0,16"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <Border Background="White"
-              BorderBrush="#0A204A"
-              BorderThickness="2"
-              CornerRadius="10"
-              Padding="18">
+                <!-- Columna izquierda: formulario actual -->
+                <Border Grid.Column="0" Background="White"
+                    BorderBrush="#0A204A"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Padding="18"
+                    Margin="0,0,8,0">
 
                     <Grid>
-
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
 
                         <!-- Día -->
                         <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
@@ -215,23 +212,22 @@
                             <RadioButton Content="Activo" IsChecked="True" Margin="0,6,0,0"/>
                         </StackPanel>
 
-
                         <!-- Botón Añadir -->
                         <Button Grid.Row="2" Grid.ColumnSpan="2"
-                      Content="Añadir"
-                      Height="36"
-                      Margin="0,10,0,0"
-                      Background="#0A204A"
-                      Foreground="White"
-                      BorderThickness="0"
-                      FontWeight="Bold">
+                                Content="Añadir"
+                                Height="36"
+                                Margin="0,10,0,0"
+                                Background="#0A204A"
+                                Foreground="White"
+                                BorderThickness="0"
+                                FontWeight="Bold">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
-                                  CornerRadius="8">
+                                CornerRadius="8">
                                         <ContentPresenter HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Margin="8,2"/>
+                                              VerticalAlignment="Center"
+                                              Margin="8,2"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
@@ -240,48 +236,70 @@
                     </Grid>
                 </Border>
 
+                <!-- Columna derecha: formulario vacío -->
+                    <Border Grid.Column="1" Background="White"
+                            BorderBrush="#0A204A"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Padding="18"
+                            Margin="8,0,0,0">
 
-                <!-- Botón Eliminar -->
-                <Button Background="Transparent"
-              BorderThickness="0"
-              HorizontalAlignment="Center"
-              Cursor="Hand">
+                    <StackPanel>
+                        <TextBlock Text="Formulario Vacío"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"/>
 
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <ContentPresenter/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
+                        <!-- Ejemplo de campos vacíos -->
+                        <StackPanel Orientation="Vertical" Margin="10">
+                            <TextBlock Text="Campo 1" FontSize="14"/>
+                            <TextBox Height="28"/>
+                        </StackPanel>
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE74D;"
-                         FontFamily="Segoe MDL2 Assets"
-                         FontSize="26"
-                         Margin="0,0,6,0"/>
-                        <TextBlock Text="Eliminar Recordatorio"
-                         FontSize="20"
-                         Foreground="#0A204A"/>
+                        <StackPanel Orientation="Vertical" Margin="10">
+                            <TextBlock Text="Campo 2" FontSize="14"/>
+                            <TextBox Height="28"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Vertical" Margin="10">
+                            <TextBlock Text="Campo 3" FontSize="14"/>
+                            <TextBox Height="28"/>
+                        </StackPanel>
+
+                        <!-- Botón Guardar con template para redondear -->
+                        <Button Content="Guardar"
+                            Height="36"
+                            Margin="0,10,0,0"
+                            Background="#0A204A"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontWeight="Bold">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="8,2"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
                     </StackPanel>
+                </Border>
 
-                </Button>
+            </Grid>
 
-            </StackPanel>
 
 
             <!-- Lista de Recordatorios -->
             <Border Grid.Row="3"
-          Background="White"
-          BorderBrush="#0A204A"
-          BorderThickness="2"
-          CornerRadius="10"
-          Padding="18" Margin="0,285,0,0" Grid.RowSpan="2">
+                  Background="White"
+                  BorderBrush="#0A204A"
+                  BorderThickness="2"
+                  CornerRadius="10"
+                  Padding="18" Margin="0,285,0,0" Grid.RowSpan="2">
 
                 <StackPanel>
 
