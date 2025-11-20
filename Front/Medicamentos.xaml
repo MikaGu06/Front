@@ -224,7 +224,7 @@
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
-                                CornerRadius="8">
+                                            CornerRadius="8">
                                         <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               Margin="8,2"/>
@@ -237,58 +237,83 @@
                 </Border>
 
                 <!-- Columna derecha: formulario vacío -->
-                    <Border Grid.Column="1" Background="White"
-                            BorderBrush="#0A204A"
-                            BorderThickness="2"
-                            CornerRadius="10"
-                            Padding="18"
-                            Margin="8,0,0,0">
+                <Border Grid.Column="1" Background="White"
+                        BorderBrush="#0A204A"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="18"
+                        Margin="0,0,8,0">
 
-                    <StackPanel>
-                        <TextBlock Text="Formulario Vacío"
-                       FontSize="16"
-                       FontWeight="Bold"
-                       Margin="0,0,0,10"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                        <!-- Ejemplo de campos vacíos -->
-                        <StackPanel Orientation="Vertical" Margin="10">
-                            <TextBlock Text="Campo 1" FontSize="14"/>
+                        <!-- Día -->
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
+                                <TextBlock Text="Día" FontSize="16"/>
+                            </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="10">
-                            <TextBlock Text="Campo 2" FontSize="14"/>
+                        <!-- Hora -->
+                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
+                                <TextBlock Text="Hora"  FontSize="16"/>
+                            </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="10">
-                            <TextBlock Text="Campo 3" FontSize="14"/>
+                        <!-- Medicamento -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
+                                <TextBlock Text="Medicamento" FontSize="16"/>
+                            </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <!-- Botón Guardar con template para redondear -->
-                        <Button Content="Guardar"
-                            Height="36"
-                            Margin="0,10,0,0"
-                            Background="#0A204A"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontWeight="Bold">
+                        <!-- Estado -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE001;" Foreground="Green"/>
+                                <TextBlock Text="Estado" FontSize="16"/>
+                            </StackPanel>
+                            <RadioButton Content="Activo" IsChecked="True" Margin="0,6,0,0"/>
+                        </StackPanel>
+
+                        <!-- Botón Añadir -->
+                        <Button Grid.Row="2" Grid.ColumnSpan="2"
+                Content="Añadir"
+                Height="36"
+                Margin="0,10,0,0"
+                Background="#0A204A"
+                Foreground="White"
+                BorderThickness="0"
+                FontWeight="Bold">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
-                                CornerRadius="8">
+                            CornerRadius="8">
                                         <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="8,2"/>
+                              VerticalAlignment="Center"
+                              Margin="8,2"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
 
-                    </StackPanel>
+                    </Grid>
                 </Border>
-
             </Grid>
 
 
