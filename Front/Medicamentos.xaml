@@ -34,26 +34,35 @@
 
         <!-- Botón blanco -->
         <Style x:Key="BotonRedondeado" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#0A204A"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="Foreground" Value="#0A204A"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0D1B40"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      CornerRadius="10"
-                      Padding="10,4">
+                        <Border x:Name="Border"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="15"
+                    Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
+                                  VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#123066"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#09152D"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        
 
         <!-- Botón Activo -->
         <Style x:Key="BotonEstado" TargetType="Button">
@@ -140,7 +149,7 @@
 
             <!-- Encabezado -->
             <Border Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
-                <TextBlock Text="RECORDATORIOS MIKAELA hola "
+                <TextBlock Text="RECORDATORIOS"
                  FontSize="40"
                  Foreground="#0A204A"
                  HorizontalAlignment="Center"
@@ -170,57 +179,61 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="96*"/>
+                            <ColumnDefinition Width="59*"/>
+                            <ColumnDefinition Width="37*"/>
                         </Grid.ColumnDefinitions>
 
+                        <StackPanel Grid.Row="0">
+                            <TextBlock
+                                Text="MEDICAMENTOS" FontSize="16">
+
+                            </TextBlock>
+
+                        </StackPanel>
+
+
                         <!-- Día -->
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                <TextBlock Text="Día" FontSize="16"/>
+                                <TextBlock Text="Nombre" FontSize="16"/>
                             </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
                         <!-- Hora -->
-                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,10,10,10" Grid.ColumnSpan="2">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Hora"  FontSize="16"/>
+                                <TextBlock Text="Descripción"  FontSize="16"/>
                             </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
                         <!-- Medicamento -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
-                                <TextBlock Text="Medicamento" FontSize="16"/>
+                                <TextBlock Text="Dosis" FontSize="16"/>
                             </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <!-- Estado -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE001;" Foreground="Green"/>
-                                <TextBlock Text="Estado" FontSize="16"/>
-                            </StackPanel>
-                            <RadioButton Content="Activo" IsChecked="True" Margin="0,6,0,0"/>
-                        </StackPanel>
-
+                        
                         <!-- Botón Añadir -->
-                        <Button Grid.Row="2" Grid.ColumnSpan="2"
-                                Content="ALVARO EXAMEN"
+                        <Button Grid.Row="4" Grid.ColumnSpan="3"
+                                Content="AÑADIR MEDICAMENTOS"
                                 Height="36"
                                 Margin="0,10,0,0"
                                 Background="#0A204A"
                                 Foreground="White"
                                 BorderThickness="0"
-                                FontWeight="Bold">
+                                >
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
@@ -236,7 +249,7 @@
                     </Grid>
                 </Border>
 
-                <!-- Columna derecha: formulario vacío -->
+                <!-- Columna derecha recordatorio-->
                 <Border Grid.Column="1" Background="White"
                         BorderBrush="#0A204A"
                         BorderThickness="2"
@@ -244,8 +257,11 @@
                         Padding="18"
                         Margin="0,0,8,0">
 
+
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -255,8 +271,17 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
+                        <StackPanel Grid.Row="0">
+                            <TextBlock
+                                Text="HORARIOS" FontSize="16">
+
+                            </TextBlock>
+
+                        </StackPanel>
+
+
                         <!-- Día -->
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
                                 <TextBlock Text="Día" FontSize="16"/>
@@ -265,16 +290,26 @@
                         </StackPanel>
 
                         <!-- Hora -->
-                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
                                 <TextBlock Text="Hora"  FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <ComboBox x:Name="cmbHoras"  Height="28" Background="White">
+                                
+                                <ComboBoxItem Content="2 horas" Tag="2"/>
+                                <ComboBoxItem Content="4 horas" Tag="4"/>
+                                <ComboBoxItem Content="6 horas" Tag="6"/>
+                                <ComboBoxItem Content="8 horas" Tag="8"/>
+                                <ComboBoxItem Content="12 horas" Tag="12"/>
+                                <ComboBoxItem Content="16 horas" Tag="16"/>
+                                <ComboBoxItem Content="24 horas" Tag="24"/>
+                            </ComboBox>
+
                         </StackPanel>
 
                         <!-- Medicamento -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Medicamento" FontSize="16"/>
@@ -282,31 +317,23 @@
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <!-- Estado -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE001;" Foreground="Green"/>
-                                <TextBlock Text="Estado" FontSize="16"/>
-                            </StackPanel>
-                            <RadioButton Content="Activo" IsChecked="True" Margin="0,6,0,0"/>
-                        </StackPanel>
-
+                        
                         <!-- Botón Añadir -->
-                        <Button Grid.Row="2" Grid.ColumnSpan="2"
-                Content="COMPUERTAS LOGICAS"
-                Height="36"
-                Margin="0,10,0,0"
-                Background="#0A204A"
-                Foreground="White"
-                BorderThickness="0"
-                FontWeight="Bold">
+                        <Button Grid.Row="4" Grid.ColumnSpan="2"
+                                Content="AÑADIR RECORDATORIO"
+                                Height="36"
+                                Margin="0,10,0,0"
+                                Background="#0A204A"
+                                Foreground="White"
+                                BorderThickness="0"
+                                >
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
-                            CornerRadius="8">
+                                    CornerRadius="8">
                                         <ContentPresenter HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Margin="8,2"/>
+                                          VerticalAlignment="Center"
+                                          Margin="8,2"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
@@ -330,7 +357,7 @@
 
                     <TextBlock Text="RECORDATORIOS"
                      FontSize="20"
-                     FontWeight="Bold"/>
+                     />
 
                     <TextBlock Text="Configura los días y horarios de Tomas"
                      FontSize="13"
@@ -338,9 +365,9 @@
                      Margin="0,0,0,14"/>
 
                     <Border CornerRadius="10"
-                  BorderBrush="#0A204A"
-                  BorderThickness="2"
-                  Padding="12">
+                          BorderBrush="#0A204A"
+                          BorderThickness="2"
+                          Padding="12">
 
                         <StackPanel>
 
