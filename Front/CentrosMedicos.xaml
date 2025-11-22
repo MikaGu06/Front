@@ -19,7 +19,7 @@
 
         </Style>
         <Style x:Key="LabelStyle" TargetType="Label">
-            <Setter Property="Content" Value="CENTROS MÉDICOS PABLO"/>
+            <Setter Property="Content" Value="CENTROS MÉDICOS"/>
             <Setter Property="FontSize" Value="64"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#072A4C"/>
@@ -39,6 +39,11 @@
             <Setter Property="FontSize" Value="22"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="#072A4C"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="TextBlock.Foreground" Value="#624695"/>
+                </Trigger>
+            </Style.Triggers>
 
         </Style>
 
@@ -108,7 +113,16 @@
                     Margin="60,6,0,6">
 
             <ToggleButton x:Name="Toggle"
-                          Style="{StaticResource ToggleStyle}"/>
+                          Style="{StaticResource ToggleStyle}">
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <ContentPresenter 
+            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+
+            </ToggleButton>
         </StackPanel>
 
         <StackPanel Grid.Row="2"
