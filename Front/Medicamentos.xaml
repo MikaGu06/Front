@@ -286,11 +286,11 @@
                             <TextBox Height="28"/>
                         </StackPanel>
 
-                        <!-- Hora -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                        <!-- frecuencia-->
+                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Hora"  FontSize="16"/>
+                                <TextBlock Text="Frecuencia"  FontSize="16"/>
                             </StackPanel>
                             <ComboBox x:Name="cmbHoras"  Height="28" Background="White">
                                 
@@ -306,17 +306,25 @@
                         </StackPanel>
 
                         <!-- Medicamento -->
-                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Medicamento" FontSize="16"/>
                             </StackPanel>
                             <TextBox Height="28"/>
                         </StackPanel>
-
                         
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
+                                <TextBlock Text="Hora Inicio" FontSize="16"/>
+                            </StackPanel>
+                            <TextBox Height="28"/>
+                        </StackPanel>
+
+
                         <!-- Botón Añadir -->
-                        <Button Grid.Row="4" Grid.ColumnSpan="2"
+                        <Button Grid.Row="3" Grid.ColumnSpan="2"
                                 Content="AÑADIR RECORDATORIO"
                                 Height="36"
                                 Margin="0,10,0,0"

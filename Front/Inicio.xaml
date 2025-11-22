@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Front"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="7200" d:DesignWidth="1280"
       Title="Inicio">
+    <!-- PAGE RESOURCES: Hover / animación para botones -->
     <Page.Resources>
         <Style TargetType="Border" x:Key="HoverBorder">
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
@@ -41,6 +42,7 @@
             </Style.Triggers>
         </Style>
     </Page.Resources>
+
     <Grid >
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Grid Margin="0">
@@ -54,11 +56,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                
+
                 <!-- HEADER -->
                 <Border Grid.Row="0" 
-		                Margin="0,40,0,12" 
-		                CornerRadius="8">
+                        Margin="0,40,0,12" 
+                        CornerRadius="8">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -73,6 +75,8 @@
                                     <Setter Property="Foreground" Value="#002454"/>
                                     <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
                                 </Style>
+
+                                <!-- Botón Acceder -->
                                 <Style x:Key="BtnAcceder" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#002454"/>
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -90,39 +94,39 @@
                             </StackPanel.Resources>
 
 
-                            <Label Content="Bienvenido DEIBI"
-				               FontSize="40" 
-				               Margin="90,130,0,00"/>
+                            <Label Content="Bienvenido"
+                                   FontSize="40" 
+                                   Margin="90,130,0,00"/>
                             <Label Content="Healthy U"
-				               FontSize="100" 
-				               FontFamily="Segoe UI Variable Display Semibold"
-				               Margin="90,0,10,10"/>
+                                   FontSize="100" 
+                                   FontFamily="Segoe UI Variable Display Semibold"
+                                   Margin="90,0,10,10"/>
                             <Label Content="The Big Bang Coders"
-				               FontSize="27"
-				               Margin="90,10,10,10"/>
+                                   FontSize="27"
+                                   Margin="90,10,10,10"/>
+                            <!-- Usamos estilo BtnAcceder -->
                             <Border Margin="90,10,10,10" MouseLeftButtonDown="Acceder_Click"
                                     Style="{StaticResource BtnAcceder}">
                                 <TextBlock Text="Acceder"
-                                    HorizontalAlignment="center"
-                                    VerticalAlignment="center"
-                                    FontSize="20"
-                                    Foreground="white"/>
+                                           HorizontalAlignment="center"
+                                           VerticalAlignment="center"
+                                           FontSize="20"
+                                           Foreground="white"/>
                             </Border>
 
                         </StackPanel>
 
                         <Image Grid.Column="1"
-                        Source="Imagenes/HealthyU_Header.png"
-                        Margin="0,80,-20,60"
-                        Height="470"/>
+                               Source="Imagenes/HealthyU_Header.png"
+                               Margin="0,80,-20,60"
+                               Height="470"/>
                     </Grid>
                 </Border>
 
                 <!-- que es healthy U-->
                 <Border Grid.Row="1" 
-		
-		            Margin="0,0,0,12"
-		            CornerRadius="10">
+                        Margin="0,0,0,12"
+                        CornerRadius="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -130,9 +134,9 @@
                         </Grid.ColumnDefinitions>
 
                         <Image Grid.Column="0"
-			                   Source="Imagenes/queEs.png"
-			                   Margin="16,60,30,10"
-			                   Height="600"
+                               Source="Imagenes/queEs.png"
+                               Margin="16,60,30,10"
+                               Height="600"
                                Stretch="Uniform"/>
 
                         <StackPanel Grid.Column="1">
@@ -142,6 +146,8 @@
                                     <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
                                     <Setter Property="HorizontalAlignment" Value="Right"/>
                                 </Style>
+
+                                <!-- Botón LOGIN morado -->
                                 <Style x:Key="BtnLoginMorado" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#8873f0"/>
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -156,39 +162,40 @@
                                 </Style>
                             </StackPanel.Resources>
                             <Label Content="¿QUÉ ES"
-				                   Margin="90,130,90,-10"
-				                   Foreground="Black"/>
+                                   Margin="90,130,90,-10"
+                                   Foreground="Black"/>
                             <Label Content="HEALTHY U?"
-				                   Margin="90,0,90,0"
-				                   Foreground="#624695"/>
+                                   Margin="90,0,90,0"
+                                   Foreground="#624695"/>
 
                             <TextBlock Text="Encuentra centros de salud cercanos, registra tus signos vitales y gestiona tus horarios de medicación.
                                      Healthy U te acompaña con herramientas claras, confiables y siempre a tu alcance."
-				                   FontSize="23" 
-				                   FontFamily="Segoe UI Semilight"
-				                   Margin="90,20,90,10"
-				                   HorizontalAlignment="Right"
-                                   TextAlignment="right"
-				                   Foreground="#002454"
-                            TextWrapping="wrap"
-                                Width="450"/>
+                                       FontSize="23" 
+                                       FontFamily="Segoe UI Semilight"
+                                       Margin="90,20,90,10"
+                                       HorizontalAlignment="Right"
+                                       TextAlignment="right"
+                                       Foreground="#002454"
+                                       TextWrapping="wrap"
+                                       Width="450"/>
+                            <!-- Usamos BtnLoginMorado -->
                             <Border HorizontalAlignment="Right"
-					                Margin="90,40,90,10" MouseLeftButtonDown="IniciarSesion_Click"
+                                    Margin="90,40,90,10" MouseLeftButtonDown="IniciarSesion_Click"
                                     Style="{StaticResource BtnLoginMorado}">
                                 <StackPanel Orientation="Horizontal"
-                                     Margin="0,0,10,0"
-                                     HorizontalAlignment="Center">
+                                            Margin="0,0,10,0"
+                                            HorizontalAlignment="Center">
                                     <TextBlock Text="LOGIN"
-                                        Width="100" 
-                                        FontFamily="Segoe UI Variable Display Semibold"
-                                        TextAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        Foreground="white"/>
+                                               Width="100" 
+                                               FontFamily="Segoe UI Variable Display Semibold"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               Foreground="white"/>
                                     <Image Grid.Column="1"
-							   Source="Imagenes/boton.png"
-							   Margin="0,0,0,00"
-							   Height="35"/>
+                                           Source="Imagenes/boton.png"
+                                           Margin="0,0,0,00"
+                                           Height="35"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -196,17 +203,17 @@
 
                 </Border>
 
-                <!-- LOGIN -->
-                <!-- Se usará Visibility en el backend para ocultar
-         "Login" o "Registrar" -->
+                <!-- LOGIN / REGISTRAR (comportamiento Hidden/Visible con ToggleController -->
                 <Grid Grid.Row="2" Margin="0,0,0,12" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-
                     <Grid.Resources>
-                        <Style x:Key="AccederRegistro" TargetType="TextBlock">
+                        <BooleanToVisibilityConverter x:Key="Bool"/>
+
+                        <!-- Estilos compartidos para los campos -->
+                        <Style x:Key="AccederRegistro" TargetType="ToggleButton">
                             <Setter Property="FontSize" Value="23"/>
                             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
                             <Setter Property="Margin" Value="0,0,0,10"/>
@@ -217,8 +224,8 @@
                                     <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
                                 </Trigger>
                             </Style.Triggers>
-
                         </Style>
+
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="23"/>
                             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
@@ -247,8 +254,9 @@
                             <Setter Property="FontSize" Value="20"/>
                             <Setter Property="Padding" Value="15,0,0,0"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            
                         </Style>
+
+                        <!-- Botón azul aplicado a los borders de acción -->
                         <Style x:Key="BtnServiciosAzul" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                             <Setter Property="Height" Value="55"/>
                             <Setter Property="Width" Value="250"/>
@@ -258,7 +266,21 @@
                             <Setter Property="TextBlock.Foreground" Value="white"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="#dae8fa"/>
+                                    <Setter Property="TextBlock.Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                        <!-- Estilo global de Border -->
+                        <Style TargetType="Border">
+                            <Setter Property="Height" Value="55"/>
+                            <Setter Property="Width" Value="250"/>
+                            <Setter Property="CornerRadius" Value="15"/>
+                            <Setter Property="Background" Value= "#002454"/>
+                            <Setter Property="Margin" Value="0,25,0,0"/>
+                            <Setter Property="TextBlock.Foreground" Value="white"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
                                     <Setter Property="TextBlock.Foreground" Value="#002454"/>
                                 </Trigger>
                             </Style.Triggers>
@@ -266,56 +288,105 @@
 
                     </Grid.Resources>
 
+                    <!--Controlador escondido fuera de los Borders-->
+                    <ToggleButton x:Name="ToggleController"
+                                  Visibility="Collapsed"/>
+
                     <!-- Login -->
                     <Border Grid.Column="0"
-                            x:Name="SeccionLogin"            
-                             Height="650"
-                             Width="Auto"
-                             Margin="33,100,33,0"
-                             CornerRadius="50"
-                             Background="White">
+                            x:Name="SeccionLogin"
+                            Height="650"
+                            Width="Auto"
+                            Margin="33,100,33,0"
+                            CornerRadius="50"
+                            Background="White">
+                        <!--Login: visible por defecto; Hidden cuando ToggleController.IsChecked == True -->
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleController}" Value="True">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
                         <StackPanel VerticalAlignment="Center">
                             <Label Content="INICIO DE SESION"
-				                   FontSize="30" 
-				                   FontFamily="Segoe UI Variable Display Semibold"
-				                   Margin="0,0,0,20"/>
+                                   FontSize="30"
+                                   FontFamily="Segoe UI Variable Display Semibold"
+                                   Margin="0,0,0,20"/>
                             <Label Content="Nombre de usuario"/>
                             <TextBox x:Name="txtUsuarioInicioSesion"/>
                             <Label Content="Contraseña"/>
                             <PasswordBox x:Name="pbContrasenaInicioSesion"/>
-                            
+
+                            <!-- Aplicamos BtnServiciosAzul al border de Login-->
                             <Border x:Name="btnIntentarInicioSesion" MouseLeftButtonDown="BtnLoginAttempt_MouseLeftButtonDown"
                                     Style="{StaticResource BtnServiciosAzul}">
                                 <TextBlock Text="Login"
-                                 HorizontalAlignment="center"
-                                 VerticalAlignment="center"
-                                 FontSize="20"/>
+                                           HorizontalAlignment="center"
+                                           VerticalAlignment="center"
+                                           FontSize="20"/>
                             </Border>
-                            <TextBlock Text="¿No tienes cuenta? Regístrate aquí"
-                                       FontSize="17"
-                                       Margin="0,30,0,0"
-                                        Style="{StaticResource AccederRegistro}"/>
-                            
 
 
+
+                            <!-- Toggle visual: enlazado al controlador externo -->
+                            <ToggleButton IsChecked="{Binding IsChecked, ElementName=ToggleController, Mode=TwoWay}"
+                                          Content="¿No tienes cuenta? Regístrate aquí"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          HorizontalAlignment="Center"
+                                          Margin="0,18,0,0"
+                                          FontSize="16"
+                                          Foreground="#002454"
+                                          Style="{StaticResource AccederRegistro}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <ContentPresenter 
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
                         </StackPanel>
                     </Border>
 
+
+
                     <!-- Registrar -->
                     <Border Grid.Column="1"
-                            
-                             Height="650"
-                             Width="Auto"
-                             Margin="33,100,33,0"
-                             CornerRadius="50"
-                             Background="White">
+                            x:Name="SeccionRegistrar"
+                            Height="700"
+                            Width="Auto"
+                            Margin="33,100,33,0"
+                            CornerRadius="50"
+                            Background="White">
+                        <!-- Inicial Hidden (espacio reservado), si ToggleController.IsChecked == True -> Visible -->
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Style.Triggers>
+                                    <!-- trigger visual que solicitaste -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="TextBlock.Foreground" Value="#dae8fa"/>
+                                    </Trigger>
+
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleController}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+
                         <StackPanel VerticalAlignment="Center">
                             <Label Content="REGISTRAR"
-					            FontSize="30" 
-					            FontFamily="Segoe UI Variable Display Semibold"
-					            Margin="0,0,0,20"/>
+                                   FontSize="30"
+                                   FontFamily="Segoe UI Variable Display Semibold"
+                                   Margin="0,0,0,20"/>
                             <Label Content="Nombre de usuario"/>
-
                             <TextBox x:Name="txtUsuarioRegistro"/>
                             <Label Content="Telefono"/>
                             <TextBox x:Name="txtTelefonoRegistro"/>
@@ -323,35 +394,59 @@
                             <PasswordBox x:Name="pbContrasenaRegistro"/>
                             <Label Content="Repetir contraseña"/>
                             <PasswordBox x:Name="pbRepetirContrasena"/>
-                            <Border  x:Name="btnIntentarRegistro" MouseLeftButtonDown="BtnRegisterAttempt_MouseLeftButtonDown"
-                                     Style="{StaticResource BtnServiciosAzul}">
+
+                            <!-- Aplicamos BtnServiciosAzul al botón registrar-->
+                            <Border x:Name="btnIntentarRegistro" MouseLeftButtonDown="BtnRegisterAttempt_MouseLeftButtonDown"
+                                    Style="{StaticResource BtnServiciosAzul}">
                                 <TextBlock Text="Registrar"
-                                     HorizontalAlignment="center"
-                                     VerticalAlignment="center"
-                                     FontSize="20"/>
+                                           HorizontalAlignment="center"
+                                           VerticalAlignment="center"
+                                           FontSize="20"/>
                             </Border>
+
+                            <!-- Toggle para volver al Login enlazado al controlador -->
+                            <ToggleButton IsChecked="{Binding IsChecked, ElementName=ToggleController, Mode=TwoWay}"
+                                          Content="¿Ya tienes una cuenta? Inicia Sesión."
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          HorizontalAlignment="Center"
+                                          Margin="0,18,0,0"
+                                          FontSize="16"
+                                          Foreground="#002454"
+                                          Style="{StaticResource AccederRegistro}">
+
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+
+
+                            </ToggleButton>
                         </StackPanel>
                     </Border>
                 </Grid>
 
                 <!-- NEWSLETTER-->
                 <Border Grid.Row="3" 
-		                Height="Auto" 
-		                Margin="0,90,0,12" 
-		                CornerRadius="10">
+                        Height="Auto" 
+                        Margin="0,90,0,12" 
+                        CornerRadius="10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Image Grid.Column="1"
-			                   Source="Imagenes/queEs.png"
-			                   Margin="0,50,30,100"
-			                   Height="600"
+                               Source="Imagenes/queEs.png"
+                               Margin="0,50,30,100"
+                               Height="600"
                                Stretch="Uniform"/>
 
                         <StackPanel Grid.Column="0">
                             <StackPanel.Resources>
+                                <!-- Botón visitar morado-->
                                 <Style x:Key="BtnVisitarMorado" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#8873f0"/>
                                     <Setter Property="CornerRadius" Value="15"/>
@@ -366,40 +461,40 @@
                                 </Style>
                             </StackPanel.Resources>
                             <Label Content="Nuestro sitio web"
-				                   FontSize="55" 
-				                   FontFamily="Segoe UI Variable Display Semibold"
-				                   Margin="0,130,0,20"
-				                   HorizontalAlignment="Center"
+                                   FontSize="55" 
+                                   FontFamily="Segoe UI Variable Display Semibold"
+                                   Margin="0,130,0,20"
+                                   HorizontalAlignment="Center"
                                    Width="Auto"
-				                   Foreground="#002454"/>
+                                   Foreground="#002454"/>
 
 
                             <TextBlock Text="Recibe tips de salud, alimentación natural y hábitos que transforman tu energía desde adentro."
-				               FontSize="23" 
-				               FontFamily="Segoe UI Semilight"
-				               Margin="90,20,90,10"
-				               HorizontalAlignment="Center"
-                                TextAlignment="Center"
-				                Foreground="#002454"
-                                TextWrapping="wrap"
-                                Width="450"/>
+                                       FontSize="23" 
+                                       FontFamily="Segoe UI Semilight"
+                                       Margin="90,20,90,10"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       Foreground="#002454"
+                                       TextWrapping="wrap"
+                                       Width="450"/>
                             <Border HorizontalAlignment="Center"
-		                            Margin="90,40,90,10"
+                                    Margin="90,40,90,10"
                                     Style="{StaticResource BtnVisitarMorado}">
                                 <StackPanel Orientation="Horizontal"
-                                         Margin="0,0,10,0"
-                                         HorizontalAlignment="Center">
+                                            Margin="0,0,10,0"
+                                            HorizontalAlignment="Center">
                                     <TextBlock Text="Visitar"
-                                          Width="100" 
-                                          FontFamily="Segoe UI Variable Display Semibold"
-                                         TextAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         FontSize="20"
-                                         Foreground="white"/>
+                                               Width="100" 
+                                               FontFamily="Segoe UI Variable Display Semibold"
+                                               TextAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               Foreground="white"/>
                                     <Image Grid.Column="1"
-				            Source="Imagenes/boton.png"
-				            Margin="0,0,0,00"
-				            Height="35"/>
+                                           Source="Imagenes/boton.png"
+                                           Margin="0,0,0,00"
+                                           Height="35"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -408,26 +503,26 @@
 
                 <!-- FOOTER-->
                 <Border Grid.Row="4" 
-		                Height="170" 
+                        Height="170" 
                         Background="White"
                         Width="Auto">
                     <StackPanel Orientation="Horizontal"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center">
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
                         <Image Grid.Column="1"
-			                   Source="Imagenes/Logo_corazon.png"
-			                   Margin="0,5,0,0"
-			                   Height="60"/>
+                               Source="Imagenes/Logo_corazon.png"
+                               Margin="0,5,0,0"
+                               Height="60"/>
                         <Label Content="Healthy U"
-			               FontSize="50" 
-			               FontFamily="Segoe UI Variable Display Semibold"
-			               Margin="20,0,10,10"
-			               HorizontalAlignment="Center"
-			               Foreground="#002454"/>
+                               FontSize="50" 
+                               FontFamily="Segoe UI Variable Display Semibold"
+                               Margin="20,0,10,10"
+                               HorizontalAlignment="Center"
+                               Foreground="#002454"/>
                     </StackPanel>
                 </Border>
+
             </Grid>
         </ScrollViewer>
-
     </Grid>
 </Page>

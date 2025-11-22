@@ -18,6 +18,46 @@ namespace Front
     /// </summary>
     public partial class Medicamentos : Page
     {
+        internal class Medicamento
+        {
+            private int id_medicamento;
+            private string nombre;
+            private string descripcion;
+            private string dosis;
+            public int Id_medicamento
+            {
+                get { return id_medicamento; }
+                set { id_medicamento = value; }
+            }
+            public string Nombre
+            {
+                get { return nombre; }
+                set { nombre = value; }
+            }
+            public string Descripcion
+            {
+                get { return descripcion; }
+                set { descripcion = value; }
+            }
+            public string Dosis
+            {
+                get { return dosis; }
+                set { dosis = value; }
+            }
+
+
+        }
+
+        internal class Recordatorio
+        {
+            private int id_recordatorio;
+            private string fecha;
+            private int frecuencia;
+        }
+
+
+
+
         public Medicamentos()
         {
             InitializeComponent();
