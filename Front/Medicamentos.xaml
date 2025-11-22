@@ -185,7 +185,8 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
                                 <TextBlock Text="Día" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox    Name="txtDia"
+                                        Height="28"/>
                         </StackPanel>
 
                         <!-- Hora -->
@@ -194,7 +195,8 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
                                 <TextBlock Text="Hora"  FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox Height="28"
+                                     Name="txtHora"/>
                         </StackPanel>
 
                         <!-- Medicamento -->
@@ -203,7 +205,8 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Medicamento" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox    Name="txtMedicamento"
+                                        Height="28"/>
                         </StackPanel>
 
                         <!-- Estado -->
@@ -212,7 +215,10 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE001;" Foreground="Green"/>
                                 <TextBlock Text="Estado" FontSize="16"/>
                             </StackPanel>
-                            <RadioButton Content="Activo" IsChecked="True" Margin="0,6,0,0"/>
+                            <RadioButton    Name="rbActivo"
+                                            Content="Activo" 
+                                            IsChecked="True" 
+                                            Margin="0,6,0,0"/>
                         </StackPanel>
 
 
@@ -224,7 +230,7 @@
                       Background="#0A204A"
                       Foreground="White"
                       BorderThickness="0"
-                      FontWeight="Bold">
+                      FontWeight="Bold" Click="Button_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border Background="{TemplateBinding Background}"
