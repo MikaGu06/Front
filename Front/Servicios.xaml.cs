@@ -57,5 +57,10 @@ namespace Front
         {
             ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Medicamentos());
         }
+
+        private void BtnCerrarSesion_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Inicio());
+        }
     }
 }

@@ -5,9 +5,42 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Front"
       mc:Ignorable="d" 
-      d:DesignHeight="720" d:DesignWidth="1280"
+      d:DesignHeight="7200" d:DesignWidth="1280"
       Title="Inicio">
-
+    <Page.Resources>
+        <Style TargetType="Border" x:Key="HoverBorder">
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                         To="1.1" Duration="0:0:0.1"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                         To="1.1" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                         To="1" Duration="0:0:0.1"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                         To="1" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
     <Grid >
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Grid Margin="0">
@@ -21,7 +54,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-
+                
                 <!-- HEADER -->
                 <Border Grid.Row="0" 
 		                Margin="0,40,0,12" 
@@ -40,7 +73,7 @@
                                     <Setter Property="Foreground" Value="#002454"/>
                                     <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
                                 </Style>
-                                <Style TargetType="Border">
+                                <Style x:Key="BtnAcceder" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#002454"/>
                                     <Setter Property="CornerRadius" Value="15"/>
                                     <Setter Property="Height" Value="55"/>
@@ -67,7 +100,8 @@
                             <Label Content="The Big Bang Coders"
 				               FontSize="27"
 				               Margin="90,10,10,10"/>
-                            <Border Margin="90,10,10,10" MouseLeftButtonDown="Acceder_Click">
+                            <Border Margin="90,10,10,10" MouseLeftButtonDown="Acceder_Click"
+                                    Style="{StaticResource BtnAcceder}">
                                 <TextBlock Text="Acceder"
                                     HorizontalAlignment="center"
                                     VerticalAlignment="center"
@@ -108,7 +142,7 @@
                                     <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
                                     <Setter Property="HorizontalAlignment" Value="Right"/>
                                 </Style>
-                                <Style TargetType="Border">
+                                <Style x:Key="BtnLoginMorado" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#8873f0"/>
                                     <Setter Property="CornerRadius" Value="15"/>
                                     <Setter Property="Height" Value="55"/>
@@ -139,7 +173,8 @@
                             TextWrapping="wrap"
                                 Width="450"/>
                             <Border HorizontalAlignment="Right"
-					                Margin="90,40,90,10" MouseLeftButtonDown="IniciarSesion_Click">
+					                Margin="90,40,90,10" MouseLeftButtonDown="IniciarSesion_Click"
+                                    Style="{StaticResource BtnLoginMorado}">
                                 <StackPanel Orientation="Horizontal"
                                      Margin="0,0,10,0"
                                      HorizontalAlignment="Center">
@@ -169,7 +204,21 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <Grid.Resources>
+                        <Style x:Key="AccederRegistro" TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="23"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                            <Setter Property="Margin" Value="0,0,0,10"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="#002454"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+                                </Trigger>
+                            </Style.Triggers>
+
+                        </Style>
                         <Style TargetType="Label">
                             <Setter Property="FontSize" Value="23"/>
                             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
@@ -198,19 +247,9 @@
                             <Setter Property="FontSize" Value="20"/>
                             <Setter Property="Padding" Value="15,0,0,0"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            
                         </Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Height" Value="55"/>
-                            <Setter Property="Width" Value="200"/>
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="FontSize" Value="25"/>
-                            <Setter Property="VerticalContentAlignment" Value="Center"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                            <Setter Property="Background" Value="#002454"/>
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
-                        </Style>
-                        <Style TargetType="Border">
+                        <Style x:Key="BtnServiciosAzul" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                             <Setter Property="Height" Value="55"/>
                             <Setter Property="Width" Value="250"/>
                             <Setter Property="CornerRadius" Value="15"/>
@@ -229,8 +268,7 @@
 
                     <!-- Login -->
                     <Border Grid.Column="0"
-                            x:Name="SeccionLogin"
-                            
+                            x:Name="SeccionLogin"            
                              Height="650"
                              Width="Auto"
                              Margin="33,100,33,0"
@@ -245,12 +283,19 @@
                             <TextBox x:Name="txtUsuarioInicioSesion"/>
                             <Label Content="Contraseña"/>
                             <PasswordBox x:Name="pbContrasenaInicioSesion"/>
-                            <Border x:Name="btnIntentarInicioSesion" MouseLeftButtonDown="BtnLoginAttempt_MouseLeftButtonDown">
+                            
+                            <Border x:Name="btnIntentarInicioSesion" MouseLeftButtonDown="BtnLoginAttempt_MouseLeftButtonDown"
+                                    Style="{StaticResource BtnServiciosAzul}">
                                 <TextBlock Text="Login"
                                  HorizontalAlignment="center"
                                  VerticalAlignment="center"
                                  FontSize="20"/>
                             </Border>
+                            <TextBlock Text="¿No tienes cuenta? Regístrate aquí"
+                                       FontSize="17"
+                                       Margin="0,30,0,0"
+                                        Style="{StaticResource AccederRegistro}"/>
+                            
 
 
                         </StackPanel>
@@ -278,17 +323,16 @@
                             <PasswordBox x:Name="pbContrasenaRegistro"/>
                             <Label Content="Repetir contraseña"/>
                             <PasswordBox x:Name="pbRepetirContrasena"/>
-                            <Border  x:Name="btnIntentarRegistro" MouseLeftButtonDown="BtnRegisterAttempt_MouseLeftButtonDown">
+                            <Border  x:Name="btnIntentarRegistro" MouseLeftButtonDown="BtnRegisterAttempt_MouseLeftButtonDown"
+                                     Style="{StaticResource BtnServiciosAzul}">
                                 <TextBlock Text="Registrar"
                                      HorizontalAlignment="center"
                                      VerticalAlignment="center"
                                      FontSize="20"/>
                             </Border>
                         </StackPanel>
-
                     </Border>
                 </Grid>
-
 
                 <!-- NEWSLETTER-->
                 <Border Grid.Row="3" 
@@ -308,7 +352,7 @@
 
                         <StackPanel Grid.Column="0">
                             <StackPanel.Resources>
-                                <Style TargetType="Border">
+                                <Style x:Key="BtnVisitarMorado" TargetType="Border" BasedOn="{StaticResource HoverBorder}">
                                     <Setter Property="Background" Value="#8873f0"/>
                                     <Setter Property="CornerRadius" Value="15"/>
                                     <Setter Property="Height" Value="55"/>
@@ -340,7 +384,8 @@
                                 TextWrapping="wrap"
                                 Width="450"/>
                             <Border HorizontalAlignment="Center"
-		                            Margin="90,40,90,10">
+		                            Margin="90,40,90,10"
+                                    Style="{StaticResource BtnVisitarMorado}">
                                 <StackPanel Orientation="Horizontal"
                                          Margin="0,0,10,0"
                                          HorizontalAlignment="Center">
@@ -359,14 +404,13 @@
                             </Border>
                         </StackPanel>
                     </Grid>
-
                 </Border>
 
                 <!-- FOOTER-->
                 <Border Grid.Row="4" 
 		                Height="170" 
                         Background="White"
-                        Width="Auto">  
+                        Width="Auto">
                     <StackPanel Orientation="Horizontal"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center">
@@ -382,9 +426,6 @@
 			               Foreground="#002454"/>
                     </StackPanel>
                 </Border>
-
-                
-
             </Grid>
         </ScrollViewer>
 

@@ -144,7 +144,8 @@
                  FontSize="40"
                  Foreground="#0A204A"
                  HorizontalAlignment="Center"
-                 VerticalAlignment="Center"/>
+                 VerticalAlignment="Center"
+                 FontFamily="Segoe UI Variable Display Semibold"/>
             </Border>
 
 
