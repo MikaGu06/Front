@@ -39,6 +39,7 @@ namespace Front
             string username = txtUsuarioInicioSesion.Text.Trim();
             string password = pbContrasenaInicioSesion.Password;
             const int LONGITUD_MINIMA = 10;
+            int letras = username.Count(char.IsLetter);
 
             // 1. Validación de campos vacíos (se usa el mensaje directo para el usuario)
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -46,33 +47,52 @@ namespace Front
                 MessageBox.Show("ERROR: Los campos Usuario y Contraseña deben ser rellenados.", "Intente nuevamente", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
-
+            /////////USUARIO LOGIN////////////
             try
             {
-                // 2. Validación de formato de nombre de usuario
-                if (!Regex.IsMatch(username, @"^[a-zA-Z0-9]+$"))
+                // 2. Validación de Longuitud de nombre usuario 
+                if (username.Length < 10 || username.Length > 15)
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario no puede tener espacios ni caracteres especiales.");
+                    throw new ArgumentException("El nombre de usuario debe tener entre 10 y 15 caracteres.");
+                }
+                foreach (char c in username)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c))
+                    {
+                        throw new ArgumentException("El nombre de usuario solo puede contener letras y números (sin caracteres especiales).");
+                    }
                 }
 
-                // 3. Validación de formato de contraseña
+                // 2.1  validacion de Sin caracter especiales 
                 if (!Regex.IsMatch(password, @"^[a-zA-Z0-9]+$"))
                 {
                     throw new ArgumentException(
                         "La contraseña no puede tener espacios ni caracteres especiales.");
                 }
-                //3. Validación de longitud mínima de contraseña
-                if (password.Length >= LONGITUD_MINIMA)
+                // 2.2 Minimo de letras Obli
+                if (letras < 3)
                 {
-                    throw new ArgumentException(
-                        "La contraseña debe tener al menos " + LONGITUD_MINIMA + " caracteres.");
+                    throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
                 }
-                //4. Validación de longitud mínima de nombre de usuario
-                if (username.Length >= LONGITUD_MINIMA)
+                // 2.3 No solo numero
+                if (username.All(char.IsDigit))
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario debe tener de menos " + LONGITUD_MINIMA + " caracteres.");
+                    throw new ArgumentException("El nombre de usuario no puede estar compuesto solo por números.");
+                }
+
+                //////////CONTRASEÑA/////////
+                //3. Validación de longitud mínima de contraseña
+                if (password.Length < 10 || password.Length > 15)
+                {
+                    throw new ArgumentException("La contraseña debe tener entre 10 y 15 caracteres.");
+                }
+                //3.1 Contra sin caracter especial
+                foreach (char c in password)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c))
+                    {
+                        throw new ArgumentException("La contraseña solo puede contener letras y números (sin caracteres especiales).");
+                    }
                 }
                 // INICIO DE SESIÓN EXITOSA
                 string successMessageLogin = "Bienvenido: " + username;
@@ -107,6 +127,7 @@ namespace Front
             string phone = txtTelefonoRegistro.Text.Trim();
             string password = pbContrasenaRegistro.Password;
             string confirmPassword = pbRepetirContrasena.Password;
+            int letrasReg = username.Count(char.IsLetter);
 
             // 1. Validación de campos vacíos
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(phone) ||
@@ -125,31 +146,28 @@ namespace Front
 
             try
             {
-                // 3. Validación de formato de nombre de usuario
-                if (!Regex.IsMatch(username, @"^[a-zA-Z0-9]+$"))
+                // 3. Minimos de caracteres user
+                if (username.Length < 10 || username.Length > 15)
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario no puede tener espacios ni caracteres especiales.",
-                        nameof(username)
-                    );
+                    throw new ArgumentException("El nombre de usuario debe tener entre 10 y 15 caracteres.");
                 }
-
-                // 4. Validación de formato de teléfono
-                if (!Regex.IsMatch(phone, @"^\d+$"))
+                // 3.1 El nombre solo puede tener letras y numeros 
+                foreach (char c in username)
                 {
-                    throw new ArgumentException(
-                        "El número de teléfono solo debe contener dígitos (0-9). No se permiten letras, espacios o guiones.",
-                        nameof(phone)
-                    );
+                    if (!char.IsLetter(c) && !char.IsDigit(c))
+                    {
+                        throw new ArgumentException("El nombre de usuario solo puede contener letras y números.");
+                    }
                 }
-
-                // 5. Validación de formato de contraseña
-                if (!Regex.IsMatch(password, @"^[a-zA-Z0-9]+$"))
+                // 3.2 User minimo 3 letras
+                if (letrasReg < 3)
                 {
-                    throw new ArgumentException(
-                        "La contraseña no puede tener espacios ni caracteres especiales.",
-                        nameof(password)
-                    );
+                    throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
+                }
+                // 3.3 User no puede tener solo numero
+                if (username.All(char.IsDigit))
+                {
+                    throw new ArgumentException("El nombre de usuario no puede estar compuesto solo por números.");
                 }
 
                 // SIMULACIÓN: Lógica de Registro exitosa
