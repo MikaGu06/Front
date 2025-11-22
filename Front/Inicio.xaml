@@ -90,7 +90,7 @@
                             </StackPanel.Resources>
 
 
-                            <Label Content="Bienvenido"
+                            <Label Content="Bienvenido DEIBI"
 				               FontSize="40" 
 				               Margin="90,130,0,00"/>
                             <Label Content="Healthy U"
