@@ -38,7 +38,7 @@ namespace Front
         {
             string username = txtUsuarioInicioSesion.Text.Trim();
             string password = pbContrasenaInicioSesion.Password;
-            const int LONGITUD_MINIMA = 10;
+    
             int letras = username.Count(char.IsLetter);
 
             // 1. Validación de campos vacíos (se usa el mensaje directo para el usuario)
