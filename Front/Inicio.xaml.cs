@@ -41,7 +41,7 @@ namespace Front
     
             int letras = username.Count(char.IsLetter);
 
-            // 1. Validación de campos vacíos (se usa el mensaje directo para el usuario)
+            // 1. Validación de campos vacíos 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("ERROR: Los campos Usuario y Contraseña deben ser rellenados.", "Intente nuevamente", MessageBoxButton.OK, MessageBoxImage.Stop);
