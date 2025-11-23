@@ -26,7 +26,7 @@ namespace Front
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Navegación a Servicios simulada.", "Navegación", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Navegación", "Servicio", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         /// Habilita la edición del formulario cuando se presiona el botón Modificar.
@@ -86,9 +86,10 @@ namespace Front
 
                 // 4. VALIDACIÓN: Correo Electronico
                 string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-                if (!Regex.IsMatch(correo, emailPattern))
+
+                if (!Regex.IsMatch(correo, emailPattern) || correo.Length > 100)
                 {
-                    throw new ArgumentException("Correo Electrónico: Debe cumplir formato estándar (ej: usuario@dominio.com).");
+                    throw new ArgumentException("Correo Electrónico: Debe cumplir formato estándar (ej: usuario@dominio.com) y no superar los 100 caracteres.");
                 }
 
                 // 5. VALIDACIÓN: Telefono
@@ -98,9 +99,9 @@ namespace Front
                 }
 
                 // 6. VALIDACIÓN : Dirección
-                if (direccion.Length < 5)
+                if (direccion.Length > 100)
                 {
-                    throw new ArgumentException("Dirección: Mínimo 5 caracteres.");
+                    throw new ArgumentException("Dirección: Debe tener como máximo 100 caracteres.");
                 }
 
                 // 7. VALIDACIÓN: Edad
