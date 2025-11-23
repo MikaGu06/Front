@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -26,7 +28,7 @@ namespace Front
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Navegación", "Servicio", MessageBoxButton.OK, MessageBoxImage.Information);
+            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
         }
 
         /// Habilita la edición del formulario cuando se presiona el botón Modificar.
@@ -165,7 +167,31 @@ namespace Front
 
         private void BtnCambiarFoto_Click(object sender, RoutedEventArgs e)
         {
-           
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Seleccionar foto de perfil";
+            ofd.Filter = "Imágenes (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+            ofd.FilterIndex = 1;
+            ofd.Multiselect = false;
+
+            if (ofd.ShowDialog() == true)
+            {
+                string rutaImagen = ofd.FileName; //guardando la ruta de imagen seleccionada
+
+                try
+                {
+                    BitmapImage foto = new BitmapImage();
+                    foto.BeginInit();
+                    foto.UriSource = new Uri(rutaImagen);
+                    foto.EndInit();
+                    foto.Freeze();
+
+                    FotoPerfil.Source = foto;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Ocurrió un error al cargar la imagen seleccionada:", "Error de Imagen", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

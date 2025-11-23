@@ -198,7 +198,8 @@
                             <Setter Property="Foreground" Value="#002454"/>
                         </Style>
                     </StackPanel.Resources>
-                    <Image Source="/Imagenes/EmptyProfile1.jpg"
+                    <Image x:Name="FotoPerfil"
+                        Source="/Imagenes/EmptyProfile1.jpg"
                            Width="160"
                            Height="160"
                            Margin="0 0 0 20" Cursor="">       
