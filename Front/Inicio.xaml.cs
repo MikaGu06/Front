@@ -82,18 +82,33 @@ namespace Front
 
                 //////////CONTRASEÑA/////////
                 //3. Validación de longitud mínima de contraseña
-                if (password.Length < 10 || password.Length > 15)
+                if (password.Length < 6 || password.Length > 20)
                 {
                     throw new ArgumentException("La contraseña debe tener entre 10 y 15 caracteres.");
                 }
-                //3.1 Contra sin caracter especial
+                //DECLARANDO 
+                bool mayus = false, num = false, puntoGuion = false;
+                // 3.1 Validación por carácter
                 foreach (char c in password)
                 {
-                    if (!char.IsLetter(c) && !char.IsDigit(c))
-                    {
-                        throw new ArgumentException("La contraseña solo puede contener letras y números (sin caracteres especiales).");
-                    }
+                    if (!char.IsLetter(c) && !char.IsDigit(c) && c != '.' && c != '_')
+                        throw new ArgumentException("La contraseña solo puede tener letras, números, . o _.");
+
+                    if (char.IsUpper(c)) mayus = true;
+                    if (char.IsDigit(c)) num = true;
+                    if (c == '.' || c == '_') puntoGuion = true;
                 }
+
+                // 3.2 PUNTO, MAYUSCULAS, NUMERO Y GUION 
+                if (!mayus)
+                    throw new ArgumentException("Debe contener al menos una mayúscula.");
+
+                if (!num)
+                    throw new ArgumentException("Debe contener al menos un número.");
+
+                if (!puntoGuion)
+                    throw new ArgumentException("Debe contener al menos un punto (.) o guion bajo (_).");
+
                 // INICIO DE SESIÓN EXITOSA
                 string successMessageLogin = "Bienvenido: " + username;
                 MessageBox.Show(successMessageLogin, "Inicio de sesión exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -147,7 +162,7 @@ namespace Front
             try
             {
                 // 3. Minimos de caracteres user
-                if (username.Length < 10 || username.Length > 15)
+                if (username.Length < 3 || username.Length > 20)
                 {
                     throw new ArgumentException("El nombre de usuario debe tener entre 10 y 15 caracteres.");
                 }
