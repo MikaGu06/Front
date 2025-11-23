@@ -168,7 +168,7 @@
         Width="130" Height="40"
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
-        Margin="0,20,180,0"/>
+        Margin="0,20,180,0" Click="BtnMiCuenta_Click"/>
 
         <Button x:Name="BtnCerrarSesion"
             Content="Cerrar sesión" Grid.Row="0"

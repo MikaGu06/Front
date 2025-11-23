@@ -7,8 +7,409 @@
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="MiCuenta">
+    <Page.Resources>
+        <Style TargetType="Border" x:Key="HoverBorder">
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                     To="1.1" Duration="0:0:0.1"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                     To="1.1" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                     To="1" Duration="0:0:0.1"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                     To="1" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Botones especial del header con animación -->
+        <Style x:Key="BtnHeader" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#0D1B40"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                Background="{TemplateBinding Background}"
+                CornerRadius="15"
+                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#123066"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#09152D"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
 
+            <!-- Animación solo para estos botones -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                 To="1.12" Duration="0:0:0.12"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                 To="1.12" Duration="0:0:0.12"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                 To="1" Duration="0:0:0.12"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                 To="1" Duration="0:0:0.12"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Page.Resources>
     <Grid>
-        
+        <Grid Cursor="">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sección izquierda-->
+            <Border Background="White"
+            Padding="30"
+            CornerRadius="0 25 25 0">
+                
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style x:Key="CambiarFoto" TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="23"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                            <Setter Property="Margin" Value="0,0,0,10"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="#002454"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="40"/>
+                            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+                            <Setter Property="Margin" Value="0,20,0,0"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="#002454"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Image Source="/Imagenes/EmptyProfile1.jpg"
+                           Width="160"
+                           Height="160"
+                           Margin="0 0 0 20">       
+                        <Image.Clip>
+                            <EllipseGeometry Center="80,80" RadiusX="80" RadiusY="80"/>
+                        </Image.Clip>
+                    </Image>
+                    <TextBlock Text="Actualizar foto de perfil"
+                        FontSize="17"
+                               Style="{StaticResource CambiarFoto}"/>
+                    <TextBlock Text="Mi Perfil"/>
+             
+                </StackPanel>
+            </Border>
+            <!-- Sección derecha-->
+
+            <Button Grid.Column="1" Style="{StaticResource BtnHeader}"
+                    Margin="0 20 90 0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Width="130" Height="40" Click="Button_Click" Cursor="Hand">
+                <TextBlock Text="Volver"
+                           HorizontalAlignment="center"
+                           VerticalAlignment="center"
+                           FontSize="15"
+                           FontFamily="Segoe UI Semibold"/>
+            </Button>
+            
+            <Border Grid.Column="1"
+            Background="White"
+            Margin="90 90 90 40"
+            CornerRadius="50">
+                <Border.Resources>
+                    <Style x:Key="LabelStyle" TargetType="Label">
+                        <Setter Property="FontSize" Value="17"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="Foreground" Value="#002454"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="200" />
+                        <Setter Property="Height" Value="Auto" />
+                    </Style>
+
+                    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="Width" Value="340"/>
+                        <Setter Property="Height" Value="Auto"/>
+                        <Setter Property="Background" Value="#dae8fa"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                        <Setter Property="Foreground" Value="#002454"/>
+                        <Setter Property="Padding" Value="15,0,0,0"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+
+
+                    <!-- ComboBox -->
+                    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+                        <Setter Property="IsEditable" Value="True"/>
+                        <Setter Property="IsReadOnly" Value="True"/>
+
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="Width" Value="340"/>
+                        <Setter Property="Height" Value="40"/>
+
+                        <Setter Property="Background" Value="#dae8fa"/>
+                        <Setter Property="BorderBrush" Value="#dae8fa"/>
+                        <Setter Property="Foreground" Value="#002454"/>
+
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                        <Setter Property="Padding" Value="10,0,10,0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+
+                    <!-- Ítems del menú desplegable -->
+                    <Style x:Key="ComboItemStyle" TargetType="ComboBoxItem">
+                        <Setter Property="Background" Value="White"/>
+                        <!-- fondo blanco -->
+                        <Setter Property="Foreground" Value="#002454"/>
+                        <!-- texto azul oscuro -->
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                        <Setter Property="Padding" Value="10,4"/>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e3f0ff"/>
+                                <!-- blanco azulado suave -->
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#cbdfff"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+                        <Setter Property="Width" Value="340"/>
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Foreground" Value="#002454"/>
+                        <Setter Property="Background" Value="#dae8fa"/>
+                        <Setter Property="BorderBrush" Value="#dae8fa"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DatePicker">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Caja de texto corregida -->
+                                        <DatePickerTextBox x:Name="PART_TextBox"
+                                       Grid.Column="0"
+                                       Background="#dae8fa"
+                                       BorderBrush="#dae8fa"
+                                       Foreground="#002454"
+                                       FontSize="20"
+                                       FontFamily="Segoe UI Semilight"
+                                       VerticalContentAlignment="Center"/>
+
+                                        <!-- Botón del calendario -->
+                                        <Button x:Name="PART_Button"
+                            Grid.Column="1"
+                            Focusable="False"
+                            Background="#c8dfff"
+                            BorderBrush="#c8dfff"
+                            Cursor="Hand">
+                                            <Path Data="M3,0 L17,0 17,14 3,14 z"
+                              Fill="#002454"
+                              Stretch="Uniform"
+                              Width="18"
+                              Height="18"
+                              Margin="5"/>
+                                        </Button>
+
+                                        <Popup x:Name="PART_Popup"
+                           Placement="Bottom"
+                           StaysOpen="False"
+                           AllowsTransparency="True">
+                                            <Border BorderBrush="#002454" BorderThickness="1">
+                                                <Calendar x:Name="PART_Calendar"
+                                      Background="White"
+                                      Foreground="#002454"/>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                    </Style>
+
+                </Border.Resources>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Nombre-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="0"
+                        Margin="50 50 50 0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                       Content="Nombre completo" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <!-- Correo-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="1"
+                        Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                        Content="Correo" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <!-- Telefono-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="2"
+                        Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                        Content="Teléfono" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <!-- Direccion-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="3"
+                                Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                                Content="Dirección" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <!--Edad-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="4"
+                                Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                                Content="Edad" VerticalAlignment="Center"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+                    <!--FechaNac-->
+                    <StackPanel Orientation="Horizontal" Grid.Row="5"
+                                 Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                                Content="Fecha de nacimiento" VerticalAlignment="Center"/>
+                        <DatePicker Style="{StaticResource DatePickerStyle}"
+            SelectedDateFormat="Short"/>
+                    </StackPanel>
+                    <!-- Género -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="6"
+                        Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                        Content="Género" VerticalAlignment="Center"/>
+                        <ComboBox Style="{StaticResource ComboBoxStyle}">
+                            <ComboBoxItem Content="Masculino"/>
+                            <ComboBoxItem Content="Femenino"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <!-- Tipo de Sangre -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="7"
+                                 Margin="50,20,50,0">
+                        <Label Style="{StaticResource LabelStyle}" 
+                                Content="Tipo de sangre" VerticalAlignment="Center"/>
+                        <ComboBox Style="{StaticResource ComboBoxStyle}">
+                            <ComboBoxItem Content="A+"/>
+                            <ComboBoxItem Content="A-"/>
+                            <ComboBoxItem Content="B+"/>
+                            <ComboBoxItem Content="B-"/>
+                            <ComboBoxItem Content="AB+"/>
+                            <ComboBoxItem Content="AB-"/>
+                            <ComboBoxItem Content="O+"/>
+                            <ComboBoxItem Content="O-"/>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Botones Modificar y Guardar -->
+                    <StackPanel Orientation="Horizontal" Grid.Row="8">
+                        <Button Style="{StaticResource BtnHeader}"
+                                Margin="260 30 0 0"
+                                Width="130" Height="40">
+                            <TextBlock Text="Modificar"
+                               HorizontalAlignment="center"
+                               VerticalAlignment="center"
+                                       FontFamily="Segoe UI Semilight"
+                               FontSize="15"/>
+                        </Button>
+                        <Button Style="{StaticResource BtnHeader}"
+                                Margin="70 30 0 0"
+                                Width="130" Height="40">
+                            <TextBlock Text="Guardar"
+                               HorizontalAlignment="center"
+                               VerticalAlignment="center"
+                                       FontFamily="Segoe UI Semilight"
+                               FontSize="15"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

@@ -22,5 +22,10 @@ namespace Front
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
+        }
     }
 }
