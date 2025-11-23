@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Front"
       mc:Ignorable="d"
-      d:DesignHeight="7200" d:DesignWidth="1280"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Title="Inicio">
     <!-- PAGE RESOURCES: Hover / animación para botones -->
     <Page.Resources>
