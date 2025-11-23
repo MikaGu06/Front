@@ -27,5 +27,20 @@ namespace Front
         {
             ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
         }
+
+        private void BtnModificar_Click(object sender, RoutedEventArgs e)
+        {
+            FormularioDatos.IsEnabled= true;
+        }
+
+        private void BtnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            FormularioDatos.IsEnabled= false;
+        }
+
+        private void BtnCambiarFoto_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
