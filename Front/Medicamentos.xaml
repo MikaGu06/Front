@@ -8,9 +8,9 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="Medicamentos">
 
-    <!-- TIPOGRAFÍA GLOBAL -->
     <Page.Resources>
 
+        <!-- TIPOGRAFÍA GLOBAL -->
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
         </Style>
@@ -31,44 +31,82 @@
             <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
         </Style>
 
+        <!-- ComboBox -->
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Width" Value="267"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Background" Value="#dae8fa"/>
+            <Setter Property="BorderBrush" Value="#dae8fa"/>
+            <Setter Property="Foreground" Value="#002454"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
 
-        <!-- Botón blanco -->
-        <Style x:Key="BotonRedondeado" TargetType="Button">
+        <!-- Botón agrandable (efecto hover) -->
+        <Style x:Key="BotonAgrandable" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
-            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Padding" Value="10"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Border"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Padding="{TemplateBinding Padding}">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="15"
+                                Padding="{TemplateBinding Padding}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
                             <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                              VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
-
-                            
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border"
-                                Property="Background"
-                                Value="#123066"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)"
+                                                             To="1.12" Duration="0:0:0.10"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)"
+                                                             To="1.12" Duration="0:0:0.10"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#123066" Duration="0:0:0.10"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)"
+                                                             To="1" Duration="0:0:0.10"/>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)"
+                                                             To="1" Duration="0:0:0.10"/>
+                                            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#0D1B40" Duration="0:0:0.10"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
                             </Trigger>
-
-                            
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border"
-                                Property="Background"
-                                Value="#09152D"/>
-                            </Trigger>
-
                         </ControlTemplate.Triggers>
-
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -85,10 +123,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                      CornerRadius="8"
-                      Padding="10,4">
+                                CornerRadius="8"
+                                Padding="10,4">
                             <ContentPresenter HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"/>
+                                              VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -112,37 +150,27 @@
                     <ControlTemplate TargetType="ToggleButton">
                         <Grid>
                             <Border x:Name="BaseToggle"
-                          Background="#CCCCCC"
-                          CornerRadius="12"/>
-
+                                    Background="#CCCCCC"
+                                    CornerRadius="12"/>
                             <Ellipse x:Name="BotonToggle"
-                           Width="18" Height="18"
-                           Fill="White"
-                           Margin="2"
-                           HorizontalAlignment="Left"/>
+                                     Width="18" Height="18"
+                                     Fill="White"
+                                     Margin="2"
+                                     HorizontalAlignment="Left"/>
                         </Grid>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="BaseToggle"
-                              Property="Background"
-                              Value="#4BAFF5"/>
-                                <Setter TargetName="BotonToggle"
-                              Property="HorizontalAlignment"
-                              Value="Right"/>
-                                <Setter TargetName="BotonToggle"
-                              Property="Margin"
-                              Value="0,2,2,2"/>
+                                <Setter TargetName="BaseToggle" Property="Background" Value="#4BAFF5"/>
+                                <Setter TargetName="BotonToggle" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="BotonToggle" Property="Margin" Value="0,2,2,2"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
-
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
     </Page.Resources>
-
 
     <!-- Contenido con Scroll -->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -156,19 +184,29 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-
             <!-- Encabezado -->
-            <Border Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
+            <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="800"/>
+                    <ColumnDefinition Width="400"/>
+                </Grid.ColumnDefinitions>
                 <TextBlock Text="RECORDATORIOS"
-                 FontSize="40"
-                 Foreground="#0A204A"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 FontFamily="Segoe UI Variable Display Semibold"/>
-            </Border>
+                           FontSize="40"
+                           Foreground="#0A204A"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontFamily="Segoe UI Variable Display Semibold"/>
+                <Button Grid.Column="1" 
+                        Content="Volver" x:Name="BtnVolver"
+                        Style="{StaticResource BotonAgrandable}" 
+                        Width="120"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,25,30,0"
+                        Click="BtnVolver_Click"/>
+            </Grid>
 
-
-            <!-- Formulario -->
             <!-- Formulario dividido en 2 columnas -->
             <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
 
@@ -179,11 +217,11 @@
 
                 <!-- Columna izquierda: formulario actual -->
                 <Border Grid.Column="0" Background="White"
-                    BorderBrush="#0A204A"
-                    BorderThickness="2"
-                    CornerRadius="10"
-                    Padding="18"
-                    Margin="0,0,8,0">
+                        BorderBrush="#0A204A"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="18"
+                        Margin="0,0,8,0">
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -200,49 +238,43 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Row="0">
-                            <TextBlock
-                                Text="MEDICAMENTOS" FontSize="16">
-
-                            </TextBlock>
-
+                            <TextBlock Text="MEDICAMENTOS" FontSize="16"/>
                         </StackPanel>
 
-
-                        <!-- Día -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+                        <!-- Nombre -->
+                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
                                 <TextBlock Text="Nombre" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox x:Name="txtMedNombre" Height="28"/>
                         </StackPanel>
 
-                        <!-- Hora -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,10,10,10" Grid.ColumnSpan="2">
+                        <!-- Descripcion -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" Grid.ColumnSpan="2">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Descripción"  FontSize="16"/>
+                                <TextBlock Text="Descripción" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox x:Name="txtMedDescripcion" Height="28"/>
                         </StackPanel>
 
-                        <!-- Medicamento -->
-                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
+                        <!-- Dosis -->
+                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Dosis" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox x:Name="txtMedDosis" Height="28"/>
                         </StackPanel>
 
-                        
-                        <!-- Botón Añadir -->
-                        <Button Grid.Row="4" Grid.ColumnSpan="3"
-                            Content="AÑADIR MEDICAMENTOS"
-                            Height="36"
-                            Margin="0,10,0,0"
-                            Style="{StaticResource BotonRedondeado}"/>
-
+                        <!-- Botón Añadir Medicamentos -->
+                        <Button x:Name="btnAgregarMedicamento"
+                                Grid.Row="4" Grid.ColumnSpan="3"
+                                Content="AÑADIR MEDICAMENTOS"
+                                Margin="0,10,0,0"
+                                Style="{StaticResource BotonAgrandable}" 
+                                Click="btnAgregarMedicamento_Click"/>
                     </Grid>
                 </Border>
 
@@ -253,7 +285,6 @@
                         CornerRadius="10"
                         Padding="18"
                         Margin="0,0,8,0">
-
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -269,31 +300,26 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Row="0">
-                            <TextBlock
-                                Text="HORARIOS" FontSize="16">
-
-                            </TextBlock>
-
+                            <TextBlock Text="HORARIOS" FontSize="16"/>
                         </StackPanel>
 
-
-                        <!-- Día -->
+                        <!-- Día de inicio -->
                         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                <TextBlock Text="Día" FontSize="16"/>
+                                <TextBlock Text="Día Inicio" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <DatePicker x:Name="dpRecDia" Height="28" FontSize="16"
+                                        FontFamily="Segoe UI Variable Display"/>
                         </StackPanel>
 
                         <!-- frecuencia-->
                         <StackPanel Grid.Row="2" Grid.Column="1" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Frecuencia"  FontSize="16"/>
+                                <TextBlock Text="Frecuencia" FontSize="16"/>
                             </StackPanel>
-                            <ComboBox x:Name="cmbHoras"  Height="28" Background="White">
-                                
+                            <ComboBox Style="{StaticResource ComboBoxStyle}" x:Name="cmbRecFrecuencia">
                                 <ComboBoxItem Content="2 horas" Tag="2"/>
                                 <ComboBoxItem Content="4 horas" Tag="4"/>
                                 <ComboBoxItem Content="6 horas" Tag="6"/>
@@ -302,7 +328,6 @@
                                 <ComboBoxItem Content="16 horas" Tag="16"/>
                                 <ComboBoxItem Content="24 horas" Tag="24"/>
                             </ComboBox>
-
                         </StackPanel>
 
                         <!-- Medicamento -->
@@ -311,32 +336,31 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Medicamento" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox x:Name="txtRecMedicamento" Height="28"/>
                         </StackPanel>
-                        
+
+                        <!-- Hora inicio -->
                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
                                 <TextBlock Text="Hora Inicio" FontSize="16"/>
                             </StackPanel>
-                            <TextBox Height="28"/>
+                            <TextBox x:Name="txtRecHoraInicio" Height="28"/>
                         </StackPanel>
 
-
-                        <!-- Botón Añadir -->
-                        <Button Grid.Row="3" Grid.ColumnSpan="2"
+                        <!-- Botón Añadir Recordatorio -->
+                        <Button x:Name="btnAgregarRecordatorio"
+                                Grid.Row="3" Grid.ColumnSpan="2"
                                 Content="AÑADIR RECORDATORIO"
-                                Height="36"
                                 Margin="0,10,0,0"
-                                Style="{StaticResource BotonRedondeado}" Click="Button_Click"/>                  
+                                Style="{StaticResource BotonAgrandable}" 
+                                Click="Button_Click"/>
 
                     </Grid>
                 </Border>
             </Grid>
 
-
-
-            <!-- Lista de Recordatorios -->
+            <!-- Lista de Recordatorios (igual que antes, no requiere botón agrandable) -->
             <Border Grid.Row="3"
                   Background="White"
                   BorderBrush="#0A204A"
@@ -347,18 +371,17 @@
                 <StackPanel>
 
                     <TextBlock Text="RECORDATORIOS"
-                     FontSize="20"
-                     />
+                               FontSize="20"/>
 
                     <TextBlock Text="Configura los días y horarios de Tomas"
-                     FontSize="13"
-                     Foreground="#555"
-                     Margin="0,0,0,14"/>
+                               FontSize="13"
+                               Foreground="#555"
+                               Margin="0,0,0,14"/>
 
                     <Border CornerRadius="10"
-                          BorderBrush="#0A204A"
-                          BorderThickness="2"
-                          Padding="12">
+                            BorderBrush="#0A204A"
+                            BorderThickness="2"
+                            Padding="12">
 
                         <StackPanel>
 
@@ -373,9 +396,9 @@
                                 </Grid.ColumnDefinitions>
 
                                 <ToggleButton Grid.Column="0"
-                                    Style="{StaticResource InterruptorToggle}"
-                                    IsChecked="True"
-                                    HorizontalAlignment="Center"/>
+                                              Style="{StaticResource InterruptorToggle}"
+                                              IsChecked="True"
+                                              HorizontalAlignment="Center"/>
 
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
@@ -393,10 +416,10 @@
                                 </StackPanel>
 
                                 <Button Grid.Column="4"
-                              Content="Activo"
-                              Width="90"
-                              HorizontalAlignment="Right"
-                              Style="{StaticResource BotonEstado}"/>
+                                        Content="Activo"
+                                        Width="90"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource BotonEstado}"/>
                             </Grid>
 
                         </StackPanel>
