@@ -51,9 +51,9 @@ namespace Front
             try
             {
                 // 2. Validación de Longuitud de nombre usuario 
-                if (username.Length < 10 || username.Length > 15)
+                if (username.Length < 3 || username.Length > 20)
                 {
-                    throw new ArgumentException("El nombre de usuario debe tener entre 10 y 15 caracteres.");
+                    throw new ArgumentException("El nombre de usuario debe tener entre 3 y 20 caracteres.");
                 }
                 foreach (char c in username)
                 {
@@ -62,14 +62,7 @@ namespace Front
                         throw new ArgumentException("El nombre de usuario solo puede contener letras y números (sin caracteres especiales).");
                     }
                 }
-
-                // 2.1  validacion de Sin caracter especiales 
-                if (!Regex.IsMatch(password, @"^[a-zA-Z0-9]+$"))
-                {
-                    throw new ArgumentException(
-                        "La contraseña no puede tener espacios ni caracteres especiales.");
-                }
-                // 2.2 Minimo de letras Obli
+                // 2.1 Minimo de letras Obli
                 if (letras < 3)
                 {
                     throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
@@ -84,7 +77,7 @@ namespace Front
                 //3. Validación de longitud mínima de contraseña
                 if (password.Length < 6 || password.Length > 20)
                 {
-                    throw new ArgumentException("La contraseña debe tener entre 10 y 15 caracteres.");
+                    throw new ArgumentException("La contraseña debe tener entre 6 y 20 caracteres.");
                 }
                 //DECLARANDO 
                 bool mayus = false, num = false, puntoGuion = false;
@@ -135,7 +128,7 @@ namespace Front
                 MessageBox.Show("ERROR DE SISTEMA CRÍTICO NO ANTICIPADO. El sistema ha fallado. Reporte el código de error: " + obj3.Message, "Fallo Crítico de Runtime", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        ///REGISTRO/////////
         private void BtnRegisterAttempt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string username = txtUsuarioRegistro.Text.Trim();
@@ -152,21 +145,49 @@ namespace Front
                 return;
             }
 
+
             // 2. Validación de coincidencia de contraseñas
             if (password != confirmPassword)
             {
                 MessageBox.Show("ERROR: La 'Contraseña' y 'Repetir contraseña' no coinciden. Por favor, verifica ambos campos.", "Error de Contraseña", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
-
             try
             {
-                // 3. Minimos de caracteres user
+                /////CONTRA CONDICION/////
+                //3. Validación de longitud mínima de contraseña
+                if (password.Length < 6 || password.Length > 20)
+                {
+                    throw new ArgumentException("La contraseña debe tener entre 6 y 20 caracteres.");
+                }
+                //DECLARANDO 
+                bool mayus = false, num = false, puntoGuion = false;
+                // 3.1 Validación por carácter
+                foreach (char c in password)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c) && c != '.' && c != '_')
+                        throw new ArgumentException("La contraseña solo puede tener letras, números, . o _.");
+
+                    if (char.IsUpper(c)) mayus = true;
+                    if (char.IsDigit(c)) num = true;
+                    if (c == '.' || c == '_') puntoGuion = true;
+                }
+
+                // 3.2 PUNTO, MAYUSCULAS, NUMERO Y GUION 
+                if (!mayus)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos una mayúscula.");
+
+                if (!num)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos un número.");
+
+                if (!puntoGuion)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos un punto (.) o guion bajo (_).");
+                // 4. Minimos de caracteres user
                 if (username.Length < 3 || username.Length > 20)
                 {
-                    throw new ArgumentException("El nombre de usuario debe tener entre 10 y 15 caracteres.");
+                    throw new ArgumentException("El nombre de usuario debe tener entre 3 y 20 caracteres.");
                 }
-                // 3.1 El nombre solo puede tener letras y numeros 
+                // 4.1 El nombre solo puede tener letras y numeros 
                 foreach (char c in username)
                 {
                     if (!char.IsLetter(c) && !char.IsDigit(c))
@@ -174,12 +195,12 @@ namespace Front
                         throw new ArgumentException("El nombre de usuario solo puede contener letras y números.");
                     }
                 }
-                // 3.2 User minimo 3 letras
+                // 4.2 User minimo 3 letras
                 if (letrasReg < 3)
                 {
                     throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
                 }
-                // 3.3 User no puede tener solo numero
+                // 4.3 User no puede tener solo numero
                 if (username.All(char.IsDigit))
                 {
                     throw new ArgumentException("El nombre de usuario no puede estar compuesto solo por números.");
