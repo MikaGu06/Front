@@ -375,42 +375,48 @@
                                        Margin="50 50 50 0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Nombre completo" VerticalAlignment="Center"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox    Name="TxtNombre"
+                                        Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!-- Correo-->
                         <StackPanel Orientation="Horizontal"
                                          Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Correo" VerticalAlignment="Center"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox    Name="TxtCorreo"
+                                        Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!-- Telefono-->
                         <StackPanel Orientation="Horizontal" 
                                         Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                        Content="Teléfono" VerticalAlignment="Center"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox    Name="TxtTelefono"
+                                        Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!-- Direccion-->
                         <StackPanel Orientation="Horizontal"
                                      Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Dirección" VerticalAlignment="Center"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox    Name="TxtDireccion"
+                                        Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!--Edad-->
                         <StackPanel Orientation="Horizontal"
                                     Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Edad" VerticalAlignment="Center"/>
-                            <TextBox Style="{StaticResource TextBoxStyle}"/>
+                            <TextBox    Name="TxtEdad"
+                                        Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!--FechaNac-->
                         <StackPanel Orientation="Horizontal" 
                                      Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Fecha de nacimiento" VerticalAlignment="Center"/>
-                            <DatePicker Style="{StaticResource DatePickerStyle}"
+                            <DatePicker     Name="DpFechaNacimiento"
+                                            Style="{StaticResource DatePickerStyle}"
                                          SelectedDateFormat="Short"/>
                         </StackPanel>
                         <!-- Género -->
@@ -418,7 +424,8 @@
                                      Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                      Content="Género" VerticalAlignment="Center"/>
-                            <ComboBox Style="{StaticResource ComboBoxStyle}">
+                            <ComboBox   Name="CbGenero"
+                                        Style="{StaticResource ComboBoxStyle}">
                                 <ComboBoxItem Content="Masculino"/>
                                 <ComboBoxItem Content="Femenino"/>
                             </ComboBox>
@@ -428,7 +435,8 @@
                                    Margin="50,20,50,0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Tipo de sangre" VerticalAlignment="Center"/>
-                            <ComboBox Style="{StaticResource ComboBoxStyle}">
+                            <ComboBox   Name="CbTipoSangre"
+                                        Style="{StaticResource ComboBoxStyle}">
                                 <ComboBoxItem Content="A+"/>
                                 <ComboBoxItem Content="A-"/>
                                 <ComboBoxItem Content="B+"/>
