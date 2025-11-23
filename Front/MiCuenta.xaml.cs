@@ -89,7 +89,7 @@ namespace Front
 
                 if (!Regex.IsMatch(correo, emailPattern) || correo.Length > 100)
                 {
-                    throw new ArgumentException("Correo Electrónico: Debe cumplir formato estándar (ej: usuario@dominio.com) y no superar los 100 caracteres.");
+                    throw new ArgumentException("Correo Electrónico: Debe cumplir formato estándar (ej: univalle@gmail.com) y no superar los 100 caracteres.");
                 }
 
                 // 5. VALIDACIÓN: Telefono
