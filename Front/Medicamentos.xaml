@@ -491,7 +491,7 @@
             </Grid>
             <!-- NOTIFICACIÓN BONITA -->
             <Border x:Name="NotificationPanel"
-                    Background="#4BAFF5"
+                    Background="#002454"
                     CornerRadius="12"
                     Padding="14"
                     HorizontalAlignment="Right"
