@@ -70,7 +70,7 @@ namespace Front
             }
             private Uri LinkT
             {
-                get { return LinkT; }
+                get { return linkT; }
                 set {  linkT = value; }
             }
             public CentroDeSalud (int pId_centro, string pCategoria, string pInstitución, string pDireccion, int pTelefono, Uri pLink, Uri pLinkT)
