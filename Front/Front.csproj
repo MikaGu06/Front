@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Imagenes\2.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,15 @@
     <None Remove="Imagenes\Logo_corazon.png" />
     <None Remove="Imagenes\medicamento.png" />
     <None Remove="Imagenes\queEs.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Imagenes\2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
