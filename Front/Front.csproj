@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Imagenes\2.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,10 @@
     <None Remove="Imagenes\Logo_corazon.png" />
     <None Remove="Imagenes\medicamento.png" />
     <None Remove="Imagenes\queEs.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Imagenes\2.ico" />
   </ItemGroup>
 
   <ItemGroup>

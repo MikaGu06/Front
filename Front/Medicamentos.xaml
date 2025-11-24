@@ -174,6 +174,7 @@
 
     <!-- Contenido con Scroll -->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
+
         <Grid Margin="16">
 
             <Grid.RowDefinitions>
@@ -429,6 +430,95 @@
                 </StackPanel>
 
             </Border>
+            <!-- NOTIFICACIÓN TOAST -->
+            <Grid x:Name="ToastHost"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Top"
+                  Margin="0,20,20,0"
+                  Visibility="Collapsed"
+                  Panel.ZIndex="9999">
+
+                <Border x:Name="ToastCard"
+                        Background="#0D1B40"
+                        CornerRadius="12"
+                        Padding="14"
+                        Opacity="0"
+                        RenderTransformOrigin="0.5,0.5">
+
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="14"
+                              ShadowDepth="3"
+                              Opacity="0.45"/>
+                    </Border.Effect>
+
+                    <Border.RenderTransform>
+                        <TranslateTransform x:Name="ToastTranslate" X="40"/>
+                    </Border.RenderTransform>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                        <TextBlock Text="✔"
+                       FontSize="20"
+                       Margin="0,0,10,0"
+                       Foreground="White"/>
+
+                        <StackPanel>
+                            <TextBlock x:Name="ToastTitle"
+                           Text="Correcto"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           FontSize="15"/>
+
+                            <TextBlock x:Name="ToastMessage"
+                           Text="Mensaje..."
+                           Foreground="White"
+                           FontSize="13"
+                           TextWrapping="Wrap"
+                           MaxWidth="260"/>
+                        </StackPanel>
+
+                        <Button Content="✕"
+                            Width="24"
+                            Height="24"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Top"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            Foreground="White"
+                            Click="BtnCerrarToast_Click"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <!-- NOTIFICACIÓN BONITA -->
+            <Border x:Name="NotificationPanel"
+                    Background="#4BAFF5"
+                    CornerRadius="12"
+                    Padding="14"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,20,20,0"
+                    Opacity="0"
+                    Visibility="Collapsed"
+                    RenderTransformOrigin="0.5,0.0">
+
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="NotifTransform" Y="-20"/>
+                </Border.RenderTransform>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE946;" 
+                   Style="{StaticResource IconoPequeno}"
+                   Foreground="White"
+                   FontSize="20"/>
+                    <TextBlock x:Name="NotificationText"
+                   Text="Texto de ejemplo"
+                   Foreground="White"
+                   FontSize="16"
+                   Margin="8,0,0,0"
+                   FontFamily="Segoe UI Variable Display Semibold"/>
+                </StackPanel>
+            </Border>
+
 
         </Grid>
     </ScrollViewer>
