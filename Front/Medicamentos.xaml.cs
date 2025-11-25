@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Media;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using System.Media;
+using static Front.Medicamentos;
 
 namespace Front
 {
@@ -14,6 +16,7 @@ namespace Front
     /// </summary>
     public partial class Medicamentos : Page
     {
+        //MOSTRAR NOTIFICACIÓN PERSONALIZADA
         private async void MostrarNotificacion(string mensaje)
         {
             NotificationText.Text = mensaje;
@@ -41,7 +44,7 @@ namespace Front
             NotificationPanel.Visibility = Visibility.Collapsed;
         }
 
-        // Esto conecta a la base de datos pa cuando la pongamos, ahorita esta listo nomas y ya tiene instalado los using para sql
+        // Conexión a la base de datos
         private SqlConnection GetConnection()
         {
             return new SqlConnection(
@@ -49,29 +52,33 @@ namespace Front
             );
         }
 
-        //TEMPOORAL esto solo esta para probarlo, luego aqui tiene que ir la lista que se carga de SQL
+        //TEMPORAL: lista de recordatorios en memoria
         private List<Recordatorio> recordatorios = new List<Recordatorio>();
 
-        // este timer revisa cada 10 seg la hora pa poner los recordatorios en base a la hora que se puso y asi 
+        //TEMPORAL: lista de medicamentos en memoria
+        private List<Medicamento> medicamentos = new List<Medicamento>();
+
+        // Timer que revisa cada 10 segundos los recordatorios
         private DispatcherTimer timer;
 
         public Medicamentos()
         {
             InitializeComponent();
 
-            // esto es lo del timer osea se lo inicializa y esta lo de los 10 seg
+            // Inicializar timer
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(10);
             timer.Tick += Timer_Tick;
             timer.Start();
+
+
         }
 
-        // aqui indica que es lo que revisa el timer osea los recordatorios 
+        // Evento del timer
         private void Timer_Tick(object sender, EventArgs e)
         {
             RevisarRecordatorios();
         }
-
 
         private void RevisarRecordatorios()
         {
@@ -87,153 +94,208 @@ namespace Front
                 while (next < ahora)
                     next = next.AddHours(rec.Frecuencia);
 
-                // AQUÍ ES DONDE SE ACTIVA EL RECORDATORIO
+                // ACTIVAR RECORDATORIO
                 if (Math.Abs((next - ahora).TotalSeconds) <= 10 && rec.LastFired < next)
                 {
                     rec.LastFired = ahora;
 
-                    
                     // SONIDO DEL SISTEMA
                     SystemSounds.Exclamation.Play();
 
-                    // NOTIFICACIÓN TOAST
-                    MostrarNotificacion($"Es hora de tomar tu medicamento");
-
+                    // NOTIFICACIÓN
+                    MostrarNotificacion($"Es hora de tomar tu medicamento: {rec.MedicamentoNombre}");
                 }
             }
         }
 
-
+        // CLASES INTERNAS
         internal class Medicamento
         {
-            private int id_medicamento; 
-            private string nombre; 
-            private string descripcion; 
-            private string dosis; 
-            public int Id_medicamento { 
-                get { return id_medicamento; } 
-                set { id_medicamento = value; } 
+            private int id_medicamento;
+            private string nombre;
+            private string descripcion;
+            private string dosis;
+
+            public int Id_medicamento
+            {
+                get { return id_medicamento; }
+                set { id_medicamento = value; }
             }
-            public string Nombre {
-                get { return nombre; } 
-                set { nombre = value; } 
+            public string Nombre
+            {
+                get { return nombre; }
+                set { nombre = value; }
             }
-            public string Descripcion {
-                get { return descripcion; } 
-                set { descripcion = value; } 
+            public string Descripcion
+            {
+                get { return descripcion; }
+                set { descripcion = value; }
             }
-            public string Dosis {
-                get { return dosis; } 
-                set { dosis = value; } 
+            public string Dosis
+            {
+                get { return dosis; }
+                set { dosis = value; }
             }
-            public Medicamento(int pId_medicamento, string pNombre, string pDescripcion, string pDosis) {
-                id_medicamento = pId_medicamento; 
-                nombre = pNombre; 
-                descripcion = pDescripcion; 
-                dosis = pDosis; 
+           
+
+
+            public Medicamento(int pId_medicamento, string pNombre, string pDescripcion, string pDosis)
+            {
+                id_medicamento = pId_medicamento;
+                nombre = pNombre;
+                descripcion = pDescripcion;
+                dosis = pDosis;
             }
         }
 
-      
         internal class Recordatorio
         {
-            private int id_recordatorio; 
-            private DateTime fecha; 
-            private DateTime hora_inicio; 
-            private int frecuencia; 
-            private bool estado; 
-            public int Id_recordatorio { 
-                get { return id_recordatorio; } 
-                set { id_recordatorio = value; } 
+            private int id_recordatorio;
+            private DateTime fecha;
+            private DateTime hora_inicio;
+            private int frecuencia;
+            private bool estado;
+
+            public int Id_recordatorio
+            {
+                get { return id_recordatorio; }
+                set { id_recordatorio = value; }
             }
-            public DateTime Fecha { 
-                get { return fecha; } 
-                set { fecha = value; } 
+            public DateTime Fecha
+            {
+                get { return fecha; }
+                set { fecha = value; }
             }
-            public DateTime Hora_inicio { 
-                get { return hora_inicio; } 
-                set { hora_inicio = value; } 
+            public DateTime Hora_inicio
+            {
+                get { return hora_inicio; }
+                set { hora_inicio = value; }
             }
-            public int Frecuencia { 
-                get { return frecuencia; } 
-                set { frecuencia = value; } 
+            public int Frecuencia
+            {
+                get { return frecuencia; }
+                set { frecuencia = value; }
             }
-            public bool Estado { 
-                get { return estado; } 
-                set { estado = value; } 
+            public bool Estado
+            {
+                get { return estado; }
+                set { estado = value; }
             }
 
-            // esto es pa evitar que un recordatorio suene varias veces
+            public string MedicamentoNombre { get; set; } = "";
+
+            // Evita que suene varias veces
             public DateTime LastFired { get; set; } = DateTime.MinValue;
 
-            public Recordatorio(int pId_recordatorio, DateTime pFecha, DateTime pHoraInicio, int pFrecuencia, bool pEstado)
+            public Recordatorio(int pId_recordatorio, DateTime pFecha, DateTime pHoraInicio, int pFrecuencia, bool pEstado, string pMedicamentoNombre)
             {
                 id_recordatorio = pId_recordatorio;
                 fecha = pFecha;
                 hora_inicio = pHoraInicio;
                 frecuencia = pFrecuencia;
                 estado = pEstado;
+                MedicamentoNombre = pMedicamentoNombre;
             }
         }
 
-
-
+        // BOTÓN AGREGAR MEDICAMENTO
         private void btnAgregarMedicamento_Click(object sender, RoutedEventArgs e)
         {
-            //ACAAAA tengo que poner que los mediicamentos se suban a la base de datos
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            // validar que todos los campos se rellenen 
-            if (dpRecDia.SelectedDate == null)
+            try
             {
-                MessageBox.Show("Selecciona un día.");
-                return;
-            }
+                string nombre = txtNombreMed.Text.Trim();
+                string descripcion = txtDescMed.Text.Trim();
+                string dosis = txtDosisMed.Text.Trim();
+                string unidad = (cmbDosisUnidad.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "";
 
-            if (!TimeSpan.TryParse(txtRecHoraInicio.Text, out TimeSpan hora))
+                // VALIDACIONES
+                if (string.IsNullOrWhiteSpace(nombre))
+                    throw new InvalidOperationException("El nombre del medicamento es obligatorio.");
+
+                if (string.IsNullOrWhiteSpace(dosis))
+                    throw new InvalidOperationException("La dosis es obligatoria.");
+
+                if (!decimal.TryParse(dosis, out decimal dosisValor))
+                    throw new InvalidOperationException("La dosis debe ser un número válido.");
+
+                if (string.IsNullOrWhiteSpace(unidad))
+                    throw new InvalidOperationException("Debes seleccionar la unidad de dosis.");
+
+                // esto temporal
+                var nuevoMed = new Medicamento(
+                    medicamentos.Count + 1, // id provisional
+                    nombre,
+                    descripcion,
+                    $"{dosis} {unidad}"
+                );
+
+                medicamentos.Add(nuevoMed);
+
+                MostrarNotificacion("Medicamento guardado correctamente (temporal).");
+
+                // Limpiar campos para agregar otro medicamento
+                txtNombreMed.Clear();
+                txtDescMed.Clear();
+                txtDosisMed.Clear();
+                cmbDosisUnidad.SelectedIndex = -1;
+            }
+            catch (InvalidOperationException ex)
             {
-                MessageBox.Show("Hora inválida. Usa formato HH:mm.");
-                return;
+                MessageBox.Show(ex.Message);
             }
-
-            if (cmbRecFrecuencia.SelectedItem == null)
-            {
-                MessageBox.Show("Selecciona la frecuencia.");
-                return;
-            }
-            //eata aca es validacion de relleno  
-
-            // me da la frecuencia sacandola del combobox (el de las horas y eso)
-            int frecuencia = int.Parse(((ComboBoxItem)cmbRecFrecuencia.SelectedItem).Tag.ToString());
-
-            
-            // aca lo agrega a la lista pero con la base de datos aca tambien lo debe añadir a la tabla de recordatorioos
-            var nuevoRec = new Recordatorio(
-                recordatorios.Count + 1, // finge ser id pero esto se tiene que sacar de la base de datos 
-                dpRecDia.SelectedDate.Value,
-                DateTime.Today + hora,
-                frecuencia,
-                true // Estado activo
-            );
-
-            //TEMPORAL esto nomas es pa la lista temporal luego tengo que poner algo asi : GuardarRecordatorioEnBD(nuevoRec);
-            //recordatorios = ObtenerRecordatoriosDesdeBD();
-            recordatorios.Add(nuevoRec);
-
-            MostrarNotificacion("Recordatorio creado correctamente.");
         }
 
         
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Validar día
+                if (dpRecDia.SelectedDate == null)
+                    throw new InvalidOperationException("Selecciona un día de inicio.");
+
+                // Validar hora
+                if (!TimeSpan.TryParseExact(txtRecHoraInicio.Text.Trim(), "hh\\:mm", null, out TimeSpan hora))
+                    throw new InvalidOperationException("La hora debe estar en formato HH:mm.");
+
+                // Validar medicamento
+                if (string.IsNullOrWhiteSpace(txtRecMedicamento.Text))
+                    throw new InvalidOperationException("Debes ingresar el nombre del medicamento.");
+
+                // Validar frecuencia
+                if (cmbRecFrecuencia.SelectedItem == null)
+                    throw new InvalidOperationException("Selecciona la frecuencia.");
+
+                int frecuencia = int.Parse(((ComboBoxItem)cmbRecFrecuencia.SelectedItem).Tag.ToString());
+
+                // esto igual temporal
+                var nuevoRec = new Recordatorio(
+                    recordatorios.Count + 1,
+                    dpRecDia.SelectedDate.Value,
+                    DateTime.Today + hora,
+                    frecuencia,
+                    true,
+                    txtRecMedicamento.Text.Trim()
+                );
+
+                recordatorios.Add(nuevoRec);
+
+                MostrarNotificacion("Recordatorio creado correctamente.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
         }
+
         private void BtnCerrarToast_Click(object sender, RoutedEventArgs e)
         {
             NotificationPanel.Visibility = Visibility.Collapsed;
         }
-
     }
 }

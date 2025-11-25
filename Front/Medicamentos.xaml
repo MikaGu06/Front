@@ -36,7 +36,6 @@
             <Setter Property="IsEditable" Value="True"/>
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
-            <Setter Property="Width" Value="267"/>
             <Setter Property="Height" Value="28"/>
             <Setter Property="Background" Value="#dae8fa"/>
             <Setter Property="BorderBrush" Value="#dae8fa"/>
@@ -46,7 +45,9 @@
             <Setter Property="Padding" Value="10,0,10,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
+
 
         <!-- Botón agrandable (efecto hover) -->
         <Style x:Key="BotonAgrandable" TargetType="Button">
@@ -188,25 +189,32 @@
             <!-- Encabezado -->
             <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="800"/>
-                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
+                
                 <TextBlock Text="RECORDATORIOS"
-                           FontSize="40"
-                           Foreground="#0A204A"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           FontFamily="Segoe UI Variable Display Semibold"/>
-                <Button Grid.Column="1" 
-                        Content="Volver" x:Name="BtnVolver"
-                        Style="{StaticResource BotonAgrandable}" 
+               FontSize="40"
+               Foreground="#0A204A"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               Grid.Column="1"
+               FontFamily="Segoe UI Variable Display Semibold"/>
+
+               
+                <Button Grid.Column="2"
+                        Content="Volver"
+                        x:Name="BtnVolver"
+                        Style="{StaticResource BotonAgrandable}"
                         Width="120"
                         Height="40"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Margin="0,25,30,0"
+                        VerticalAlignment="Center"
+                        Margin="20,0,0,0"
                         Click="BtnVolver_Click"/>
-            </Grid>
+                        </Grid>
 
             <!-- Formulario dividido en 2 columnas -->
             <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
@@ -248,7 +256,7 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
                                 <TextBlock Text="Nombre" FontSize="16"/>
                             </StackPanel>
-                            <TextBox x:Name="txtMedNombre" Height="28"/>
+                            <TextBox x:Name="txtNombreMed" Height="28"/>
                         </StackPanel>
 
                         <!-- Descripcion -->
@@ -257,16 +265,32 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
                                 <TextBlock Text="Descripción" FontSize="16"/>
                             </StackPanel>
-                            <TextBox x:Name="txtMedDescripcion" Height="28"/>
+                            <TextBox x:Name="txtDescMed" Height="28"/>
                         </StackPanel>
 
                         <!-- Dosis -->
                         <StackPanel Grid.Row="3" Grid.Column="0" Margin="10">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Dosis" FontSize="16"/>
                             </StackPanel>
-                            <TextBox x:Name="txtMedDosis" Height="28"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Cantidad -->
+                                <TextBox x:Name="txtDosisMed" Height="28" Grid.Column="0" Margin="0,0,4,0" FontSize="16"/>
+
+                                <!-- Unidad -->
+                                <ComboBox x:Name="cmbDosisUnidad" Grid.Column="1" Height="28" FontSize="16"
+                                    Style="{StaticResource ComboBoxStyle}" Cursor="">
+                                    <ComboBoxItem Content="mg"/>
+                                    <ComboBoxItem Content="g"/>
+                                    <ComboBoxItem Content="ml"/>
+                                </ComboBox>
+                            </Grid>
                         </StackPanel>
 
                         <!-- Botón Añadir Medicamentos -->
