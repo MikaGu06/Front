@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Front.Data__bd_;
+using Front.Helpers;
 
 namespace Front
 {
@@ -33,7 +35,7 @@ namespace Front
             SeccionLogin.BringIntoView();
         }
 
-        
+
         private void BtnLoginAttempt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string username = txtUsuarioInicioSesion.Text.Trim();
@@ -74,12 +76,35 @@ namespace Front
                     throw new ArgumentException(
                         "El nombre de usuario debe tener de menos " + LONGITUD_MINIMA + " caracteres.");
                 }
-                // INICIO DE SESIÓN EXITOSA
-                string successMessageLogin = "Bienvenido: " + username;
-                MessageBox.Show(successMessageLogin, "Inicio de sesión exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // NAVEGAR SOLO SI TODO ESTÁ CORRECTO
-                this.NavigationService.Navigate(new Servicios());
+                // Hash de contraseña Dell
+                byte[] hash = PasswordHelper.HashPassword(password); // Dell
+                string hashHex = PasswordHelper.HashToHex(hash);    // Dell
+
+                // Validar usuario con BD Dell
+                string query = $@"
+                    SELECT COUNT(*)
+                    FROM Usuario
+                    WHERE nombre_usuario = '{username}'
+                    AND contrasena_hash = {hashHex};
+                "; // Dell
+
+                Database db = new Database(); // Dell
+                var tabla = db.EjecutarConsulta(query); // Dell
+                int count = Convert.ToInt32(tabla.Rows[0][0]); // Dell
+
+                if (count == 1) // Dell
+                {
+                    string successMessageLogin = "Bienvenido: " + username;
+                    MessageBox.Show(successMessageLogin, "Inicio de sesión exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    // NAVEGAR SOLO SI TODO ESTÁ CORRECTO
+                    this.NavigationService.Navigate(new Servicios());
+                }
+                else
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos.", "Acceso denegado", MessageBoxButton.OK, MessageBoxImage.Warning); // Dell
+                }
             }
             catch (RegexMatchTimeoutException obj1)
             {
@@ -149,7 +174,23 @@ namespace Front
                     );
                 }
 
-                // SIMULACIÓN: Lógica de Registro exitosa
+                // Hash de contraseña Dell
+                byte[] hash = PasswordHelper.HashPassword(password); // Dell
+                string hashHex = PasswordHelper.HashToHex(hash);    // Dell
+
+                // Generar ID Dell
+                Random r = new Random();
+                int nuevoID = r.Next(200, 999); // Dell
+
+                // Insert en BD sin columna rol Dell
+                string insertQuery = $@"
+                    INSERT INTO Usuario (id_usuario, ci_paciente, nombre_usuario, contrasena_hash, estado)
+                    VALUES ({nuevoID}, NULL, '{username}', {hashHex}, 1);
+                "; // Dell
+
+                Database db = new Database(); // Dell
+                db.EjecutarComando(insertQuery); // Dell
+
                 string successMessageRegister = "Registro exitoso. ¡Bienvenido, " + username + "!";
                 MessageBox.Show(successMessageRegister, "Registro Exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
 
