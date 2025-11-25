@@ -1,14 +1,15 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Front.RecordatorioPag.ModelosR;
+using Front.RecordatorioPag.ServicioR;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
-using System.IO.Packaging;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+
 
 namespace Front
 {
@@ -17,18 +18,8 @@ namespace Front
     /// </summary>
     public partial class Medicamentos : Page
     {
-        // Conexión a la base de datos
-        private SqlConnection GetConnection()
-        {
-            return new SqlConnection(
-                ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString
-            );
-        }
-
-        // Listas en memoria temporales
-        private List<Medicamento> medicamentos = new List<Medicamento>();
+        private MedicamentoServicio medServicio = new MedicamentoServicio();
         private List<Recordatorio> recordatorios = new List<Recordatorio>();
-
         private DispatcherTimer timer;
 
         public Medicamentos()
@@ -41,8 +32,8 @@ namespace Front
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            // Cargar medicamentos y recordatorios desde la base de datos
-            CargarMedicamentos();
+            // Cargar datos
+            medServicio.CargarMedicamentos();
             CargarRecordatorios();
         }
 
@@ -69,6 +60,8 @@ namespace Front
 
                 if (Math.Abs((next - ahora).TotalSeconds) <= 10 && rec.LastFired < next)
                 {
+                    
+
                     rec.LastFired = ahora;
 
                     // Sonido
@@ -143,28 +136,10 @@ namespace Front
                 if (string.IsNullOrWhiteSpace(unidad))
                     throw new InvalidOperationException("Debes seleccionar la unidad de dosis.");
 
-                // Guardar en BD
-                using (var con = GetConnection())
-                {
-                    con.Open();
-                    string insertQuery = @"
-                     INSERT INTO Medicamento (id_medicamento, nombre, descripcion, dosis, unidad)
-                     VALUES (@id, @nombre, @descripcion, @dosis, @unidad);";
-                    using (var cmd = new SqlCommand(insertQuery, con))
-                    {
-                        int nuevoID = ObtenerNuevoIdMedicamento();
-                        cmd.Parameters.AddWithValue("@id", nuevoID);
-                        cmd.Parameters.AddWithValue("@nombre", nombre);
-                        cmd.Parameters.AddWithValue("@descripcion", descripcion);
-                        cmd.Parameters.AddWithValue("@dosis", dosisValor);
-                        cmd.Parameters.AddWithValue("@unidad", unidad);
-                        cmd.ExecuteNonQuery();
-
-                        // Añadir a lista local
-                        medicamentos.Add(new Medicamento(nuevoID, nombre, descripcion, dosisValor, unidad));
-                    }
-                }
-
+                // Crear medicamento y guardar con servicio
+                int nuevoID = medServicio.ObtenerNuevoId();
+                var med = new Medicamento(nuevoID, nombre, descripcion, dosisValor, unidad);
+                medServicio.AgregarMedicamento(med);
 
                 MostrarNotificacion("Medicamento guardado correctamente.");
 
@@ -179,43 +154,6 @@ namespace Front
                 MessageBox.Show(ex.Message);
             }
         }
-
-        private int ObtenerNuevoIdMedicamento()
-        {
-            if (medicamentos.Count == 0) return 1;
-            return medicamentos[medicamentos.Count - 1].Id_medicamento + 1;
-        }
-
-        private void CargarMedicamentos()
-        {
-            try
-            {
-                using (var con = GetConnection())
-                {
-                    con.Open();
-                    string query = "SELECT id_medicamento, nombre, descripcion, dosis, unidad FROM Medicamento";
-                    using (var cmd = new SqlCommand(query, con))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            medicamentos.Add(new Medicamento(
-                                reader.GetInt32(0),
-                                reader.GetString(1),
-                                reader.IsDBNull(2) ? "" : reader.GetString(2),
-                                reader.GetDecimal(3),
-                                reader.GetString(4)
-                            ));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error cargando medicamentos: " + ex.Message);
-            }
-        }
-
 
         #endregion
 
@@ -236,15 +174,15 @@ namespace Front
 
                 int frecuencia = int.Parse(((ComboBoxItem)cmbRecFrecuencia.SelectedItem).Tag.ToString());
 
-                // Buscar id del medicamento en BD
-                int idMed = ObtenerIdMedicamentoPorNombre(txtRecMedicamento.Text.Trim());
+                // Buscar id del medicamento con el servicio
+                int idMed = medServicio.ObtenerIdPorNombre(txtRecMedicamento.Text.Trim());
                 if (idMed == 0)
                     throw new InvalidOperationException("El medicamento no existe en la base de datos.");
 
                 DateTime fecha = dpRecDia.SelectedDate.Value;
                 DateTime horaInicio = DateTime.Today + hora;
 
-                using (var con = GetConnection())
+                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
                 {
                     con.Open();
                     string insertQuery = @"
@@ -272,27 +210,34 @@ namespace Front
             }
         }
 
-        private int ObtenerIdMedicamentoPorNombre(string nombre)
-        {
-            foreach (var med in medicamentos)
-            {
-                if (med.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase))
-                    return med.Id_medicamento;
-            }
-            return 0;
-        }
-
         private int ObtenerNuevoIdRecordatorio()
         {
-            if (recordatorios.Count == 0) return 1;
-            return recordatorios[recordatorios.Count - 1].Id_recordatorio + 1;
+            int nuevoID = 1;
+            try
+            {
+                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
+                {
+                    con.Open();
+                    string query = "SELECT ISNULL(MAX(id_recordatorio), 0) FROM Recordatorio";
+                    using (var cmd = new SqlCommand(query, con))
+                    {
+                        nuevoID = (int)cmd.ExecuteScalar() + 1;
+                    }
+                }
+            }
+            catch
+            {
+                // Si hay un error, se deja el ID como 1
+            }
+            return nuevoID;
         }
 
         private void CargarRecordatorios()
         {
+            recordatorios.Clear();
             try
             {
-                using (var con = GetConnection())
+                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
                 {
                     con.Open();
                     string query = @"
@@ -307,7 +252,7 @@ namespace Front
                             recordatorios.Add(new Recordatorio(
                                 reader.GetInt32(0),
                                 reader.GetDateTime(2),
-                                reader.GetDateTime(3),
+                                DateTime.Today + reader.GetTimeSpan(3),
                                 reader.GetInt32(4),
                                 reader.GetBoolean(5),
                                 reader.GetString(6)
@@ -322,110 +267,6 @@ namespace Front
             }
         }
 
-        #endregion
-
-        #region Clases internas
-
-        internal class Medicamento
-        {
-            private int id_medicamento;
-            private string nombre;
-            private string descripcion;
-            private decimal dosis;
-            private string unidad;
-
-            public int Id_medicamento
-            {
-                get { return id_medicamento; }
-                set { id_medicamento = value; }
-            }
-            public string Nombre
-            {
-                get { return nombre; }
-                set { nombre = value; }
-            }
-            public string Descripcion
-            {
-                get { return descripcion; }
-                set { descripcion = value; }
-            }
-            public decimal Dosis
-            {
-                get { return dosis; }
-                set { dosis = value; }
-            }
-            public string Unidad
-            {
-                get { return unidad; }
-                set { unidad = value; }
-            }
-            
-
-
-
-            public Medicamento(int pId_medicamento, string pNombre, string pDescripcion, decimal pDosis, string pUnidad)
-            {
-                id_medicamento = pId_medicamento;
-                nombre = pNombre;
-                descripcion = pDescripcion;
-                dosis = pDosis;
-                unidad = pUnidad;
-            }
-            public override string ToString()
-            {
-                return $"{dosis} {unidad}";
-            }
-        }
-
-        internal class Recordatorio
-        {
-            private int id_recordatorio;
-            private DateTime fecha;
-            private DateTime hora_inicio;
-            private int frecuencia;
-            private bool estado;
-
-            public int Id_recordatorio
-            {
-                get { return id_recordatorio; }
-                set { id_recordatorio = value; }
-            }
-            public DateTime Fecha
-            {
-                get { return fecha; }
-                set { fecha = value; }
-            }
-            public DateTime Hora_inicio
-            {
-                get { return hora_inicio; }
-                set { hora_inicio = value; }
-            }
-            public int Frecuencia
-            {
-                get { return frecuencia; }
-                set { frecuencia = value; }
-            }
-            public bool Estado
-            {
-                get { return estado; }
-                set { estado = value; }
-            }
-
-            public string MedicamentoNombre { get; set; } = "";
-
-            // Evita que suene varias veces
-            public DateTime LastFired { get; set; } = DateTime.MinValue;
-
-            public Recordatorio(int pId_recordatorio, DateTime pFecha, DateTime pHoraInicio, int pFrecuencia, bool pEstado, string pMedicamentoNombre)
-            {
-                id_recordatorio = pId_recordatorio;
-                fecha = pFecha;
-                hora_inicio = pHoraInicio;
-                frecuencia = pFrecuencia;
-                estado = pEstado;
-                MedicamentoNombre = pMedicamentoNombre;
-            }
-        }
         #endregion
     }
 }
