@@ -100,7 +100,7 @@ namespace Front
                 MessageBox.Show("ERROR DE SISTEMA CRÍTICO NO ANTICIPADO. El sistema ha fallado. Reporte el código de error: " + obj3.Message, "Fallo Crítico de Runtime", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        ///REGISTRARSE//////////////
         private void BtnRegisterAttempt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string username = txtUsuarioRegistro.Text.Trim();
@@ -134,13 +134,10 @@ namespace Front
                     );
                 }
 
-                // 4. Validación de formato de teléfono
-                if (!Regex.IsMatch(phone, @"^\d+$"))
+                // 5. VALIDACIÓN: Telefono o phone
+                if (!Regex.IsMatch(phone, @"^\d+$") || phone.Length < 7 || phone.Length > 15)
                 {
-                    throw new ArgumentException(
-                        "El número de teléfono solo debe contener dígitos (0-9). No se permiten letras, espacios o guiones.",
-                        nameof(phone)
-                    );
+                    throw new ArgumentException("Teléfono: Solo números, entre 7 y 15 dígitos.");
                 }
 
                 // 5. Validación de formato de contraseña
