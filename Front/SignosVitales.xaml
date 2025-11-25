@@ -236,7 +236,8 @@
                                     <Image Source="Imagenes/cora.png" Width="30" Height="30" Margin="0,0,10,0"/>
                                     <TextBlock Text="Añadir Ritmo Cardíaco" Style="{StaticResource EtiquetaCampo}"/>
                                 </StackPanel>
-                                <TextBox Style="{StaticResource EntradaTexto}"/>
+                                <TextBox Name="txtRitmoCardiaco"
+                                        Style="{StaticResource EntradaTexto}"/>
                             </StackPanel>
 
                             <!-- Presión -->
@@ -245,7 +246,8 @@
                                     <Image Source="Imagenes/cora.png" Width="30" Height="30" Margin="0,0,10,0"/>
                                     <TextBlock Text="Añadir Presión Arterial" Style="{StaticResource EtiquetaCampo}"/>
                                 </StackPanel>
-                                <TextBox Style="{StaticResource EntradaTexto}"/>
+                                <TextBox Name="txtPresionArterial"
+                                        Style="{StaticResource EntradaTexto}"/>
                             </StackPanel>
 
                             <!-- Oxigenación -->
@@ -254,7 +256,8 @@
                                     <Image Source="Imagenes/cora.png" Width="30" Height="30" Margin="0,0,10,0"/>
                                     <TextBlock Text="Añadir Oxigenación" Style="{StaticResource EtiquetaCampo}"/>
                                 </StackPanel>
-                                <TextBox Style="{StaticResource EntradaTexto}"/>
+                                <TextBox Name="txtOxigenacion"
+                                        Style="{StaticResource EntradaTexto}"/>
                             </StackPanel>
 
                             <!-- Temperatura -->
@@ -263,16 +266,19 @@
                                     <Image Source="Imagenes/cora.png" Width="30" Height="30" Margin="0,0,10,0"/>
                                     <TextBlock Text="Añadir Temperatura" Style="{StaticResource EtiquetaCampo}"/>
                                 </StackPanel>
-                                <TextBox Style="{StaticResource EntradaTexto}"/>
+                                <TextBox Name="txtTemperatura"
+                                        Style="{StaticResource EntradaTexto}"/>
                             </StackPanel>
 
                             <!-- Añadir -->
                             <Border Grid.Row="2" Grid.ColumnSpan="2"
                                     Style="{StaticResource BotonPrincipal}">
-                                <TextBlock Text="Añadir"
+                                <Button    Foreground="White"
+                                           Background="Transparent"
+                                           Content="Añadir"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           FontSize="20"/>
+                                           FontSize="20" Click="Button_Click"/>
                             </Border>
 
                         </Grid>

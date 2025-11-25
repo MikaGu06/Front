@@ -40,42 +40,69 @@ namespace Front
         {
             string username = txtUsuarioInicioSesion.Text.Trim();
             string password = pbContrasenaInicioSesion.Password;
-            const int LONGITUD_MINIMA = 20;
+            int letras = username.Count(char.IsLetter);
 
-            // 1. Validación de campos vacíos (se usa el mensaje directo para el usuario)
+            // 1. Validación de campos vacíos 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("ERROR: Los campos Usuario y Contraseña deben ser rellenados.", "Intente nuevamente", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
 
+            /////////USUARIO LOGIN////////////
             try
             {
-                // 2. Validación de formato de nombre de usuario
-                if (!Regex.IsMatch(username, @"^[a-zA-Z0-9]+$"))
+                // 2. Validación de Longuitud de nombre usuario 
+                if (username.Length < 3 || username.Length > 20)
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario no puede tener espacios ni caracteres especiales.");
+                    throw new ArgumentException("El nombre de usuario debe tener entre 3 y 20 caracteres.");
+                }
+                foreach (char c in username)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c))
+                    {
+                        throw new ArgumentException("El nombre de usuario solo puede contener letras y números (sin caracteres especiales).");
+                    }
+                }
+                // 2.1 Minimo de letras Obli
+                if (letras < 3)
+                {
+                    throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
+                }
+                // 2.3 No solo numero
+                if (username.All(char.IsDigit))
+                {
+                    throw new ArgumentException("El nombre de usuario no puede estar compuesto solo por números.");
                 }
 
-                // 3. Validación de formato de contraseña
-                if (!Regex.IsMatch(password, @"^[a-zA-Z0-9]+$"))
-                {
-                    throw new ArgumentException(
-                        "La contraseña no puede tener espacios ni caracteres especiales.");
-                }
+                //////////CONTRASEÑA/////////
                 //3. Validación de longitud mínima de contraseña
-                if (password.Length >= LONGITUD_MINIMA)
+                if (password.Length < 6 || password.Length > 20)
                 {
-                    throw new ArgumentException(
-                        "La contraseña debe tener al menos " + LONGITUD_MINIMA + " caracteres.");
+                    throw new ArgumentException("La contraseña debe tener entre 6 y 20 caracteres.");
                 }
-                //4. Validación de longitud mínima de nombre de usuario
-                if (username.Length >= LONGITUD_MINIMA)
+                //DECLARANDO 
+                bool mayus = false, num = false, puntoGuion = false;
+                // 3.1 Validación por carácter
+                foreach (char c in password)
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario debe tener de menos " + LONGITUD_MINIMA + " caracteres.");
+                    if (!char.IsLetter(c) && !char.IsDigit(c) && c != '.' && c != '_')
+                        throw new ArgumentException("La contraseña solo puede tener letras, números, . o _.");
+
+                    if (char.IsUpper(c)) mayus = true;
+                    if (char.IsDigit(c)) num = true;
+                    if (c == '.' || c == '_') puntoGuion = true;
                 }
+
+                // 3.2 PUNTO, MAYUSCULAS, NUMERO Y GUION 
+                if (!mayus)
+                    throw new ArgumentException("Debe contener al menos una mayúscula.");
+
+                if (!num)
+                    throw new ArgumentException("Debe contener al menos un número.");
+
+                if (!puntoGuion)
+                    throw new ArgumentException("Debe contener al menos un punto (.) o guion bajo (_).");
 
                 // Hash de contraseña Dell
                 byte[] hash = PasswordHelper.HashPassword(password); // Dell
@@ -132,6 +159,7 @@ namespace Front
             string phone = txtTelefonoRegistro.Text.Trim();
             string password = pbContrasenaRegistro.Password;
             string confirmPassword = pbRepetirContrasena.Password;
+            int letrasReg = username.Count(char.IsLetter);
 
             // 1. Validación de campos vacíos
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(phone) ||
@@ -141,37 +169,65 @@ namespace Front
                 return;
             }
 
+
             // 2. Validación de coincidencia de contraseñas
             if (password != confirmPassword)
             {
                 MessageBox.Show("ERROR: La 'Contraseña' y 'Repetir contraseña' no coinciden. Por favor, verifica ambos campos.", "Error de Contraseña", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
             }
-
             try
             {
-                // 3. Validación de formato de nombre de usuario
-                if (!Regex.IsMatch(username, @"^[a-zA-Z0-9]+$"))
+                /////CONTRA CONDICION/////
+                //3. Validación de longitud mínima de contraseña
+                if (password.Length < 6 || password.Length > 20)
                 {
-                    throw new ArgumentException(
-                        "El nombre de usuario no puede tener espacios ni caracteres especiales.",
-                        nameof(username)
-                    );
+                    throw new ArgumentException("La contraseña debe tener entre 6 y 20 caracteres.");
+                }
+                //DECLARANDO 
+                bool mayus = false, num = false, puntoGuion = false;
+                // 3.1 Validación por carácter
+                foreach (char c in password)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c) && c != '.' && c != '_')
+                        throw new ArgumentException("La contraseña solo puede tener letras, números, . o _.");
+
+                    if (char.IsUpper(c)) mayus = true;
+                    if (char.IsDigit(c)) num = true;
+                    if (c == '.' || c == '_') puntoGuion = true;
                 }
 
-                // 5. VALIDACIÓN: Telefono o phone
-                if (!Regex.IsMatch(phone, @"^\d+$") || phone.Length < 7 || phone.Length > 15)
-                {
-                    throw new ArgumentException("Teléfono: Solo números, entre 7 y 15 dígitos.");
-                }
+                // 3.2 PUNTO, MAYUSCULAS, NUMERO Y GUION 
+                if (!mayus)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos una mayúscula.");
 
-                // 5. Validación de formato de contraseña
-                if (!Regex.IsMatch(password, @"^[a-zA-Z0-9]+$"))
+                if (!num)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos un número.");
+
+                if (!puntoGuion)
+                    throw new ArgumentException("LA CONTRASEÑA Debe contener al menos un punto (.) o guion bajo (_).");
+                // 4. Minimos de caracteres user
+                if (username.Length < 3 || username.Length > 20)
                 {
-                    throw new ArgumentException(
-                        "La contraseña no puede tener espacios ni caracteres especiales.",
-                        nameof(password)
-                    );
+                    throw new ArgumentException("El nombre de usuario debe tener entre 3 y 20 caracteres.");
+                }
+                // 4.1 El nombre solo puede tener letras y numeros 
+                foreach (char c in username)
+                {
+                    if (!char.IsLetter(c) && !char.IsDigit(c))
+                    {
+                        throw new ArgumentException("El nombre de usuario solo puede contener letras y números.");
+                    }
+                }
+                // 4.2 User minimo 3 letras
+                if (letrasReg < 3)
+                {
+                    throw new ArgumentException("El nombre de usuario debe contener al menos 3 letras.");
+                }
+                // 4.3 User no puede tener solo numero
+                if (username.All(char.IsDigit))
+                {
+                    throw new ArgumentException("El nombre de usuario no puede estar compuesto solo por números.");
                 }
 
                 // Hash de contraseña Dell
