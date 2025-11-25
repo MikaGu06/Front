@@ -65,7 +65,7 @@ namespace Front
 
         private void BtnMiCuenta_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new MiCuenta());
+            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new MiCuenta.MiCuenta());
         }
     }
 }
