@@ -3,7 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Front"
+      xmlns:local="clr-namespace:Front.RecordatorioPag.ModelosR"
+
+      
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="Medicamentos">
@@ -387,73 +389,96 @@
 
             <!-- Lista de Recordatorios (igual que antes, no requiere botón agrandable) -->
             <Border Grid.Row="3"
-                  Background="White"
-                  BorderBrush="#0A204A"
-                  BorderThickness="2"
-                  CornerRadius="10"
-                  Padding="18" Margin="0,285,0,0" Grid.RowSpan="2">
+                    Background="White"
+                    BorderBrush="#0A204A"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Padding="18" Margin="0,285,0,0" Grid.RowSpan="2">
 
                 <StackPanel>
 
                     <TextBlock Text="RECORDATORIOS"
-                               FontSize="20"/>
+                   FontSize="20"/>
 
                     <TextBlock Text="Configura los días y horarios de Tomas"
-                               FontSize="13"
-                               Foreground="#555"
-                               Margin="0,0,0,14"/>
+                           FontSize="13"
+                           Foreground="#555"
+                           Margin="0,0,0,14"/>
 
                     <Border CornerRadius="10"
-                            BorderBrush="#0A204A"
-                            BorderThickness="2"
-                            Padding="12">
+                        BorderBrush="#0A204A"
+                        BorderThickness="2"
+                        Padding="12">
 
-                        <StackPanel>
+                        <!-- ItemsControl para mostrar recordatorios-->
+                        <ItemsControl x:Name="RecordatoriosList" ItemsSource="{Binding ListaRecordatorios}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type local:Recordatorio}">
 
-                            <!-- Fila ejemplo -->
-                            <Grid Margin="0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="70"/>
-                                    <ColumnDefinition Width="160"/>
-                                    <ColumnDefinition Width="180"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="110"/>
-                                </Grid.ColumnDefinitions>
+                                    <Grid Margin="0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <!-- Toggle -->
+                                            <ColumnDefinition Width="160"/>
+                                            <!-- Fecha -->
+                                            <ColumnDefinition Width="180"/>
+                                            <!-- Hora -->
+                                            <ColumnDefinition Width="*"/>
+                                            <!-- Medicamento -->
+                                            <ColumnDefinition Width="130"/>
+                                            <!-- Frecuencia -->
+                                            <ColumnDefinition Width="110"/>
+                                            <!-- Botón -->
+                                        </Grid.ColumnDefinitions>
 
-                                <ToggleButton Grid.Column="0"
-                                              Style="{StaticResource InterruptorToggle}"
-                                              IsChecked="True"
-                                              HorizontalAlignment="Center"/>
+                                        <!-- ToggleButton para activar/desactivar -->
+                                        <ToggleButton Grid.Column="0"
+                                          Style="{StaticResource InterruptorToggle}"
+                                          IsChecked="{Binding Estado, Mode=TwoWay}"
+                                          Checked="ToggleButton_Checked"
+                                          Unchecked="ToggleButton_Unchecked"
+                                          HorizontalAlignment="Center"/>
 
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                    <TextBlock Text="Lunes" FontWeight="Bold"/>
-                                </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
+                                            <TextBlock Text="{Binding Fecha, StringFormat=d}" FontWeight="Bold"/>
+                                        </StackPanel>
 
-                                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                    <TextBlock Text="Hoy - 07:00"/>
-                                </StackPanel>
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
+                                            <TextBlock Text="{Binding Hora_inicio, StringFormat=t}"/>
+                                        </StackPanel>
 
-                                <StackPanel Grid.Column="3" Orientation="Horizontal">
-                                    <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
-                                    <TextBlock Text="Jarabe"/>
-                                </StackPanel>
+                                        <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
+                                            <TextBlock Text="{Binding MedicamentoNombre}"/>
+                                        </StackPanel>
 
-                                <Button Grid.Column="4"
-                                        Content="Activo"
-                                        Width="90"
-                                        HorizontalAlignment="Right"
-                                        Style="{StaticResource BotonEstado}"/>
-                            </Grid>
+                                        <!-- Nueva columna para frecuencia -->
+                                        <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                            <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE823;"/>
+                                            <TextBlock Text="{Binding FrecuenciaTexto}"/>
+                                        </StackPanel>
 
-                        </StackPanel>
+                                        <!-- Botón de estado ahora en la columna 5 -->
+                                        <Button Grid.Column="5"
+                                            Content="{Binding EstadoBoton}"
+                                            Width="90"
+                                            HorizontalAlignment="Right"
+                                            Style="{StaticResource BotonEstado}"/>
+                                    </Grid>
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
                     </Border>
 
                 </StackPanel>
 
             </Border>
+
+
             <!-- NOTIFICACIÓN TOAST -->
             <Grid x:Name="ToastHost"
                   HorizontalAlignment="Right"

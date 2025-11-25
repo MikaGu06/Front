@@ -3,28 +3,33 @@ using Front.RecordatorioPag.ServicioR;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
 
 namespace Front
 {
-    /// <summary>
-    /// Lógica de interacción para Medicamentos.xaml
-    /// </summary>
     public partial class Medicamentos : Page
     {
         private MedicamentoServicio medServicio = new MedicamentoServicio();
         private List<Recordatorio> recordatorios = new List<Recordatorio>();
         private DispatcherTimer timer;
 
+        // ObservableCollection para binding con XAML
+        public ObservableCollection<Recordatorio> ListaRecordatorios { get; set; } = new ObservableCollection<Recordatorio>();
+
         public Medicamentos()
         {
             InitializeComponent();
+
+            // Ligar ItemsControl al ObservableCollection
+            RecordatoriosList.ItemsSource = ListaRecordatorios;
 
             // Inicializar timer de recordatorios
             timer = new DispatcherTimer();
@@ -35,6 +40,7 @@ namespace Front
             // Cargar datos
             medServicio.CargarMedicamentos();
             CargarRecordatorios();
+            CargarRecordatoriosEnLista(); // Actualiza ObservableCollection para UI
         }
 
         #region Timer
@@ -60,8 +66,6 @@ namespace Front
 
                 if (Math.Abs((next - ahora).TotalSeconds) <= 10 && rec.LastFired < next)
                 {
-                    
-
                     rec.LastFired = ahora;
 
                     // Sonido
@@ -136,14 +140,12 @@ namespace Front
                 if (string.IsNullOrWhiteSpace(unidad))
                     throw new InvalidOperationException("Debes seleccionar la unidad de dosis.");
 
-                // Crear medicamento y guardar con servicio
                 int nuevoID = medServicio.ObtenerNuevoId();
                 var med = new Medicamento(nuevoID, nombre, descripcion, dosisValor, unidad);
                 medServicio.AgregarMedicamento(med);
 
                 MostrarNotificacion("Medicamento guardado correctamente.");
 
-                // Limpiar campos
                 txtNombreMed.Clear();
                 txtDescMed.Clear();
                 txtDosisMed.Clear();
@@ -174,7 +176,6 @@ namespace Front
 
                 int frecuencia = int.Parse(((ComboBoxItem)cmbRecFrecuencia.SelectedItem).Tag.ToString());
 
-                // Buscar id del medicamento con el servicio
                 int idMed = medServicio.ObtenerIdPorNombre(txtRecMedicamento.Text.Trim());
                 if (idMed == 0)
                     throw new InvalidOperationException("El medicamento no existe en la base de datos.");
@@ -198,7 +199,9 @@ namespace Front
                         cmd.Parameters.AddWithValue("@frecuencia", frecuencia);
                         cmd.ExecuteNonQuery();
 
-                        recordatorios.Add(new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim()));
+                        var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim());
+                        recordatorios.Add(nuevoRec);
+                        ListaRecordatorios.Add(nuevoRec); // Actualiza UI
                     }
                 }
 
@@ -220,15 +223,10 @@ namespace Front
                     con.Open();
                     string query = "SELECT ISNULL(MAX(id_recordatorio), 0) FROM Recordatorio";
                     using (var cmd = new SqlCommand(query, con))
-                    {
                         nuevoID = (int)cmd.ExecuteScalar() + 1;
-                    }
                 }
             }
-            catch
-            {
-                // Si hay un error, se deja el ID como 1
-            }
+            catch { }
             return nuevoID;
         }
 
@@ -264,6 +262,48 @@ namespace Front
             catch (Exception ex)
             {
                 MessageBox.Show("Error cargando recordatorios: " + ex.Message);
+            }
+        }
+
+        // Llenar ObservableCollection para XAML
+        private void CargarRecordatoriosEnLista()
+        {
+            ListaRecordatorios.Clear();
+            foreach (var rec in recordatorios)
+                ListaRecordatorios.Add(rec);
+        }
+
+        // ToggleButton Checked/Unchecked
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleButton toggle && toggle.DataContext is Recordatorio rec)
+            {
+                rec.Estado = true;
+                ActualizarEstadoEnBD(rec);
+                RecordatoriosList.Items.Refresh();
+            }
+        }
+
+        private void ToggleButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleButton toggle && toggle.DataContext is Recordatorio rec)
+            {
+                rec.Estado = false;
+                ActualizarEstadoEnBD(rec);
+                RecordatoriosList.Items.Refresh();
+            }
+        }
+
+        private void ActualizarEstadoEnBD(Recordatorio r)
+        {
+            string query = "UPDATE Recordatorio SET estado = @estado WHERE id_recordatorio = @id";
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@estado", r.Estado);
+                cmd.Parameters.AddWithValue("@id", r.Id_recordatorio);
+                cmd.ExecuteNonQuery();
             }
         }
 

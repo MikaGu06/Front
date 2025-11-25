@@ -55,7 +55,8 @@ namespace Front.RecordatorioPag.ModelosR
             get { return lastFired; }
             set { lastFired = value; }
         }
-
+        public string EstadoBoton => Estado ? "Activo" : "Inactivo";
+        public string FrecuenciaTexto => $"Cada {Frecuencia} horas";
         public Recordatorio(int pid, DateTime pfecha, DateTime phoraInicio, int pfrecuencia, bool pestado, string pmedicamentoNombre)
         {
             Id_recordatorio = pid;
