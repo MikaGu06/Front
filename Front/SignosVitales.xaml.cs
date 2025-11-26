@@ -132,7 +132,7 @@ namespace Front
             }
             catch (Exception ex)
             {
-                MessageBox.Show("El sistema ha fallado. Reporte el código de error: " + ex.Message, "Fallo Crítico de Runtime", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("El sistema ha fallado. Reporte el código de error: " + ex.Message, "Fallo Crítico", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
