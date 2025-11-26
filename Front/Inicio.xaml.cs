@@ -156,14 +156,12 @@ namespace Front
         private void BtnRegisterAttempt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string username = txtUsuarioRegistro.Text.Trim();
-            string phone = txtTelefonoRegistro.Text.Trim();
             string password = pbContrasenaRegistro.Password;
             string confirmPassword = pbRepetirContrasena.Password;
             int letrasReg = username.Count(char.IsLetter);
 
             // 1. Validación de campos vacíos
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(phone) ||
-                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
             {
                 MessageBox.Show("ERROR: Todos los campos del formulario de registro deben ser completados.", "Validación Requerida", MessageBoxButton.OK, MessageBoxImage.Stop);
                 return;
