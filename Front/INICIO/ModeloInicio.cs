@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using Front.Data__bd_;
 using Front.Helpers;
 
-namespace Front.INICIO
+namespace Front.MODELO
 {
     internal class ModeloInicio
     {
