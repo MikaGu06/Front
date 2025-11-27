@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Front.MiCuenta
 {
     /// <summary>
@@ -25,6 +26,18 @@ namespace Front.MiCuenta
         public MiCuenta()
         {
             InitializeComponent();
+        }
+
+        //recibe el usuario y teléfono. REGISTRAR Y LUEGO MI CUENTA
+        public MiCuenta(string usuario, string telefono, string contrasena = null) : this()
+        {
+            TxtUsuario.Text = usuario;
+            TxtTelefono.Text = telefono;
+
+            if (!string.IsNullOrEmpty(contrasena))
+            {
+                PsBoxContrasena.Password = contrasena;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

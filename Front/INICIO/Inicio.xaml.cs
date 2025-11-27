@@ -6,7 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Front.Data__bd_;
 using Front.Helpers;
-using Front.INICIO; 
+using Front.INICIO;
+using Front.MiCuenta;
 
 namespace Front.INICIO 
 {
@@ -45,16 +46,19 @@ namespace Front.INICIO
                 // 2. LLAMADA BASE DE DATOS
                 BaseDatos db = new BaseDatos();
                 bool loginExitoso = db.VerificarLogin(username, password);
-                
+
                 // 3. MANEJO DE RESULTADOS BIENVENIDA Y NO COINCIDENCIA
-                if (loginExitoso) 
+                if (loginExitoso)
                 {
                     string successMessageLogin = "Bienvenido: " + username;
                     MessageBox.Show(successMessageLogin, "Inicio de sesión exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // NAVEGAR SOLO SI EL LOGIN ES CORRECTO
-                    this.NavigationService.Navigate(new Servicios());
+                    // Desde LOGIN solo conocemos el usuario (y la contraseña en memoria si quisieras usarla)
+                    this.NavigationService.Navigate(
+                        new Front.MiCuenta.MiCuenta(username, telefono: null, contrasena:null)
+                    );
                 }
+
                 else
                 {
                     // MENSAJE SI EL USUARIO O CONTRASEÑA NO COINCIDEN EN LA DB
@@ -96,16 +100,19 @@ namespace Front.INICIO
 
                 // 2. LLAMADA A LA CAPA DE DATOS 
                 BaseDatos db = new BaseDatos();
-                db.RegistrarUsuario(username, password); 
+                db.RegistrarUsuario(username, password);
 
-                // 3. MENSAJE DE ÉXITO Y NAVEGACIÓN 
-                string successMessageRegister = "Registro exitoso. ¡Bienvenido, " + username + "!";
-                MessageBox.Show(successMessageRegister, "Registro Exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
+                // 3. MENSAJE DE ÉXITO Y NAVEGACIÓN 
+                string successMessageRegister = "Registro exitoso. ¡Bienvenido, " + username + "!";
+                MessageBox.Show(successMessageRegister, "Registro Exitoso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // NAVEGAR
-                this.NavigationService.Navigate(new Servicios());
-            }
-            catch (RegexMatchTimeoutException obj4)
+                // NAVEGAR A MI CUENTA (y prellenar usuario y teléfono)
+                this.NavigationService.Navigate(
+                    new Front.MiCuenta.MiCuenta(username, phone,password)
+                );
+
+            }
+            catch (RegexMatchTimeoutException obj4)
             {
                 MessageBox.Show("Error de rendimiento en la validación de datos." + obj4.Message, "Por favor, inténtelo de nuevo.", MessageBoxButton.OK, MessageBoxImage.Error);
             }

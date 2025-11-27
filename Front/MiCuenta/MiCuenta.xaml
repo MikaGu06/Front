@@ -391,6 +391,9 @@
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Usuario" VerticalAlignment="Center"/>
                             <TextBox    Name="TxtUsuario"
+                                        IsReadOnly="True"
+                                        IsTabStop="False"
+                                        IsEnabled="False"
                                          Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
                         <!-- Contraseña-->
