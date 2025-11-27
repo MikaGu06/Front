@@ -26,6 +26,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="MinWidth" Value="240"/>
         </Style>
+
         <Style x:Key="BotonAgrandable" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
@@ -45,15 +46,15 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Padding="{TemplateBinding Padding}"
-                        RenderTransformOrigin="0.5,0.5">
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="15"
+                                Padding="{TemplateBinding Padding}"
+                                RenderTransformOrigin="0.5,0.5">
                             <Border.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="1"/>
                             </Border.RenderTransform>
                             <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                              VerticalAlignment="Center"/>
                         </Border>
 
                         <ControlTemplate.Triggers>
@@ -62,11 +63,11 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)"
-                                                     To="1.12" Duration="0:0:0.10"/>
+                                                             To="1.12" Duration="0:0:0.10"/>
                                             <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)"
-                                                     To="1.12" Duration="0:0:0.10"/>
+                                                             To="1.12" Duration="0:0:0.10"/>
                                             <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="#123066" Duration="0:0:0.10"/>
+                                                            To="#123066" Duration="0:0:0.10"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.EnterActions>
@@ -74,11 +75,11 @@
                                     <BeginStoryboard>
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleX)"
-                                                     To="1" Duration="0:0:0.10"/>
+                                                             To="1" Duration="0:0:0.10"/>
                                             <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(ScaleTransform.ScaleY)"
-                                                     To="1" Duration="0:0:0.10"/>
+                                                             To="1" Duration="0:0:0.10"/>
                                             <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="#0D1B40" Duration="0:0:0.10"/>
+                                                            To="#0D1B40" Duration="0:0:0.10"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </Trigger.ExitActions>
@@ -88,7 +89,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
 
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Content" Value="CENTROS MÉDICOS"/>
@@ -111,7 +111,6 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Foreground" Value="#072A4C"/>
             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
-
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="#80000000" 
@@ -120,7 +119,6 @@
                                       Opacity="0.35"/>
                 </Setter.Value>
             </Setter>
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
                     <Setter Property="Foreground" Value="#624695"/>
@@ -151,26 +149,17 @@
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="#072A4C"/>
             <Setter Property="Visibility" Value="Visible" />
-
-
-
-
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Foreground" Value="#624695"/>
                     <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-
                     <Setter Property="Foreground" Value="#624695"/>
                     <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
-
     </Page.Resources>
 
     <Grid Margin="18">
@@ -187,31 +176,25 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            
             <Label Style="{StaticResource LabelStyle}"
-               Grid.Column="1"
-               HorizontalAlignment="Center"/>
+                   Grid.Column="1"
+                   HorizontalAlignment="Center"/>
 
-            
             <Button Grid.Column="2" 
-            Content="Volver" x:Name="BtnVolver"
-            Style="{StaticResource BotonAgrandable}" 
-            Width="120"
-            Height="40"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="0,25,30,0"
-            Click="BtnVolver_Click"/>
+                    Content="Volver" x:Name="BtnVolver"
+                    Style="{StaticResource BotonAgrandable}" 
+                    Width="120"
+                    Height="40"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,25,30,0"
+                    Click="BtnVolver_Click"/>
         </Grid>
-
-
-
 
         <StackPanel Grid.Row="1" Orientation="Horizontal"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Margin="60,6,0,6">
-
 
             <ToggleButton x:Name="Toggle"
                           Style="{StaticResource ToggleStyle}">
@@ -229,7 +212,6 @@
                 </StackPanel>
             </ToggleButton>
 
-
             <Popup IsOpen="{Binding IsChecked, ElementName=Toggle}"
                    PlacementTarget="{Binding ElementName=Toggle}"
                    Placement="Bottom"
@@ -245,8 +227,6 @@
                              Background="Transparent"
                              SelectionMode="Single"
                              ItemContainerStyle="{StaticResource CategoriaItemStyle}">
-                        <!--Código para que se implemente en el backend-->
-                        <!--SelectionChanged="ListaCategorias_SelectionChanged"-->
 
                         <ListBoxItem x:Name="FarmaciasItem">
                             <TextBlock Text="Farmacias"/>
@@ -270,21 +250,17 @@
 
                     </ListBox>
                 </Border>
-
-
-
             </Popup>
         </StackPanel>
 
-        <!-- Aquí va el recuadro principal con la lista (igual que tu código original) -->
+        <!-- Contenedor principal de la lista -->
         <StackPanel Grid.Row="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     Margin="60,18,60,24">
 
             <Border Style="{StaticResource MainBorderStyle}">
-                <!-- ... contenido de lista (igual que en tu ejemplo), deja sin cambios -->
-                <StackPanel Orientation="Vertical">
+                <StackPanel x:Name="spCentros" Orientation="Vertical">
                     <Grid Margin="4" VerticalAlignment="Top">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -316,6 +292,7 @@
                                            Style="{StaticResource TxtBl1}"/>
                             </Border>
                         </StackPanel>
+
                         <StackPanel Grid.Column="3" HorizontalAlignment="Right">
                             <Border>
                                 <TextBlock x:Name="TxtTel"
@@ -325,25 +302,43 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- ejemplo de filas (igual que tu código) -->
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                        <Grid Margin="6" MinHeight="64">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
+                    <!-- Aquí se llenarán dinámicamente los centros -->
+                    <!-- Aquí se llenarán dinámicamente los centros -->
+                    <ItemsControl x:Name="FilasContainer">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="4" VerticalAlignment="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
-                                       Text="Clinica de las Américas"
-                                       Style="{StaticResource TxtBl2}"/>
+                                    <!-- Nombre / Categoría -->
+                                    <TextBlock Grid.Column="0"
+                           Text="{Binding Categoria}"
+                           Style="{StaticResource TxtBl2}"/>
 
-                            <Border Grid.Column="1"/>
+                                    <!-- Institución -->
+                                    <TextBlock Grid.Column="1"
+                           Text="{Binding Institucion}"
+                           Style="{StaticResource TxtBl2}"/>
 
-                            <Border Grid.Column="2"/>
-                        </Grid>
-                        <!-- ... más filas ... -->
-                    </StackPanel>
+                                    <!-- Dirección -->
+                                    <TextBlock Grid.Column="2"
+                           Text="{Binding Direccion}"
+                           Style="{StaticResource TxtBl2}"/>
+
+                                    <!-- Teléfono -->
+                                    <TextBlock Grid.Column="3"
+                           Text="{Binding Telefono}"
+                           Style="{StaticResource TxtBl2}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
                 </StackPanel>
             </Border>
         </StackPanel>
