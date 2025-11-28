@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Front.INICIO
 {
@@ -67,6 +68,11 @@ namespace Front.INICIO
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(phone) ||
         string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
                 throw new ArgumentException("ERROR: Todos los campos del formulario deben ser completados.");
+            // Teléfono
+            if (!Regex.IsMatch(phone, @"^\d+$") || phone.Length < 7 || phone.Length > 15)
+            {
+                throw new ArgumentException("Teléfono: solo números, 7-15 dígitos.");
+            }
 
             // Coincidencia de contraseñas
             if (password != confirmPassword)
