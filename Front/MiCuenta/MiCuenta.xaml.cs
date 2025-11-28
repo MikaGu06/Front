@@ -12,9 +12,7 @@ using System.Windows.Navigation;
 
 namespace Front.MiCuenta
 {
-    /// <summary>
     /// Página de edición de datos de la cuenta del usuario.
-    /// </summary>
     public partial class MiCuenta : Page
     {
         // Cadena de conexión (igual que Database.cs)
@@ -33,9 +31,7 @@ namespace Front.MiCuenta
             CargarFotoDesdeBaseDeDatos();
         }
 
-        /// <summary>
         /// Rellena el formulario con los datos de la sesión.
-        /// </summary>
         private void CargarDesdeSesion()
         {
             usuarioActual = SesionUsuario.NombreUsuario;
@@ -104,9 +100,7 @@ namespace Front.MiCuenta
             ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
         }
 
-        /// <summary>
         /// Activa el modo edición del formulario.
-        /// </summary>
         private void BtnModificar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -131,9 +125,7 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
         /// Guarda cambios de MiCuenta en sesión y BD (Paciente + Usuario.ci_paciente).
-        /// </summary>
         private void BtnGuardar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -203,9 +195,7 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
         /// Permite seleccionar y actualizar la foto de perfil.
-        /// </summary>
         private void BtnCambiarFoto_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog
@@ -249,9 +239,7 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
         /// Carga la foto de perfil desde la BD (Paciente.foto_perfil).
-        /// </summary>
         private void CargarFotoDesdeBaseDeDatos()
         {
             if (string.IsNullOrEmpty(usuarioActual))
@@ -297,9 +285,8 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
-        /// Guarda la foto en la tabla Paciente.foto_perfil.
-        /// </summary>
+
+        /// Guarda la foto en la tabla Paciente.foto_perfil
         private void GuardarFotoEnBaseDeDatos()
         {
             if (fotoPerfilActual == null || fotoPerfilActual.Length == 0)
@@ -368,9 +355,7 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
         /// Crea o actualiza el registro de Paciente y vincula Usuario.ci_paciente.
-        /// </summary>
         private void GuardarPacienteDesdeMiCuenta(ModeloUsuario u)
         {
             if (string.IsNullOrEmpty(usuarioActual))
@@ -531,9 +516,9 @@ namespace Front.MiCuenta
             }
         }
 
-        /// <summary>
+
         /// Convierte un arreglo de bytes en BitmapImage.
-        /// </summary>
+
         private BitmapImage ConvertirBytesAImagen(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)

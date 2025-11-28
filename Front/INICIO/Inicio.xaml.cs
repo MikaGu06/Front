@@ -1,7 +1,7 @@
 ﻿using Front.Data__bd_;
 using Front.Helpers;
 using Front.INICIO;
-using Front.MiCuenta;  // <-- para usar MiCuenta directamente
+using Front.MiCuenta;  
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,9 +11,7 @@ using System.Windows.Input;
 
 namespace Front.INICIO
 {
-    /// <summary>
     /// Lógica de interacción para Inicio.xaml
-    /// </summary>
     public partial class Inicio : Page
     {
         public Inicio()
@@ -107,7 +105,7 @@ namespace Front.INICIO
             }
         }
 
-        /// REGISTRO //////////////////
+        /// REGISTRO 
         private void BtnRegisterAttempt_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string username = txtUsuarioRegistro.Text.Trim();

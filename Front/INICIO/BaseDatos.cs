@@ -7,9 +7,7 @@ namespace Front.INICIO
 {
     internal class BaseDatos
     {
-        /// <summary>
         /// Valida usuario y contraseña en la tabla Usuario.
-        /// </summary>
         public bool VerificarLogin(string username, string password)
         {
             // Generar hash de la contraseña
@@ -31,9 +29,7 @@ namespace Front.INICIO
             return count == 1;
         }
 
-        /// <summary>
         /// Devuelve el CI del paciente vinculado al usuario, o null.
-        /// </summary>
         public int? ObtenerCiPaciente(string username)
         {
             string query = $@"
@@ -55,9 +51,7 @@ namespace Front.INICIO
             return Convert.ToInt32(valor);
         }
 
-        /// <summary>
         /// Crea un registro básico en Paciente y devuelve su CI.
-        /// </summary>
         private int CrearPacienteBasico(string username, string phone)
         {
             Database db = new Database();
@@ -83,9 +77,8 @@ namespace Front.INICIO
             return nuevoCi;
         }
 
-        /// <summary>
+
         /// Registra un nuevo Usuario y crea su Paciente vinculado.
-        /// </summary>
         public void RegistrarUsuario(string username, string phone, string password)
         {
             // Generar hash de la contraseña

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Front.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using Front.Helpers;   
 
 namespace Front.SigVitalesPag
 {
@@ -18,25 +18,40 @@ namespace Front.SigVitalesPag
             CargarHistorial();
         }
 
+        //      CARGAR HISTORIAL
         private void CargarHistorial()
         {
             try
             {
-                // Si no hay CI en sesión, no cargamos nada
+                // CI viene como string desde SesionUsuario
                 if (string.IsNullOrWhiteSpace(SesionUsuario.CI))
+                {
+                    MessageBox.Show(
+                        "Debes completar tus datos en MI CUENTA antes de usar Signos Vitales.",
+                        "Datos incompletos",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
                     return;
+                }
 
                 if (!int.TryParse(SesionUsuario.CI, out int ciPaciente))
+                {
+                    MessageBox.Show(
+                        "El CI guardado en sesión no es válido. Vuelve a guardarlo en MI CUENTA.",
+                        "CI inválido",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
                     return;
+                }
 
                 var listaSignos = servicio.ListarSignosDePaciente(ciPaciente);
 
-                var listaMostrar = new List<object>();
+                var listaMostrar = new List<dynamic>();
                 foreach (var s in listaSignos)
                 {
                     listaMostrar.Add(new
                     {
-                        Fecha = s.Fecha.ToString("dd/MM/yyyy HH:mm"),
+                        Fecha = s.Fecha.ToString("dd/MM/yyyy"),
                         Ritmo = s.RitmoCardiaco,
                         Presion = s.PresionArterial,
                         Oxigenacion = s.Oxigenacion,
@@ -48,31 +63,24 @@ namespace Front.SigVitalesPag
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar historial: {ex.Message}",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error al cargar historial: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
+        //      GUARDAR SIGNO
         private void Acceder_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
             {
-                // 1) Validar datos
-                var valores = ValidacionesSignosVitales.Validar(
-                    txtRitmoCardiaco.Text,
-                    txtPresionArterial.Text,
-                    txtOxigenacion.Text,
-                    txtTemperatura.Text
-                );
-
-                // 2) Verificar CI en sesión
                 if (string.IsNullOrWhiteSpace(SesionUsuario.CI))
                 {
                     MessageBox.Show(
-                        "Para registrar signos vitales primero debes completar tus datos en 'Mi Cuenta' (CI obligatorio).",
-                        "Paciente no configurado",
+                        "Debes registrar tus datos personales en MI CUENTA antes de guardar signos vitales.",
+                        "Paciente no válido",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
                     return;
@@ -81,77 +89,61 @@ namespace Front.SigVitalesPag
                 if (!int.TryParse(SesionUsuario.CI, out int ciPaciente))
                 {
                     MessageBox.Show(
-                        "El CI guardado en la sesión no es válido. Vuelve a 'Mi Cuenta' y corrige el CI.",
+                        "El CI guardado en sesión no es válido. Vuelve a guardarlo en MI CUENTA.",
                         "CI inválido",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
                     return;
                 }
 
-                // 3) Nuevo id_signo
+                var valores = ValidacionesSignosVitales.Validar(
+                    txtRitmoCardiaco.Text,
+                    txtPresionArterial.Text,
+                    txtOxigenacion.Text,
+                    txtTemperatura.Text
+                );
+
                 int nuevoId = servicio.ObtenerNuevoId();
 
-                int sistolica = int.Parse(txtPresionArterial.Text.Split('-')[0]);
+                var nuevoSigno = new ModeloSignosVitales(
+                    nuevoId,
+                    ciPaciente,              
+                    DateTime.Now.Date,
+                    DateTime.Now.TimeOfDay,
+                    valores.ritmo,
+                    valores.sistolica,        
+                    valores.temperatura,
+                    valores.oxigeno
+                );
 
-                // 4) Crear modelo con CI real del paciente
-                var nuevoSigno = new ModeloSignosVitales
-                {
-                    IdSigno = nuevoId,
-                    CiPaciente = ciPaciente,
-                    Fecha = DateTime.Now,
-                    Hora = DateTime.Now.TimeOfDay,
-                    RitmoCardiaco = valores.ritmo,
-                    PresionArterial = sistolica,
-                    Temperatura = valores.temperatura,
-                    Oxigenacion = valores.oxigeno
-                };
-
-                // 5) Guardar en BD
                 servicio.AgregarSigno(nuevoSigno);
 
-                // Si usas tabla pac_signos, descomenta:
-                // servicio.AgregarPacSigno(ciPaciente, nuevoId);
+                MessageBox.Show(
+                    "Signo vital agregado correctamente.",
+                    "Éxito",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
 
-                MessageBox.Show("Signos vitales registrados correctamente.",
-                                "Éxito",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
-
-                // 6) Limpiar campos
                 txtRitmoCardiaco.Clear();
                 txtPresionArterial.Clear();
                 txtOxigenacion.Clear();
                 txtTemperatura.Clear();
 
-                // 7) Recargar historial del paciente
                 CargarHistorial();
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message,
-                                "Datos inválidos",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-            }
-            catch (InvalidOperationException ex)
-            {
-                MessageBox.Show(ex.Message,
-                                "Paciente no válido",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al agregar signo: {ex.Message}",
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Error al agregar signo: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
         private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {
-            if (NavigationService != null && NavigationService.CanGoBack)
+            if (NavigationService.CanGoBack)
                 NavigationService.GoBack();
         }
     }

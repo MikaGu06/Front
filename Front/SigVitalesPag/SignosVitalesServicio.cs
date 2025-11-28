@@ -1,51 +1,35 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 
 namespace Front.SigVitalesPag
 {
     internal class SignosVitalesServicio
     {
-        // Usa la misma cadena que el resto del proyecto (app.config)
-        private readonly string connectionString =
-            ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString;
+        // Cadena de conexión
+        private readonly string _connectionString =
+            "Data Source=159.203.102.189,1433;" +
+            "Initial Catalog=HealthyU;" +
+            "User ID=sa;" +
+            "Password=Passw0rd!;" +
+            "Encrypt=False;" +
+            "TrustServerCertificate=True;" +
+            "Connect Timeout=15;";
 
-        // Verificar si existe un Paciente con ese CI
-        private bool ExistePaciente(int ciPaciente)
-        {
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                string query = "SELECT COUNT(*) FROM Paciente WHERE ci_paciente = @ci";
-
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@ci", ciPaciente);
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
-                }
-            }
-        }
-
-        // Agregar signo vital (Signos_vitales) respetando FK FK_Signos_Paciente
+        // INSERTAR SIGNO 
         public void AgregarSigno(ModeloSignosVitales signo)
         {
-            // Si el CI no existe en Paciente, lanzamos error controlado
-            if (!ExistePaciente(signo.CiPaciente))
-                throw new InvalidOperationException(
-                    "El CI del paciente no existe en la tabla Paciente. " +
-                    "Primero completa tus datos en 'Mi Cuenta' para crear el registro de Paciente.");
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Open();
-                string query = @"INSERT INTO Signos_vitales
-                                (id_signo, ci_paciente, fecha, hora,
-                                 ritmo_cardiaco, presion_arterial, temperatura, oxigenacion)
-                                VALUES
-                                (@IdSigno, @CiPaciente, @Fecha, @Hora,
-                                 @RitmoCardiaco, @PresionArterial, @Temperatura, @Oxigenacion)";
+
+                string query = @"
+                    INSERT INTO Signos_vitales
+                        (id_signo, ci_paciente, fecha, hora,
+                         ritmo_cardiaco, presion_arterial, temperatura, oxigenacion)
+                    VALUES
+                        (@IdSigno, @CiPaciente, @Fecha, @Hora,
+                         @RitmoCardiaco, @PresionArterial, @Temperatura, @Oxigenacion);";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -63,19 +47,16 @@ namespace Front.SigVitalesPag
             }
         }
 
-        // SOLO si realmente tienes la tabla pac_signos en tu BD
+        // agregar signos pasados a la tabla pac_signos
         public void AgregarPacSigno(int ciPaciente, int idSigno)
         {
-            if (!ExistePaciente(ciPaciente))
-                throw new InvalidOperationException(
-                    "El CI del paciente no existe en la tabla Paciente. " +
-                    "Primero completa tus datos en 'Mi Cuenta' para crear el registro de Paciente.");
-
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Open();
-                string query = @"INSERT INTO pac_signos (ci_paciente, id_signo)
-                                 VALUES (@CiPaciente, @IdSigno)";
+
+                string query = @"
+                    INSERT INTO pac_signos (ci_paciente, id_signo)
+                    VALUES (@CiPaciente, @IdSigno);";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -86,12 +67,13 @@ namespace Front.SigVitalesPag
             }
         }
 
-        // Nuevo id_signo incremental
+        // NUEVO ID
         public int ObtenerNuevoId()
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Open();
+
                 string query = "SELECT ISNULL(MAX(id_signo), 0) + 1 FROM Signos_vitales";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -101,19 +83,81 @@ namespace Front.SigVitalesPag
             }
         }
 
-        // Listar signos de un paciente concreto
+        // LISTAR TODO
+        public List<ModeloSignosVitales> ListarSignos()
+        {
+            List<ModeloSignosVitales> lista = new List<ModeloSignosVitales>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                con.Open();
+
+                string query = @"
+                    SELECT id_signo,
+                           ci_paciente,
+                           fecha,
+                           hora,
+                           ritmo_cardiaco,
+                           presion_arterial,
+                           temperatura,
+                           oxigenacion
+                    FROM Signos_vitales
+                    ORDER BY fecha DESC, hora DESC;";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var signo = new ModeloSignosVitales
+                        {
+                            IdSigno = Convert.ToInt32(reader["id_signo"]),
+
+                            CiPaciente = reader["ci_paciente"] == DBNull.Value
+                                ? 0
+                                : Convert.ToInt32(reader["ci_paciente"]),
+
+                            Fecha = Convert.ToDateTime(reader["fecha"]),
+
+                            Hora = reader["hora"] is TimeSpan ts
+                                ? ts
+                                : TimeSpan.Parse(reader["hora"].ToString()),
+
+                            RitmoCardiaco = Convert.ToInt32(reader["ritmo_cardiaco"]),
+                            PresionArterial = Convert.ToInt32(reader["presion_arterial"]),
+                            Temperatura = Convert.ToDecimal(reader["temperatura"]),
+                            Oxigenacion = Convert.ToInt32(reader["oxigenacion"])
+                        };
+
+                        lista.Add(signo);
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        // LISTAR SOLO DEL PACIENTE LOGUEADO 
         public List<ModeloSignosVitales> ListarSignosDePaciente(int ciPaciente)
         {
             List<ModeloSignosVitales> lista = new List<ModeloSignosVitales>();
 
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
                 con.Open();
-                string query = @"SELECT id_signo, ci_paciente, fecha, hora,
-                                        ritmo_cardiaco, presion_arterial, temperatura, oxigenacion
-                                 FROM Signos_vitales
-                                 WHERE ci_paciente = @ci
-                                 ORDER BY fecha DESC, hora DESC";
+
+                string query = @"
+                    SELECT id_signo,
+                           ci_paciente,
+                           fecha,
+                           hora,
+                           ritmo_cardiaco,
+                           presion_arterial,
+                           temperatura,
+                           oxigenacion
+                    FROM Signos_vitales
+                    WHERE ci_paciente = @ci
+                    ORDER BY fecha DESC, hora DESC;";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -125,54 +169,20 @@ namespace Front.SigVitalesPag
                         {
                             var signo = new ModeloSignosVitales
                             {
-                                IdSigno = reader.GetInt32(0),
-                                CiPaciente = reader.GetInt32(1),
-                                Fecha = reader.GetDateTime(2),
-                                Hora = reader.GetTimeSpan(3),
-                                RitmoCardiaco = reader.GetInt32(4),
-                                PresionArterial = reader.GetInt32(5),
-                                Temperatura = reader.GetDecimal(6),
-                                Oxigenacion = reader.GetInt32(7)
+                                IdSigno = Convert.ToInt32(reader["id_signo"]),
+                                CiPaciente = Convert.ToInt32(reader["ci_paciente"]),
+                                Fecha = Convert.ToDateTime(reader["fecha"]),
+                                Hora = reader["hora"] is TimeSpan ts
+                                    ? ts
+                                    : TimeSpan.Parse(reader["hora"].ToString()),
+                                RitmoCardiaco = Convert.ToInt32(reader["ritmo_cardiaco"]),
+                                PresionArterial = Convert.ToInt32(reader["presion_arterial"]),
+                                Temperatura = Convert.ToDecimal(reader["temperatura"]),
+                                Oxigenacion = Convert.ToInt32(reader["oxigenacion"])
                             };
+
                             lista.Add(signo);
                         }
-                    }
-                }
-            }
-
-            return lista;
-        }
-
-        // Versión antigua: todos los signos (si la necesitas en otro lado)
-        public List<ModeloSignosVitales> ListarSignos()
-        {
-            List<ModeloSignosVitales> lista = new List<ModeloSignosVitales>();
-
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                string query = @"SELECT id_signo, ci_paciente, fecha, hora,
-                                        ritmo_cardiaco, presion_arterial, temperatura, oxigenacion
-                                 FROM Signos_vitales";
-
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                using (SqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var signo = new ModeloSignosVitales
-                        {
-                            IdSigno = reader.GetInt32(0),
-                            CiPaciente = reader.GetInt32(1),
-                            Fecha = reader.GetDateTime(2),
-                            Hora = reader.GetTimeSpan(3),
-                            RitmoCardiaco = reader.GetInt32(4),
-                            PresionArterial = reader.GetInt32(5),
-                            Temperatura = reader.GetDecimal(6),
-                            Oxigenacion = reader.GetInt32(7)
-                        };
-
-                        lista.Add(signo);
                     }
                 }
             }

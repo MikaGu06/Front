@@ -6,9 +6,9 @@ namespace Front.MiCuenta
 {
     public class ValidacionesMiCuenta
     {
-        /// <summary>
+     
         /// Valida todos los campos de MiCuenta y lanza excepciones con mensajes claros.
-        /// </summary>
+      
         public static void CuentaValidar(ModeloUsuario u)
         {
             // Campos obligatorios

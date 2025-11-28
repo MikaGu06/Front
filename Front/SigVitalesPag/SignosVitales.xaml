@@ -409,7 +409,7 @@
                                     Style="{StaticResource BotonPrincipal}" 
                                     MouseLeftButtonDown="Acceder_Click">
 
-                                <TextBlock Text="Acceder"
+                                <TextBlock Text="Agregar"
                                                HorizontalAlignment="center"
                                                VerticalAlignment="center"
                                                FontSize="20"
