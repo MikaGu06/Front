@@ -272,33 +272,33 @@
         </Style>
 
     </Page.Resources>
-    <ScrollViewer>
 
 
 
-        <!-- CONTENIDO -->
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <!-- BOTÓN VOLVER -->
-            <Button Content="Volver" x:Name="BtnVolver"
+    <!-- CONTENIDO -->
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- BOTÓN VOLVER -->
+        <Button Content="Volver" x:Name="BtnVolver"
         Style="{StaticResource BotonVolver}"
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
         Margin="0,20,30,0"
         Grid.Row="0" Click="BtnVolver_Click"/>
 
-            <!-- SCROLL -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <StackPanel Margin="20" HorizontalAlignment="Center">
+        <!-- SCROLL -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20" HorizontalAlignment="Center">
 
-                    <!-- Formulario -->
-                    <StackPanel Width="750" Margin="0,0,0,0" HorizontalAlignment="Center">
+                <!-- Formulario -->
+                <StackPanel Width="750" Margin="0,0,0,0" HorizontalAlignment="Center">
 
-                        <TextBlock Text="SIGNOS VITALES"
+                    <TextBlock Text="SIGNOS VITALES"
                                FontSize="50"
                                Foreground="#0A204A"
                                HorizontalAlignment="Center"
@@ -306,7 +306,7 @@
                                FontFamily="Segoe UI Variable Display Semibold"
                                Margin="0,0,0,10"/>
 
-                        <Border HorizontalAlignment="Center"
+                    <Border HorizontalAlignment="Center"
                             Padding="30"
                             Width="650"
                             Height="380"
@@ -314,227 +314,203 @@
                             CornerRadius="50"
                             Margin="0 0 0 30">
 
-                            <Grid Margin="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                        <Grid Margin="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                <!-- Ritmo -->
-                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="20">
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="Añadir Ritmo Cardíaco" Style="{StaticResource EtiquetaCampo}"/>
-                                    </StackPanel>
+                            <!-- Ritmo -->
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="20">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Añadir Ritmo Cardíaco" Style="{StaticResource EtiquetaCampo}"/>
+                                </StackPanel>
 
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBox x:Name="txtRitmoCardiaco"
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="txtRitmoCardiaco"
                                              Style="{StaticResource EntradaTexto}"
                                              Grid.Column="0"/>
 
-                                            <TextBlock Text="bpm"
-                                               Style="{StaticResource MeasureLabelStyle}"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"/>
-                                        </StackPanel>
-
-                                    </Grid>
-
-                                </StackPanel>
-
-                                <!-- Presión -->
-                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="20">
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="Añadir Presión Arterial" Style="{StaticResource EtiquetaCampo}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox Name="txtPresionArterial"
-                                        Style="{StaticResource EntradaTexto}"/>
-                                        <TextBlock Text="mm Hg"
+                                        <TextBlock Text="bpm"
                                                Style="{StaticResource MeasureLabelStyle}"
                                                Grid.Column="1"
                                                VerticalAlignment="Center"/>
                                     </StackPanel>
 
-                                </StackPanel>
+                                </Grid>
 
-                                <!-- Oxigenación -->
-                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="20">
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="Añadir Oxigenación" Style="{StaticResource EtiquetaCampo}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox Name="txtOxigenacion"
-                                        Style="{StaticResource EntradaTexto}"/>
-                                        <TextBlock Text="%"
-                                               Style="{StaticResource MeasureLabelStyle}"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"/>
-                                    </StackPanel>
-
-
-                                </StackPanel>
-
-                                <!-- Temperatura -->
-                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="20">
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <TextBlock Text="Añadir Temperatura" Style="{StaticResource EtiquetaCampo}"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox Name="txtTemperatura"
-                                        Style="{StaticResource EntradaTexto}"/>
-                                        <TextBlock Text="C°"
-                                               Style="{StaticResource MeasureLabelStyle}"
-                                               Grid.Column="1"
-                                               VerticalAlignment="Center"/>
-                                    </StackPanel>
-
-                                </StackPanel>
-
-                                <!-- Añadir -->
-                                <Border Grid.Row="2" Grid.ColumnSpan="2"
-                                    Style="{StaticResource BotonPrincipal}">
-                                    <Button    Foreground="White"
-                                           Background="Transparent"
-                                           Content="Añadir"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="20" Click="Button_Click"/>
-                                </Border>
-
-                            </Grid>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- ===== HISTORIAL ===== -->
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,40">
-                        <Border CornerRadius="40" Padding="20" Width="700" Background="White">
-                            <Border.Effect>
-                                <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="4" Direction="270" BlurRadius="6"/>
-                            </Border.Effect>
-
-                            <StackPanel>
-                                <!-- Título -->
-                                <StackPanel Orientation="Vertical" Margin="0,0,0,12">
-                                    <TextBlock Text="HISTORIAL"
-                           FontSize="30"
-                           Foreground="#0A204A"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           FontFamily="Segoe UI Variable Display Semibold"
-                           Margin="0,6,0,6"/>
-
-
-
-
-
-                                </StackPanel>
-                                <!--==== CONTENEDORES=== -->
-                                <StackPanel x:Name="Contenedor">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Fecha: "
-                                               HorizontalAlignment="Left"
-                                               Style="{StaticResource EtiquetaCampo}"/>
-                                        <TextBlock x:Name="TxtBlFecha"
-                                                   Text=" "
-                                                   HorizontalAlignment="Left"
-                                                   Style="{StaticResource EtiquetaCampo}"/>
-                                    </StackPanel>
-
-
-
-                                    <!-- Contenedor claro -->
-                                    <Border x:Name="ContenedorClaro" Background="#E8EAF6" CornerRadius="6" Padding="10">
-
-                                        <!-- 4 cards en una fila -->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- Ritmo Card -->
-                                            <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="12" Margin="6">
-                                                <Border.Effect>
-                                                    <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
-                                                </Border.Effect>
-                                                <StackPanel HorizontalAlignment="Center">
-                                                    <TextBlock Text="Ritmo Cardíaco" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
-                                                    <TextBlock x:Name="TxtBlRitmoCardiaco"
-                                                               Text="-"
-                                                               Style="{StaticResource RitmoCardiaco}"/>
-
-                                                    <TextBlock Text="bpm" 
-                                                           Style="{StaticResource MeasureLabelStyle}" 
-                                                           HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Border>
-
-                                            <!-- Presión Card -->
-                                            <Border Grid.Column="1" Background="White" CornerRadius="8" Padding="12" Margin="6">
-                                                <Border.Effect>
-                                                    <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
-                                                </Border.Effect>
-                                                <StackPanel HorizontalAlignment="Center">
-                                                    <TextBlock Text="Presión arterial" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
-                                                    <TextBlock x:Name="TxtBlPresionArterial"
-                                                           Text="-"
-                                                           Style="{StaticResource PresionArterial}"/>
-                                                    <TextBlock Text="mmHg" Style="{StaticResource MeasureLabelStyle}" HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Border>
-
-                                            <!-- Oxigenación Card -->
-                                            <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="12" Margin="6">
-                                                <Border.Effect>
-                                                    <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
-                                                </Border.Effect>
-                                                <StackPanel HorizontalAlignment="Center">
-                                                    <TextBlock Text="Oxigenación" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
-                                                    <TextBlock x:Name="TxtBlOxigenacion"
-                                                           Text="-"
-                                                           Style="{StaticResource Oxigenacion}"/>
-                                                    <TextBlock Text="%" Style="{StaticResource MeasureLabelStyle}" HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Border>
-
-                                            <!-- Temperatura Card -->
-                                            <Border Grid.Column="3" Background="White" CornerRadius="8" Padding="12" Margin="6">
-                                                <Border.Effect>
-                                                    <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
-                                                </Border.Effect>
-                                                <StackPanel HorizontalAlignment="Center">
-                                                    <TextBlock Text="Temperatura" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
-                                                    <TextBlock x:Name="TxtBlTemperatura"
-                                                           Text="-"
-                                                           Style="{StaticResource Temperatura}"/>
-                                                    <TextBlock Text="°C" Style="{StaticResource MeasureLabelStyle}" HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Border>
-
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
                             </StackPanel>
-                        </Border>
 
-                    </StackPanel>
+                            <!-- Presión -->
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="20">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Añadir Presión Arterial" Style="{StaticResource EtiquetaCampo}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Name="txtPresionArterial"
+                                        Style="{StaticResource EntradaTexto}"/>
+                                    <TextBlock Text="mm Hg"
+                                               Style="{StaticResource MeasureLabelStyle}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                            </StackPanel>
+
+                            <!-- Oxigenación -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="20">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Añadir Oxigenación" Style="{StaticResource EtiquetaCampo}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Name="txtOxigenacion"
+                                        Style="{StaticResource EntradaTexto}"/>
+                                    <TextBlock Text="%"
+                                               Style="{StaticResource MeasureLabelStyle}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
 
 
+                            </StackPanel>
+
+                            <!-- Temperatura -->
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="20">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Añadir Temperatura" Style="{StaticResource EtiquetaCampo}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Name="txtTemperatura"
+                                        Style="{StaticResource EntradaTexto}"/>
+                                    <TextBlock Text="C°"
+                                               Style="{StaticResource MeasureLabelStyle}"
+                                               Grid.Column="1"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                            </StackPanel>
+
+                            <!-- Añadir -->
+                            <Border Grid.Row="2" Grid.ColumnSpan="2"
+                                    Style="{StaticResource BotonPrincipal}" 
+                                    MouseLeftButtonDown="Acceder_Click">
+
+                                <TextBlock Text="Acceder"
+                                               HorizontalAlignment="center"
+                                               VerticalAlignment="center"
+                                               FontSize="20"
+                                               Foreground="white"/>
+                            </Border>
+
+
+                        </Grid>
+                    </Border>
                 </StackPanel>
-            </ScrollViewer>
-        </Grid>
-    </ScrollViewer>
+
+                <!-- HISTORIAL -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,40">
+                    <Border CornerRadius="40" Padding="20" Width="700" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.08" ShadowDepth="4" Direction="270" BlurRadius="6"/>
+                        </Border.Effect>
+
+                        <StackPanel>
+                            <!-- Título -->
+                            <TextBlock Text="HISTORIAL"
+                       FontSize="30"
+                       Foreground="#0A204A"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontFamily="Segoe UI Variable Display Semibold"
+                       Margin="0,6,0,6"/>
+
+                            <!-- ItemsControl para historial -->
+                            <ItemsControl x:Name="HistorialItems">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,10,0,10">
+                                            <!-- Fecha -->
+                                            <TextBlock Text="{Binding Fecha}"
+                                       Style="{StaticResource EtiquetaCampo}"/>
+
+                                            <!-- Contenedor claro -->
+                                            <Border Background="#E8EAF6" CornerRadius="6" Padding="10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Ritmo Card -->
+                                                    <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="12" Margin="6">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
+                                                        </Border.Effect>
+                                                        <StackPanel HorizontalAlignment="Center">
+                                                            <TextBlock Text="Ritmo Cardíaco" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Ritmo}" Style="{StaticResource RitmoCardiaco}"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Presión Card -->
+                                                    <Border Grid.Column="1" Background="White" CornerRadius="8" Padding="12" Margin="6">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
+                                                        </Border.Effect>
+                                                        <StackPanel HorizontalAlignment="Center">
+                                                            <TextBlock Text="Presión arterial" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Presion}" Style="{StaticResource PresionArterial}"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Oxigenación Card -->
+                                                    <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="12" Margin="6">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
+                                                        </Border.Effect>
+                                                        <StackPanel HorizontalAlignment="Center">
+                                                            <TextBlock Text="Oxigenación" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Oxigenacion}" Style="{StaticResource Oxigenacion}"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                    <!-- Temperatura Card -->
+                                                    <Border Grid.Column="3" Background="White" CornerRadius="8" Padding="12" Margin="6">
+                                                        <Border.Effect>
+                                                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="6" ShadowDepth="2"/>
+                                                        </Border.Effect>
+                                                        <StackPanel HorizontalAlignment="Center">
+                                                            <TextBlock Text="Temperatura" FontSize="13" Foreground="#002454" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding Temperatura}" Style="{StaticResource Temperatura}"/>
+                                                        </StackPanel>
+                                                    </Border>
+
+                                                </Grid>
+                                            </Border>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Page>
