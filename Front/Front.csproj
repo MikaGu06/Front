@@ -15,11 +15,13 @@
     <None Remove="Imagenes\clinica.png" />
     <None Remove="Imagenes\cora.png" />
     <None Remove="Imagenes\EmptyProfile1.jpg" />
+    <None Remove="Imagenes\google-maps.png" />
     <None Remove="Imagenes\gradient_1080_1080.png" />
     <None Remove="Imagenes\HealthyU_Header.png" />
     <None Remove="Imagenes\Logo_corazon.png" />
     <None Remove="Imagenes\medicamento.png" />
     <None Remove="Imagenes\queEs.png" />
+    <None Remove="Imagenes\whatsapp.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +48,7 @@
     <Resource Include="Imagenes\EmptyProfile1.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Imagenes\google-maps.png" />
     <Resource Include="Imagenes\gradient_1080_1080.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -57,6 +60,9 @@
     </Resource>
     <Resource Include="Imagenes\medicamento.png" />
     <Resource Include="Imagenes\queEs.png" />
+    <Resource Include="Imagenes\whatsapp.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
