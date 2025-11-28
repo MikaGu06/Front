@@ -52,7 +52,7 @@ namespace Front
         }
         private void Tarjeta2_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new SignosVitales());
+            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new SigVitalesPag.SignosVitales());
         }
         private void Tarjeta3_Click(object sender, RoutedEventArgs e)
         {
