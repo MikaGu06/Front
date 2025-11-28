@@ -387,15 +387,14 @@
                     <StackPanel Grid.Row="0" IsEnabled="False" x:Name="FormularioDatos" Cursor="">
                         <!-- Usuario-->
                         <StackPanel Orientation="Horizontal"
-                                     Margin="50 40 50 0">
+                                    Margin="50 40 50 0">
                             <Label Style="{StaticResource LabelStyle}" 
                                     Content="Usuario" VerticalAlignment="Center"/>
                             <TextBox    Name="TxtUsuario"
-                                        IsReadOnly="True"
-                                        IsTabStop="False"
-                                        IsEnabled="False"
-                                         Style="{StaticResource TextBoxStyle}"/>
+                                        Style="{StaticResource TextBoxStyle}"
+                                        IsEnabled="False"/>
                         </StackPanel>
+
                         <!-- Contraseña-->
                         <StackPanel Orientation="Horizontal"
                                     Margin="50 20 50 0">
@@ -422,6 +421,17 @@
                             <TextBox    Name="TxtNombre"
                                         Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
+
+                        <!-- CI-->
+                        <!-- CI -->
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="50 20 50 0">
+                            <Label Style="{StaticResource LabelStyle}" 
+                                    Content="CI" VerticalAlignment="Center"/>
+                            <TextBox Name="TxtCI"
+                                    Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+
                         <!-- Correo-->
                         <StackPanel Orientation="Horizontal"
                                          Margin="50,20,50,0">

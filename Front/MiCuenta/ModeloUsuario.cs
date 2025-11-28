@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Front.MiCuenta
 {
@@ -13,14 +11,15 @@ namespace Front.MiCuenta
         private string correo;
         private string direccion;
         private string edad;
-        private DateTime? fechaNacimiento; //DateTime tipo Nunable para que permita validar si no se selecciona fecha
+        private DateTime? fechaNacimiento;
         private string genero;
         private string tipoSangre;
         private string rutaFoto;
+        private string ci;   
 
         public string Usuario
         {
-            get { return usuario;  } 
+            get { return usuario; }
             set { usuario = value; }
         }
         public string Contrasena
@@ -73,7 +72,25 @@ namespace Front.MiCuenta
             get { return rutaFoto; }
             set { rutaFoto = value; }
         }
-        public ModeloUsuario(string pUsuario, string pContrasena, string pTelefono, string pNombre,string pCorreo, string pDireccion, string pEdad, DateTime? pFechaNacimiento, string pGenero, string pTipoSangre, string pRutaFoto)
+        public string CI
+        {
+            get { return ci; }
+            set { ci = value; }
+        }
+
+        public ModeloUsuario(
+            string pUsuario,
+            string pContrasena,
+            string pTelefono,
+            string pNombre,
+            string pCorreo,
+            string pDireccion,
+            string pEdad,
+            DateTime? pFechaNacimiento,
+            string pGenero,
+            string pTipoSangre,
+            string pRutaFoto,
+            string pCI)
         {
             usuario = pUsuario;
             contrasena = pContrasena;
@@ -86,8 +103,7 @@ namespace Front.MiCuenta
             genero = pGenero;
             tipoSangre = pTipoSangre;
             rutaFoto = pRutaFoto;
+            ci = pCI;
         }
-            
-        
     }
 }

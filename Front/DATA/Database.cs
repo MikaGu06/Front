@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -15,7 +14,7 @@ namespace Front.Data__bd_
                 .ConnectionStrings["cnHealthyU"].ConnectionString;
         }
 
-        // Para probar la conexión 
+        /// Abre y cierra la conexión para probar que funcione.
         public void ProbarConexion()
         {
             using (SqlConnection cn = new SqlConnection(_connectionString))
@@ -24,7 +23,7 @@ namespace Front.Data__bd_
             }
         }
 
-        // SELECT -> devuelve DataTable
+        /// Ejecuta un SELECT y devuelve los datos en un DataTable.
         public DataTable EjecutarConsulta(string query)
         {
             DataTable dt = new DataTable();
@@ -40,7 +39,7 @@ namespace Front.Data__bd_
             return dt;
         }
 
-        // INSERT / UPDATE / DELETE
+        /// Ejecuta INSERT, UPDATE o DELETE y devuelve filas afectadas.
         public int EjecutarComando(string query)
         {
             using (SqlConnection cn = new SqlConnection(_connectionString))
