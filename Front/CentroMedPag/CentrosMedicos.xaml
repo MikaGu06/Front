@@ -4,29 +4,32 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Front"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="CentrosMedicos">
 
+    <!-- ================= RECURSOS ================= -->
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-        <Style x:Key="MainBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="#EFE8F6"/>
-            <Setter Property="BorderBrush" Value="#222222"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="16"/>
+        <!-- Estilos de texto -->
+        <Style x:Key="TxtBl1" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#624695"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
         </Style>
 
-        <Style x:Key="PopupBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="6"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="MinWidth" Value="240"/>
+        <Style x:Key="TxtBl2" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="#072A4C"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
         </Style>
 
+        <!-- Botón principal -->
         <Style x:Key="BotonAgrandable" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
@@ -56,7 +59,6 @@
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
                         </Border>
-
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Trigger.EnterActions>
@@ -100,45 +102,14 @@
             <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
         </Style>
 
+        <!-- ToggleButton transparente -->
         <Style x:Key="ToggleStyle" TargetType="ToggleButton">
-            <Setter Property="Content" Value="Centros de salud"/>
-            <Setter Property="Background" Value="#dae8fa"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#072A4C"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
             <Setter Property="FontSize" Value="22"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#072A4C"/>
-            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="#80000000" 
-                                      BlurRadius="10" 
-                                      ShadowDepth="6" 
-                                      Opacity="0.35"/>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter Property="Foreground" Value="#624695"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="TxtBl1" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#624695"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
-        </Style>
-
-        <Style x:Key="TxtBl2" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Foreground" Value="#072A4C"/>
-            <Setter Property="Margin" Value="10,0"/>
-            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+            <Setter Property="Padding" Value="0"/>
         </Style>
 
         <Style x:Key="CategoriaItemStyle" TargetType="ListBoxItem">
@@ -148,20 +119,10 @@
             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="#072A4C"/>
-            <Setter Property="Visibility" Value="Visible" />
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="#624695"/>
-                    <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
-                </Trigger>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="#624695"/>
-                    <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
     </Page.Resources>
 
+    <!-- ================= GRID PRINCIPAL ================= -->
     <Grid Margin="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -169,6 +130,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- HEADER -->
         <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -176,39 +138,19 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Style="{StaticResource LabelStyle}"
-                   Grid.Column="1"
-                   HorizontalAlignment="Center"/>
-
-            <Button Grid.Column="2" 
-                    Content="Volver" x:Name="BtnVolver"
-                    Style="{StaticResource BotonAgrandable}" 
-                    Width="120"
-                    Height="40"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,25,30,0"
+            <Label Style="{StaticResource LabelStyle}" Grid.Column="1" HorizontalAlignment="Center"/>
+            <Button Grid.Column="2" Content="Volver" x:Name="BtnVolver"
+                    Style="{StaticResource BotonAgrandable}" Width="120" Height="40"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,25,30,0"
                     Click="BtnVolver_Click"/>
         </Grid>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="60,6,0,6">
-
-            <ToggleButton x:Name="Toggle"
-                          Style="{StaticResource ToggleStyle}">
-                <ToggleButton.Template>
-                    <ControlTemplate TargetType="ToggleButton">
-                        <ContentPresenter 
-            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </ControlTemplate>
-                </ToggleButton.Template>
-
+        <!-- FILTRO CATEGORIAS -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,6,0,6">
+            <ToggleButton x:Name="Toggle" Style="{StaticResource ToggleStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Categorías" FontFamily="Segoe UI Semilight"/>
-                    <TextBlock Text="  ▾" FontFamily="Segoe UI Semilight" Margin="6,0,0,0"/>
+                    <TextBlock Text="Categorías"/>
+                    <TextBlock Text="  ▾" Margin="6,0,0,0"/>
                 </StackPanel>
             </ToggleButton>
 
@@ -221,126 +163,105 @@
                    HorizontalOffset="0"
                    VerticalOffset="6">
 
-                <Border Style="{StaticResource PopupBorderStyle}">
+                <Border Background="White" CornerRadius="8" Padding="6" BorderBrush="#E0E0E0" BorderThickness="1">
                     <ListBox x:Name="ListaCategorias"
-                             BorderThickness="0"
-                             Background="Transparent"
-                             SelectionMode="Single"
-                             ItemContainerStyle="{StaticResource CategoriaItemStyle}">
-
-                        <ListBoxItem x:Name="FarmaciasItem">
-                            <TextBlock Text="Farmacias"/>
-                        </ListBoxItem>
-
-                        <ListBoxItem x:Name="HospitalesItem">
-                            <TextBlock Text="Hospitales"/>
-                        </ListBoxItem>
-
-                        <ListBoxItem x:Name="ClinicasItem">
-                            <TextBlock Text="Clínicas"/>
-                        </ListBoxItem>
-
-                        <ListBoxItem x:Name="LaboratoriosItem">
-                            <TextBlock Text="Laboratorios"/>
-                        </ListBoxItem>
-
-                        <ListBoxItem x:Name="ConsultoriosItem">
-                            <TextBlock Text="Consultorios"/>
-                        </ListBoxItem>
-
-                    </ListBox>
+                            DisplayMemberPath="."
+                            BorderThickness="0"
+                            Background="White"
+                            SelectionMode="Single"
+                            ItemContainerStyle="{StaticResource CategoriaItemStyle}"/>
                 </Border>
             </Popup>
         </StackPanel>
 
-        <!-- Contenedor principal de la lista -->
-        <StackPanel Grid.Row="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    Margin="60,18,60,24">
+        <!-- LISTA DE CENTROS CON SCROLLVIEWER -->
+        <ScrollViewer Grid.Row="2" Margin="60,18,60,24" VerticalScrollBarVisibility="Auto">
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <Border Background="#EFE8F6" Padding="16" BorderThickness="0" CornerRadius="8">
+                    <StackPanel Orientation="Vertical">
 
-            <Border Style="{StaticResource MainBorderStyle}">
-                <StackPanel x:Name="spCentros" Orientation="Vertical">
-                    <Grid Margin="4" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
+                        <!-- TITULOS -->
+                        <Grid Margin="4" VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" HorizontalAlignment="Left">
-                            <Border>
-                                <TextBlock x:Name="TxtBlNombre"
-                                           Text="Nombre"
-                                           Style="{StaticResource TxtBl1}"/>
-                            </Border>
-                        </StackPanel>
+                            <TextBlock Grid.Column="0" Text="Institución" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="1" Text="Dirección" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="2" Text="Teléfono" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="3" Text="Ubicación" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="4" Text="WhatsApp" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                        </Grid>
 
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                            <Border>
-                                <TextBlock x:Name="TxtBlAtt"
-                                           Text="Institución"
-                                           Style="{StaticResource TxtBl1}"/>
-                            </Border>
-                        </StackPanel>
+                        <!-- FILAS -->
+                        <ItemsControl x:Name="FilasContainer">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="6" MinHeight="64">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="4*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                        </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="2" HorizontalAlignment="Right">
-                            <Border>
-                                <TextBlock x:Name="TxtBlDir"
-                                           Text="Dirección"
-                                           Style="{StaticResource TxtBl1}"/>
-                            </Border>
-                        </StackPanel>
+                                        <!-- Institución -->
+                                        <TextBlock Text="{Binding Institucion}" 
+                                           Style="{StaticResource TxtBl1}" 
+                                           Grid.Column="0" 
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"/>
 
-                        <StackPanel Grid.Column="3" HorizontalAlignment="Right">
-                            <Border>
-                                <TextBlock x:Name="TxtTel"
-                                           Text="Teléfono"
-                                           Style="{StaticResource TxtBl1}"/>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
+                                        <!-- Dirección -->
+                                       <TextBlock Text="{Binding Direccion}" 
+                                           Style="{StaticResource TxtBl1}" 
+                                           Grid.Column="1" 
+                                           TextWrapping="Wrap"
+                                           MaxWidth="300"/>
 
-                    <!-- Aquí se llenarán dinámicamente los centros -->
-                    <!-- Aquí se llenarán dinámicamente los centros -->
-                    <ItemsControl x:Name="FilasContainer">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="4" VerticalAlignment="Top">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="3*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                    </Grid.ColumnDefinitions>
+                                        <!-- Teléfono -->
+                                        <TextBlock Text="{Binding Telefono}" 
+                                               Style="{StaticResource TxtBl1}"
+                                               Grid.Column="2"
+                                               HorizontalAlignment="Left"/>
 
-                                    <!-- Nombre / Categoría -->
-                                    <TextBlock Grid.Column="0"
-                           Text="{Binding Categoria}"
-                           Style="{StaticResource TxtBl2}"/>
+                                        <!-- Botón Google Maps con imagen -->
+                                        <Button Grid.Column="3"
+                                            Tag="{Binding LinkUbi}"
+                                            Click="AbrirMapa_Click"
+                                            Width="40" Height="40"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            HorizontalAlignment="Center">
+                                            <Image Source="/Imagenes/google-maps.png" Stretch="Uniform"/>
+                                        </Button>
 
-                                    <!-- Institución -->
-                                    <TextBlock Grid.Column="1"
-                           Text="{Binding Institucion}"
-                           Style="{StaticResource TxtBl2}"/>
+                                        <!-- Botón WhatsApp con imagen -->
+                                        <Button Grid.Column="4"
+                                                Tag="{Binding LinkTelf}"
+                                                Click="AbrirWhatsApp_Click"
+                                                Width="40" Height="40"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                HorizontalAlignment="Center">
+                                            <Image Source="/Imagenes/whatsapp.png" Stretch="Uniform"/>
+                                        </Button>
 
-                                    <!-- Dirección -->
-                                    <TextBlock Grid.Column="2"
-                           Text="{Binding Direccion}"
-                           Style="{StaticResource TxtBl2}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                                    <!-- Teléfono -->
-                                    <TextBlock Grid.Column="3"
-                           Text="{Binding Telefono}"
-                           Style="{StaticResource TxtBl2}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
 
-                </StackPanel>
-            </Border>
-        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Page>

@@ -1,7 +1,8 @@
-﻿using Front.CentroMedPag; // Ajusta si tu namespace es diferente
+﻿using Front.CentroMedPag.ModelosCM;
+using Front.CentroMedPag.ServiciosCM;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,14 +10,37 @@ namespace Front
 {
     public partial class CentrosMedicos : Page
     {
-        private ServicioCM service;
+        private CentroDeSaludServicio servicio = new CentroDeSaludServicio();
+
+        // ObservableCollection para ItemsControl
+        public ObservableCollection<dynamic> CentrosUI { get; set; } = new ObservableCollection<dynamic>();
 
         public CentrosMedicos()
         {
             InitializeComponent();
-            service = new ServicioCM(); // tu clase de conexión SQL
 
-            // Evento para cambio de categoría
+            // Asociar la colección al ItemsControl
+            FilasContainer.ItemsSource = CentrosUI;
+
+            CargarCategorias();
+        }
+
+        private void CargarCategorias()
+        {
+            ListaCategorias.ItemsSource = new List<string>
+            {
+                "AMBULANCIA",
+                "CENTRO DE DIAGNOSTICO",
+                "CENTRO DE FISIOTERAPIA Y",
+                "CENTRO DE FISIOTERAPIA Y REHABILITACION",
+                "CENTRO MEDICO",
+                "CLINICA / HOSPITAL",
+                "CLINICA ODONTOLOGICA",
+                "FARMACIA",
+                "LABORATORIO CLINICO",
+                "OPTICA DIAGNOSTICO"
+            };
+
             ListaCategorias.SelectionChanged += ListaCategorias_SelectionChanged;
         }
 
@@ -24,69 +48,74 @@ namespace Front
         {
             if (ListaCategorias.SelectedItem == null) return;
 
-            string categoria = (ListaCategorias.SelectedItem as ListBoxItem)?.Content.ToString();
+            // Para simplificar: como tus items son strings, asignamos directamente un ID simulado
+            int idCat = ListaCategorias.SelectedIndex + 1;
 
-            int idCategoria = categoria switch
-            {
-                "Farmacias" => 1,
-                "Hospitales" => 2,
-                "Clínicas" => 3,
-                "Laboratorios" => 4,
-                "Consultorios" => 5,
-                _ => 0
-            };
+            // Obtener centros desde la base de datos
+            List<CentrosDeSalud> centros = servicio.ObtenerCentrosPorCategoria(idCat);
 
-            if (idCategoria == 0) return;
+            // Limpiar la ObservableCollection antes de agregar
+            CentrosUI.Clear();
 
-            service.CargarCentrosPorCategoria(idCategoria);
-
-            MostrarCentros(service.ListarCentros());
-        }
-
-        private void MostrarCentros(List<ModeloCM> centros)
-        {
-            spCentros.Children.Clear();
-
+            // Preparar lista para la UI
             foreach (var centro in centros)
             {
-                Grid row = new Grid { Margin = new Thickness(6), MinHeight = 64 };
-                row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-                row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-                row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(3, GridUnitType.Star) });
-                row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-
-                TextBlock txtInstitucion = new TextBlock { Text = centro.Institucion, FontWeight = FontWeights.Bold };
-                Grid.SetColumn(txtInstitucion, 0);
-                row.Children.Add(txtInstitucion);
-
-                TextBlock txtCategoria = new TextBlock { Text = centro.Categoria };
-                Grid.SetColumn(txtCategoria, 1);
-                row.Children.Add(txtCategoria);
-
-                TextBlock txtDireccion = new TextBlock { Text = centro.Direccion };
-                Grid.SetColumn(txtDireccion, 2);
-                row.Children.Add(txtDireccion);
-
-                Button btnTelefono = new Button { Content = centro.Telefono.ToString(), Width = 100, Height = 30 };
-                btnTelefono.Click += (s, e) =>
+                foreach (var tel in centro.Telefonos)
                 {
-                    string tel = (s as Button)?.Content.ToString();
-                    if (!string.IsNullOrEmpty(tel))
+                    CentrosUI.Add(new
                     {
-                        try { Process.Start(new ProcessStartInfo($"tel:{tel}") { UseShellExecute = true }); }
-                        catch (Exception ex) { MessageBox.Show("No se pudo iniciar la llamada: " + ex.Message); }
-                    }
-                };
-                Grid.SetColumn(btnTelefono, 3);
-                row.Children.Add(btnTelefono);
+                        Institucion = centro.Institucion,
+                        Direccion = centro.Direccion,
+                        Telefono = tel.Telefono,
+                        LinkUbi = centro.Link,   // string
+                        LinkTelf = tel.LinkT     // string
+                    });
+                }
+            }
+        }
 
-                spCentros.Children.Add(row);
+        private void AbrirMapa_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string url && !string.IsNullOrEmpty(url))
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo abrir el enlace: " + ex.Message);
+                }
+            }
+        }
+
+        private void AbrirWhatsApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string url && !string.IsNullOrEmpty(url))
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = url,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("No se pudo abrir el enlace: " + ex.Message);
+                }
             }
         }
 
         private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
+            if (this.NavigationService != null && this.NavigationService.CanGoBack)
+                this.NavigationService.GoBack();
         }
     }
 }
