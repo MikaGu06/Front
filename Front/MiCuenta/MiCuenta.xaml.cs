@@ -27,6 +27,15 @@ namespace Front.MiCuenta
         {
             InitializeComponent();
 
+            // 1) Tomamos el usuario que inició sesión
+            usuarioActual = SesionUsuario.NombreUsuario;
+
+            // 2) Si hay usuario, cargamos sus datos desde la BD
+            if (!string.IsNullOrEmpty(usuarioActual))
+            {
+                CargarUsuarioDesdeBD();
+            }
+
             CargarDesdeSesion();
             CargarFotoDesdeBaseDeDatos();
         }
@@ -88,6 +97,83 @@ namespace Front.MiCuenta
             {
                 fotoPerfilActual = SesionUsuario.FotoPerfil;
                 FotoPerfil.Source = ConvertirBytesAImagen(fotoPerfilActual);
+            }
+        }
+        private void CargarUsuarioDesdeBD()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand(
+                    @"SELECT
+                u.nombre_usuario,
+                u.contrasena_hash as contrasena,
+                p.celular,
+                p.nombre_completo,
+                p.correo,
+                p.direccion,
+                p.fecha_nacimiento,
+                p.sexo,
+                p.id_tipo_sangre,
+                p.ci_paciente,
+                p.foto_perfil
+              FROM Usuario u
+              LEFT JOIN Paciente p ON u.ci_paciente = p.ci_paciente
+              WHERE u.nombre_usuario = @user", conn))
+                {
+                    cmd.Parameters.AddWithValue("@user", usuarioActual);
+                    conn.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            // Llenamos la sesión con lo que viene de la BD
+                            SesionUsuario.NombreUsuario = dr["nombre_usuario"]?.ToString();
+                            SesionUsuario.Contrasena = dr["contrasena"]?.ToString();
+                            SesionUsuario.Telefono = dr["celular"]?.ToString();
+                            SesionUsuario.NombreCompleto = dr["nombre_completo"]?.ToString();
+                            SesionUsuario.Correo = dr["correo"]?.ToString();
+                            SesionUsuario.Direccion = dr["direccion"]?.ToString();
+
+                            if (dr["fecha_nacimiento"] != DBNull.Value)
+                                SesionUsuario.FechaNacimiento = Convert.ToDateTime(dr["fecha_nacimiento"]);
+                            else
+                                SesionUsuario.FechaNacimiento = null;
+
+                            // Género: en la BD es 1 = Masculino, 0 = Femenino (según lo que ya usas)
+                            if (dr["sexo"] != DBNull.Value)
+                            {
+                                int sexo = Convert.ToInt32(dr["sexo"]);
+                                SesionUsuario.Genero = (sexo == 1) ? "Masculino" : "Femenino";
+                            }
+
+                            // Tipo de sangre por id → lo convertimos a código (A+, O-, etc.)
+                            if (dr["id_tipo_sangre"] != DBNull.Value)
+                            {
+                                int idTipo = Convert.ToInt32(dr["id_tipo_sangre"]);
+                                SesionUsuario.TipoSangre = ObtenerCodigoTipoSangre(idTipo);
+                            }
+
+                            SesionUsuario.CI = dr["ci_paciente"]?.ToString();
+
+                            // Foto de perfil
+                            if (dr["foto_perfil"] != DBNull.Value)
+                            {
+                                SesionUsuario.FotoPerfil = (byte[])dr["foto_perfil"];
+                                fotoPerfilActual = SesionUsuario.FotoPerfil;
+                                FotoPerfil.Source = ConvertirBytesAImagen(fotoPerfilActual);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar datos desde la base de datos: " + ex.Message,
+                                "Error al cargar usuario",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
             }
         }
 
@@ -530,6 +616,27 @@ namespace Front.MiCuenta
             }
         }
 
+        private string ObtenerCodigoTipoSangre(int idTipo)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand(
+                    "SELECT codigo FROM Tipo_sangre WHERE id_tipo_sangre = @id",
+                    conn))
+                {
+                    cmd.Parameters.AddWithValue("@id", idTipo);
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    return result?.ToString() ?? string.Empty;
+                }
+            }
+            catch
+            {
+                // Si algo falla, devolvemos vacío y ya
+                return string.Empty;
+            }
+        }
 
         /// Convierte un arreglo de bytes en BitmapImage.
 
