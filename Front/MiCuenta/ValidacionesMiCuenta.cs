@@ -95,6 +95,18 @@ namespace Front.MiCuenta
                 edadCalculada--;
             }
 
+            // Edad mínima
+            if (edadCalculada < 13)
+            {
+                throw new ArgumentException("Edad mínima permitida: 13 años.");
+            }
+
+            // Edad máxima
+            if (edadCalculada > 120)
+            {
+                throw new ArgumentException("Fecha de nacimiento inválida: no puede superar los 120 años.");
+            }
+
         }
 
         public static bool CamposCompletos(ModeloUsuario u)
