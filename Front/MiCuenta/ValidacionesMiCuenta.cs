@@ -17,7 +17,6 @@ namespace Front.MiCuenta
                 string.IsNullOrWhiteSpace(u.Correo) ||
                 string.IsNullOrWhiteSpace(u.Telefono) ||
                 string.IsNullOrWhiteSpace(u.Direccion) ||
-                string.IsNullOrWhiteSpace(u.Edad) ||
                 string.IsNullOrWhiteSpace(u.CI) ||
                 !u.FechaNacimiento.HasValue ||
                 string.IsNullOrEmpty(u.Genero) ||
@@ -59,11 +58,6 @@ namespace Front.MiCuenta
                 throw new ArgumentException("Dirección: máximo 100 caracteres.");
             }
 
-            // Edad
-            if (!int.TryParse(u.Edad, out int edadIngresada) || edadIngresada < 1 || edadIngresada > 120)
-            {
-                throw new ArgumentException("Edad: solo números, entre 1 y 120.");
-            }
 
             // CI
             if (!Regex.IsMatch(u.CI, @"^\d+$"))
@@ -101,11 +95,21 @@ namespace Front.MiCuenta
                 edadCalculada--;
             }
 
-            if (edadCalculada != edadIngresada || edadCalculada < 1 || edadCalculada > 120)
-            {
-                throw new ArgumentException(
-                    $"La edad calculada ({edadCalculada}) no coincide con la ingresada ({edadIngresada}).");
-            }
+        }
+
+        public static bool CamposCompletos(ModeloUsuario u)
+        {
+            return
+                !string.IsNullOrWhiteSpace(u.Usuario) &&
+                !string.IsNullOrWhiteSpace(u.Contrasena) &&
+                !string.IsNullOrWhiteSpace(u.Telefono) &&
+                !string.IsNullOrWhiteSpace(u.Nombre) &&
+                !string.IsNullOrWhiteSpace(u.Correo) &&
+                !string.IsNullOrWhiteSpace(u.Direccion) &&
+                u.FechaNacimiento.HasValue &&
+                !string.IsNullOrWhiteSpace(u.Genero) &&
+                !string.IsNullOrWhiteSpace(u.TipoSangre) &&
+                !string.IsNullOrWhiteSpace(u.CI);
         }
     }
 }

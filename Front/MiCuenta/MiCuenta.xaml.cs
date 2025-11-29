@@ -54,9 +54,6 @@ namespace Front.MiCuenta
             if (!string.IsNullOrEmpty(SesionUsuario.Direccion))
                 TxtDireccion.Text = SesionUsuario.Direccion;
 
-            if (!string.IsNullOrEmpty(SesionUsuario.Edad))
-                TxtEdad.Text = SesionUsuario.Edad;
-
             if (SesionUsuario.FechaNacimiento.HasValue)
                 DpFechaNacimiento.SelectedDate = SesionUsuario.FechaNacimiento.Value;
 
@@ -96,7 +93,28 @@ namespace Front.MiCuenta
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            // Volver a Servicios
+            ModeloUsuario usuario = new ModeloUsuario(
+                TxtUsuario.Text,
+                PsBoxContrasena.Password,
+                TxtTelefono.Text,
+                TxtNombre.Text,
+                TxtCorreo.Text,
+                TxtDireccion.Text,
+                DpFechaNacimiento.SelectedDate,
+                (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString(),
+                (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString(),
+                null,
+                TxtCI.Text
+            );
+
+            //Verificando si faltan datos obligatorios
+            if (!ValidacionesMiCuenta.CamposCompletos(usuario))
+            {
+                MessageBox.Show("Debe completar todos los datos antes de salir.", "Datos incompletos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; // NO permite salir
+            }
+
+            // Volver a Servicios si todo está completo
             ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
         }
 
@@ -138,7 +156,6 @@ namespace Front.MiCuenta
                     TxtNombre.Text,
                     TxtCorreo.Text,
                     TxtDireccion.Text,
-                    TxtEdad.Text,
                     DpFechaNacimiento.SelectedDate,
                     (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString(),
                     (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString(),
@@ -156,7 +173,6 @@ namespace Front.MiCuenta
                 SesionUsuario.NombreCompleto = usuario.Nombre;
                 SesionUsuario.Correo = usuario.Correo;
                 SesionUsuario.Direccion = usuario.Direccion;
-                SesionUsuario.Edad = usuario.Edad;
                 SesionUsuario.FechaNacimiento = usuario.FechaNacimiento;
                 SesionUsuario.Genero = usuario.Genero;
                 SesionUsuario.TipoSangre = usuario.TipoSangre;
@@ -365,8 +381,9 @@ namespace Front.MiCuenta
             if (!int.TryParse(u.CI, out int ciNumerico))
                 throw new ArgumentException("CI: Debe ser numérico.");
 
-            int edadInt = 0;
-            int.TryParse(u.Edad, out edadInt);
+            if (!u.FechaNacimiento.HasValue)
+                throw new ArgumentException("Debe seleccionar una fecha de nacimiento.");
+
 
             byte[] bytesFoto = fotoPerfilActual ?? SesionUsuario.FotoPerfil;
 
@@ -428,9 +445,9 @@ namespace Front.MiCuenta
                             using (SqlCommand cmdInsertPac = new SqlCommand(
                                 @"INSERT INTO Paciente
                                   (ci_paciente, id_tipo_sangre, id_centro, correo, nombre_completo,
-                                   celular, direccion, sexo, foto_perfil, fecha_nacimiento, edad)
+                                   celular, direccion, sexo, foto_perfil, fecha_nacimiento)
                                   VALUES (@ci, @idTipo, NULL, @correo, @nombre,
-                                          @cel, @dir, @sexo, @foto, @fecha, @edad)",
+                                          @cel, @dir, @sexo, @foto, @fecha)",
                                 conn, tx))
                             {
                                 cmdInsertPac.Parameters.AddWithValue("@ci", ciNumerico);
@@ -450,7 +467,6 @@ namespace Front.MiCuenta
                                     cmdInsertPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value;
 
                                 cmdInsertPac.Parameters.AddWithValue("@fecha", u.FechaNacimiento.Value);
-                                cmdInsertPac.Parameters.AddWithValue("@edad", edadInt);
 
                                 cmdInsertPac.ExecuteNonQuery();
                             }
@@ -467,8 +483,7 @@ namespace Front.MiCuenta
                                       direccion       = @dir,
                                       sexo            = @sexo,
                                       foto_perfil     = @foto,
-                                      fecha_nacimiento = @fecha,
-                                      edad            = @edad
+                                      fecha_nacimiento = @fecha
                                   WHERE ci_paciente = @ci",
                                 conn, tx))
                             {
@@ -489,7 +504,6 @@ namespace Front.MiCuenta
                                     cmdUpdPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value;
 
                                 cmdUpdPac.Parameters.AddWithValue("@fecha", u.FechaNacimiento.Value);
-                                cmdUpdPac.Parameters.AddWithValue("@edad", edadInt);
 
                                 cmdUpdPac.ExecuteNonQuery();
                             }

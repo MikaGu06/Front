@@ -10,7 +10,6 @@ namespace Front.MiCuenta
         private string nombre;
         private string correo;
         private string direccion;
-        private string edad;
         private DateTime? fechaNacimiento;
         private string genero;
         private string tipoSangre;
@@ -47,11 +46,7 @@ namespace Front.MiCuenta
             get { return direccion; }
             set { direccion = value; }
         }
-        public string Edad
-        {
-            get { return edad; }
-            set { edad = value; }
-        }
+
         public DateTime? FechaNacimiento
         {
             get { return fechaNacimiento; }
@@ -85,7 +80,6 @@ namespace Front.MiCuenta
             string pNombre,
             string pCorreo,
             string pDireccion,
-            string pEdad,
             DateTime? pFechaNacimiento,
             string pGenero,
             string pTipoSangre,
@@ -98,7 +92,6 @@ namespace Front.MiCuenta
             nombre = pNombre;
             correo = pCorreo;
             direccion = pDireccion;
-            edad = pEdad;
             fechaNacimiento = pFechaNacimiento;
             genero = pGenero;
             tipoSangre = pTipoSangre;
