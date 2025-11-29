@@ -449,14 +449,7 @@
                             <TextBox    Name="TxtDireccion"
                                         Style="{StaticResource TextBoxStyle}"/>
                         </StackPanel>
-                        <!--Edad-->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Edad" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtEdad"
-                                        Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
+
                         <!--FechaNac-->
                         <StackPanel Orientation="Horizontal" 
                                      Margin="50,20,50,0">
