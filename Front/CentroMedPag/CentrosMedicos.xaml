@@ -9,11 +9,9 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="CentrosMedicos">
 
-    <!-- ================= RECURSOS ================= -->
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-        <!-- Estilos de texto -->
         <Style x:Key="TxtBl1" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#624695"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -29,7 +27,6 @@
             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
         </Style>
 
-        <!-- Botón principal -->
         <Style x:Key="BotonAgrandable" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
@@ -102,7 +99,6 @@
             <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
         </Style>
 
-        <!-- ToggleButton transparente -->
         <Style x:Key="ToggleStyle" TargetType="ToggleButton">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -122,7 +118,6 @@
         </Style>
     </Page.Resources>
 
-    <!-- ================= GRID PRINCIPAL ================= -->
     <Grid Margin="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -130,7 +125,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
         <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -145,12 +139,11 @@
                     Click="BtnVolver_Click"/>
         </Grid>
 
-        <!-- FILTRO CATEGORIAS -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,6,0,6">
             <ToggleButton x:Name="Toggle" Style="{StaticResource ToggleStyle}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Categorías"/>
-                    <TextBlock Text="  ▾" Margin="6,0,0,0"/>
+                    <TextBlock Text="  ▾" Margin="6,0,0,0"/>
                 </StackPanel>
             </ToggleButton>
 
@@ -165,22 +158,20 @@
 
                 <Border Background="White" CornerRadius="8" Padding="6" BorderBrush="#E0E0E0" BorderThickness="1">
                     <ListBox x:Name="ListaCategorias"
-                            DisplayMemberPath="."
-                            BorderThickness="0"
-                            Background="White"
-                            SelectionMode="Single"
-                            ItemContainerStyle="{StaticResource CategoriaItemStyle}"/>
+                             DisplayMemberPath="."
+                             BorderThickness="0"
+                             Background="White"
+                             SelectionMode="Single"
+                             ItemContainerStyle="{StaticResource CategoriaItemStyle}"/>
                 </Border>
             </Popup>
         </StackPanel>
 
-        <!-- LISTA DE CENTROS CON SCROLLVIEWER -->
         <ScrollViewer Grid.Row="2" Margin="60,18,60,24" VerticalScrollBarVisibility="Auto">
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
                 <Border Background="#EFE8F6" Padding="16" BorderThickness="0" CornerRadius="8">
                     <StackPanel Orientation="Vertical">
 
-                        <!-- TITULOS -->
                         <Grid Margin="4" VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
@@ -190,14 +181,13 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" Text="Institución" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
-                            <TextBlock Grid.Column="1" Text="Dirección" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
-                            <TextBlock Grid.Column="2" Text="Teléfono" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
-                            <TextBlock Grid.Column="3" Text="Ubicación" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
-                            <TextBlock Grid.Column="4" Text="WhatsApp" Style="{StaticResource TxtBl1}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="0" Text="Institución" Style="{StaticResource TxtBl1}"/>
+                            <TextBlock Grid.Column="1" Text="Dirección" Style="{StaticResource TxtBl1}" />
+                            <TextBlock Grid.Column="2" Text="Teléfono" Style="{StaticResource TxtBl1}" />
+                            <TextBlock Grid.Column="3" Text="Ubicación" Style="{StaticResource TxtBl1}" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="WhatsApp" Style="{StaticResource TxtBl1}" HorizontalAlignment="Center"/>
                         </Grid>
 
-                        <!-- FILAS -->
                         <ItemsControl x:Name="FilasContainer">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -210,48 +200,51 @@
                                             <ColumnDefinition Width="2*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Institución -->
                                         <TextBlock Text="{Binding Institucion}" 
-                                           Style="{StaticResource TxtBl1}" 
-                                           Grid.Column="0" 
-                                           TextWrapping="Wrap"
-                                           MaxWidth="200"/>
+                                                   Style="{StaticResource TxtBl1}" 
+                                                   Grid.Column="0" 
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="200"
+                                                   VerticalAlignment="Center"/>
 
-                                        <!-- Dirección -->
-                                       <TextBlock Text="{Binding Direccion}" 
-                                           Style="{StaticResource TxtBl1}" 
-                                           Grid.Column="1" 
-                                           TextWrapping="Wrap"
-                                           MaxWidth="300"/>
+                                        <TextBlock Text="{Binding Direccion}" 
+                                               Style="{StaticResource TxtBl1}" 
+                                               Grid.Column="1" 
+                                               TextWrapping="Wrap"
+                                               MaxWidth="300"
+                                               VerticalAlignment="Center"/>
 
-                                        <!-- Teléfono -->
                                         <TextBlock Text="{Binding Telefono}" 
                                                Style="{StaticResource TxtBl1}"
                                                Grid.Column="2"
-                                               HorizontalAlignment="Left"/>
+                                               TextWrapping="Wrap" 
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"/>
 
-                                        <!-- Botón Google Maps con imagen -->
                                         <Button Grid.Column="3"
                                             Tag="{Binding LinkUbi}"
                                             Click="AbrirMapa_Click"
-                                            Width="40" Height="40"
+                                            Width="30" Height="30"
                                             Background="Transparent"
                                             BorderThickness="0"
-                                            HorizontalAlignment="Center">
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center">
+
                                             <Image Source="/Imagenes/google-maps.png" Stretch="Uniform"/>
                                         </Button>
 
-                                        <!-- Botón WhatsApp con imagen -->
                                         <Button Grid.Column="4"
                                                 Tag="{Binding LinkTelf}"
                                                 Click="AbrirWhatsApp_Click"
-                                                Width="40" Height="40"
+                                                Width="30" Height="30"
                                                 Background="Transparent"
                                                 BorderThickness="0"
-                                                HorizontalAlignment="Center">
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Visibility="{Binding MostrarBotonWA, Converter={StaticResource BoolToVis}}">
+
                                             <Image Source="/Imagenes/whatsapp.png" Stretch="Uniform"/>
                                         </Button>
-
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

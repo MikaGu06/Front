@@ -3,6 +3,7 @@ using Front.CentroMedPag.ServiciosCM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq; // Necesario para la función .Select() y .FirstOrDefault()
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,6 +11,7 @@ namespace Front
 {
     public partial class CentrosMedicos : Page
     {
+        // Se mantiene la inicialización del servicio
         private CentroDeSaludServicio servicio = new CentroDeSaludServicio();
 
         // ObservableCollection para ItemsControl
@@ -27,6 +29,7 @@ namespace Front
 
         private void CargarCategorias()
         {
+            // Se mantiene la lista hardcodeada por solicitud
             ListaCategorias.ItemsSource = new List<string>
             {
                 "AMBULANCIA",
@@ -48,31 +51,40 @@ namespace Front
         {
             if (ListaCategorias.SelectedItem == null) return;
 
-            // Para simplificar: como tus items son strings, asignamos directamente un ID simulado
             int idCat = ListaCategorias.SelectedIndex + 1;
-
-            // Obtener centros desde la base de datos
             List<CentrosDeSalud> centros = servicio.ObtenerCentrosPorCategoria(idCat);
 
-            // Limpiar la ObservableCollection antes de agregar
             CentrosUI.Clear();
 
-            // Preparar lista para la UI
             foreach (var centro in centros)
             {
-                foreach (var tel in centro.Telefonos)
+                string telefonosConcatenados = centro.Telefonos.Any()
+                    ? string.Join(Environment.NewLine, centro.Telefonos.Select(t => t.Telefono))
+                    : "No disponible";
+
+                
+                var telefonoConLink = centro.Telefonos
+            
+                    .FirstOrDefault(t => t.Tienew && !string.IsNullOrEmpty(t.LinkT));
+
+                // 3. Establecer las propiedades para el objeto de la UI
+                string linkWhatsApp = telefonoConLink?.LinkT;
+
+                
+                bool mostrarBoton = telefonoConLink != null;
+
+                CentrosUI.Add(new
                 {
-                    CentrosUI.Add(new
-                    {
-                        Institucion = centro.Institucion,
-                        Direccion = centro.Direccion,
-                        Telefono = tel.Telefono,
-                        LinkUbi = centro.Link,   // string
-                        LinkTelf = tel.LinkT     // string
-                    });
-                }
+                    Institucion = centro.Institucion,
+                    Direccion = centro.Direccion,
+                    Telefono = telefonosConcatenados,
+                    LinkUbi = centro.Link,
+                    LinkTelf = linkWhatsApp,      
+                    MostrarBotonWA = mostrarBoton 
+                });
             }
         }
+        
 
         private void AbrirMapa_Click(object sender, RoutedEventArgs e)
         {
