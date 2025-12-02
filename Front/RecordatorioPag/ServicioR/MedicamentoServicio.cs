@@ -29,7 +29,7 @@ namespace Front.RecordatorioPag.ServicioR
                 {
                     while (reader.Read())
                     {
-                        // Convertimos la dosis a decimal de forma segura
+                        // CoWin32Exception: Tiempo de espera de Win32Exception: Tiempo de espera de la operación de espera agotado.la operación de espera agotado.nvertimos la dosis a decimal de forma segura
                         decimal dosis = Convert.ToDecimal(reader.GetValue(3));
 
                         medicamentos.Add(new Medicamento(
