@@ -136,6 +136,26 @@
             </Setter>
         </Style>
 
+        <!-- Botón Eliminar (rojo) -->
+        <Style x:Key="BotonEliminar" TargetType="Button">
+            <Setter Property="Background" Value="#D9534F"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D9534F"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Iconos pequeños -->
         <Style x:Key="IconoPequeno" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
@@ -196,7 +216,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                
+
                 <TextBlock Text="RECORDATORIOS"
                FontSize="40"
                Foreground="#0A204A"
@@ -205,7 +225,7 @@
                Grid.Column="1"
                FontFamily="Segoe UI Variable Display Semibold"/>
 
-               
+
                 <Button Grid.Column="2"
                         Content="Volver"
                         x:Name="BtnVolver"
@@ -216,7 +236,7 @@
                         VerticalAlignment="Center"
                         Margin="20,0,0,0"
                         Click="BtnVolver_Click"/>
-                        </Grid>
+            </Grid>
 
             <!-- Formulario dividido en 2 columnas -->
             <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
@@ -301,7 +321,8 @@
                                 Content="AÑADIR MEDICAMENTOS"
                                 Margin="0,10,0,0"
                                 Style="{StaticResource BotonAgrandable}" 
-                                Click="btnAgregarMedicamento_Click"/>
+                                Click="btnAgregarMedicamento_Click"
+                                ToolTip="Agregar este medicamento"/>
                     </Grid>
                 </Border>
 
@@ -377,11 +398,24 @@
 
                         <!-- Botón Añadir Recordatorio -->
                         <Button x:Name="btnAgregarRecordatorio"
-                                Grid.Row="3" Grid.ColumnSpan="2"
+                                Grid.Row="3" Grid.ColumnSpan="1"
                                 Content="AÑADIR RECORDATORIO"
                                 Margin="0,10,0,0"
                                 Style="{StaticResource BotonAgrandable}" 
-                                Click="Button_Click"/>
+                                Click="Button_Click"
+                                ToolTip="Agregar este recordatorio"/>
+
+                        <!-- Botón Eliminar -->
+                        <Button x:Name="btnEliminarRecordatorio"
+                                Grid.Row="3" Grid.ColumnSpan="2"
+                                Content="ELIMINAR"
+                                Margin="0 10 0 0"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource BotonAgrandable}" 
+                                ToolTip="Eliminar este recordatorio" 
+                                Click="btnEliminarRecordatorio_Click"/>
+
+
 
                     </Grid>
                 </Border>

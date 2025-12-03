@@ -40,7 +40,8 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!-- Botones especial del header con animación -->
+
+        <!-- BtnHeader -->
         <Style x:Key="BtnHeader" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
@@ -75,8 +76,6 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
-            <!-- Animación solo para estos botones -->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Trigger.EnterActions>
@@ -104,7 +103,7 @@
             </Style.Triggers>
         </Style>
 
-
+        <!-- BtnHeaderNoHoverColor -->
         <Style x:Key="BtnHeaderNoHoverColor" TargetType="Button">
             <Setter Property="Foreground" Value="#002454"/>
             <!-- azul oscuro -->
@@ -162,77 +161,86 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </Page.Resources>
-    <Grid>
-        <Grid Cursor="">
+
+    <!-- AQUI VIENE EL FIX REAL -->
+
+    <Grid Background="Transparent">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <!-- Panel izquierdo fijo -->
+            <ColumnDefinition Width="*"/>
+            <!-- Espacio flexible -->
+        </Grid.ColumnDefinitions>
+
+        <!-- PANEL IZQUIERDO (igual que antes, no lo toco) -->
+        <Border Background="White"
+                Padding="30"
+                CornerRadius="0 25 25 0">
+            <StackPanel VerticalAlignment="Center">
+                <Image x:Name="FotoPerfil"
+                       Source="/Imagenes/EmptyProfile1.jpg"
+                       Width="160"
+                       Height="160"
+                       Margin="0 0 0 20"
+                       Stretch="UniformToFill"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality">
+                    <Image.Clip>
+                        <EllipseGeometry Center="80,80" RadiusX="80" RadiusY="80"/>
+                    </Image.Clip>
+                </Image>
+
+
+                <Button x:Name="BtnCambiarFoto"
+                        Content="Actualizar foto de perfil"
+                        Style="{StaticResource BtnHeaderNoHoverColor}"
+                        Click="BtnCambiarFoto_Click"/>
+
+                <TextBlock Text="Mi Perfil"
+                           FontSize="40"
+                           FontFamily="Segoe UI Variable Display Semibold"
+                           HorizontalAlignment="Center"
+                           Foreground="#002454"/>
+            </StackPanel>
+        </Border>
+
+        <!-- CONTENEDOR DERECHO CENTRADO -->
+        <Grid Grid.Column="1">
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
+                <!-- Espacio izquierda -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- TARJETA CENTRADA -->
+                <ColumnDefinition Width="*"/>
+                <!-- Espacio derecha -->
             </Grid.ColumnDefinitions>
 
-            <!-- Sección izquierda-->
-            <Border Background="White"
-            Padding="30"
-            CornerRadius="0 25 25 0">
-                
-                <StackPanel VerticalAlignment="Center" Cursor="">
-                    <StackPanel.Resources>
-                        <Style x:Key="CambiarFoto" TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="23"/>
-                            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
-                            <Setter Property="Margin" Value="0,0,0,10"/>
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="Foreground" Value="#002454"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontSize" Value="40"/>
-                            <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
-                            <Setter Property="Margin" Value="0,20,0,0"/>
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="Foreground" Value="#002454"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <Image x:Name="FotoPerfil"
-                        Source="/Imagenes/EmptyProfile1.jpg"
-                           Width="160"
-                           Height="160"
-                           Margin="0 0 0 20" Cursor="">       
-                        <Image.Clip>
-                            <EllipseGeometry Center="80,80" RadiusX="80" RadiusY="80"/>
-                        </Image.Clip>
-                    </Image>
-                    <Button x:Name="BtnCambiarFoto"
-                        Content="Actualizar foto de perfil"
-                             Style="{StaticResource BtnHeaderNoHoverColor}" Click="BtnCambiarFoto_Click"/>
-
-                    <TextBlock Text="Mi Perfil"/>
-             
-                </StackPanel>
-            </Border>
-            <!-- Sección derecha-->
-
-            <Button Grid.Column="1" Style="{StaticResource BtnHeader}"
-                    Margin="0 10 90 0"
+            <!-- BOTON VOLVER (igual que antes) -->
+            <Button Style="{StaticResource BtnHeader}"
+                    Grid.Column="1"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Width="130" Height="40" Click="Button_Click" Cursor="Hand">
+                    Margin="0 10 0 0"
+                    Width="130" Height="40"
+                    Click="Button_Click">
                 <TextBlock Text="Volver"
-                           HorizontalAlignment="center"
-                           VerticalAlignment="center"
                            FontSize="15"
                            FontFamily="Segoe UI Semibold"/>
             </Button>
-            
+
+            <!-- TARJETA DERECHA FIXEADA -->
             <Border Grid.Column="1"
-            Background="White"
-            Margin="90 65 90 10"
-            CornerRadius="50" Cursor="">
+                    Background="White"
+                    CornerRadius="50"
+                    Padding="20"
+                    Margin="0 65 0 20"
+                    MaxWidth="750">
+                <!-- EVITA el estiramiento -->
                 <Border.Resources>
                     <Style x:Key="LabelStyle" TargetType="Label">
                         <Setter Property="FontSize" Value="15"/>
@@ -379,144 +387,164 @@
 
                 </Border.Resources>
 
-                <Grid Cursor="">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" IsEnabled="False" x:Name="FormularioDatos" Cursor="">
-                        <!-- Usuario-->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="50 40 50 0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Usuario" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtUsuario"
-                                        Style="{StaticResource TextBoxStyle}"
-                                        IsEnabled="False"/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                    <Grid Margin="0 20 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+
+                        <StackPanel Grid.Row="0" IsEnabled="False" x:Name="FormularioDatos">
+
+                            <!-- Usuario -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 40 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Usuario"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtUsuario"
+                                 Style="{StaticResource TextBoxStyle}"
+                                 IsEnabled="False"/>
+                            </StackPanel>
+
+                            <!-- Contraseña -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Contraseña"
+                               VerticalAlignment="Center"/>
+                                <PasswordBox Name="PsBoxContrasena"
+                                     Style="{StaticResource PasswordBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- Teléfono -->
+                            <StackPanel Orientation="Horizontal" 
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Teléfono"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtTelefono"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- Nombre completo -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Nombre completo"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtNombre"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- CI -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="CI"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtCI"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- Correo -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Correo"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtCorreo"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- Dirección -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Dirección"
+                               VerticalAlignment="Center"/>
+                                <TextBox Name="TxtDireccion"
+                                 Style="{StaticResource TextBoxStyle}"/>
+                            </StackPanel>
+
+                            <!-- Fecha nacimiento -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Fecha de nacimiento"
+                               VerticalAlignment="Center"/>
+                                <DatePicker Name="DpFechaNacimiento"
+                                    Style="{StaticResource DatePickerStyle}"
+                                    SelectedDateFormat="Short"/>
+                            </StackPanel>
+
+                            <!-- Género -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Género"
+                               VerticalAlignment="Center"/>
+                                <ComboBox Name="CbGenero"
+                                  Style="{StaticResource ComboBoxStyle}">
+                                    <ComboBoxItem Content="Masculino"/>
+                                    <ComboBoxItem Content="Femenino"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Tipo de sangre -->
+                            <StackPanel Orientation="Horizontal"
+                                Margin="50 20 50 0">
+                                <Label Style="{StaticResource LabelStyle}" 
+                               Content="Tipo de sangre"
+                               VerticalAlignment="Center"/>
+                                <ComboBox Name="CbTipoSangre"
+                                  Style="{StaticResource ComboBoxStyle}">
+                                    <ComboBoxItem Content="A+"/>
+                                    <ComboBoxItem Content="A-"/>
+                                    <ComboBoxItem Content="B+"/>
+                                    <ComboBoxItem Content="B-"/>
+                                    <ComboBoxItem Content="AB+"/>
+                                    <ComboBoxItem Content="AB-"/>
+                                    <ComboBoxItem Content="O+"/>
+                                    <ComboBoxItem Content="O-"/>
+                                </ComboBox>
+                            </StackPanel>
+
                         </StackPanel>
 
-                        <!-- Contraseña-->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="50 20 50 0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Contraseña" VerticalAlignment="Center"/>
-                            <PasswordBox    Name="PsBoxContrasena"
-                                        Style="{StaticResource PasswordBoxStyle}"/>
-                        </StackPanel>
-
-                        <!-- Telefono-->
-                        <StackPanel Orientation="Horizontal" 
-                                     Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Teléfono" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtTelefono"
-                                        Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
-                        
-                        <!-- Nombre-->
-                        <StackPanel Orientation="Horizontal"
-                                       Margin="50 20 50 0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Nombre completo" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtNombre"
-                                        Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
-
-                        <!-- CI-->
-                        <!-- CI -->
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="50 20 50 0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="CI" VerticalAlignment="Center"/>
-                            <TextBox Name="TxtCI"
-                                    Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
-
-                        <!-- Correo-->
-                        <StackPanel Orientation="Horizontal"
-                                         Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Correo" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtCorreo"
-                                        Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
-                        
-                        <!-- Direccion-->
-                        <StackPanel Orientation="Horizontal"
-                                     Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Dirección" VerticalAlignment="Center"/>
-                            <TextBox    Name="TxtDireccion"
-                                        Style="{StaticResource TextBoxStyle}"/>
-                        </StackPanel>
-
-                        <!--FechaNac-->
-                        <StackPanel Orientation="Horizontal" 
-                                     Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Fecha de nacimiento" VerticalAlignment="Center"/>
-                            <DatePicker     Name="DpFechaNacimiento"
-                                            Style="{StaticResource DatePickerStyle}"
-                                         SelectedDateFormat="Short"/>
-                        </StackPanel>
-                        <!-- Género -->
-                        <StackPanel Orientation="Horizontal"
-                                     Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                     Content="Género" VerticalAlignment="Center"/>
-                            <ComboBox   Name="CbGenero"
-                                        Style="{StaticResource ComboBoxStyle}">
-                                <ComboBoxItem Content="Masculino"/>
-                                <ComboBoxItem Content="Femenino"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <!-- Tipo de Sangre -->
-                        <StackPanel Orientation="Horizontal"
-                                   Margin="50,20,50,0">
-                            <Label Style="{StaticResource LabelStyle}" 
-                                    Content="Tipo de sangre" VerticalAlignment="Center"/>
-                            <ComboBox   Name="CbTipoSangre"
-                                        Style="{StaticResource ComboBoxStyle}">
-                                <ComboBoxItem Content="A+"/>
-                                <ComboBoxItem Content="A-"/>
-                                <ComboBoxItem Content="B+"/>
-                                <ComboBoxItem Content="B-"/>
-                                <ComboBoxItem Content="AB+"/>
-                                <ComboBoxItem Content="AB-"/>
-                                <ComboBoxItem Content="O+"/>
-                                <ComboBoxItem Content="O-"/>
-                            </ComboBox>
-                        </StackPanel>
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" x:Name="BotonesModificarGuardar">
-                        <!-- Botones Modificar y Guardar -->
-                        <StackPanel Orientation="Horizontal" >
-                            <Button x:Name="BtnModificar"
+                        <!-- BOTONES -->
+                        <StackPanel Grid.Row="1" x:Name="BotonesModificarGuardar">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="BtnModificar"
                                 Style="{StaticResource BtnHeader}"
-                                    Margin="260 20 0 0"
-                                    Width="130" Height="40" Click="BtnModificar_Click">
-                                <TextBlock Text="Modificar"
-                                   HorizontalAlignment="center"
-                                   VerticalAlignment="center"
-                                           FontFamily="Segoe UI Semilight"
-                                   FontSize="15" Cursor=""/>
-                            </Button>
-                            <Button x:Name="BtnGuardar" 
-                                    Style="{StaticResource BtnHeader}"
-                                        Margin="70 20 0 0"
-                                        Width="130" Height="40" Click="BtnGuardar_Click">
-                                <TextBlock Text="Guardar"
-                                   HorizontalAlignment="center"
-                                   VerticalAlignment="center"
-                                           FontFamily="Segoe UI Semilight"
-                                   FontSize="15"/>      
-                            </Button>
+                                Margin="260 20 0 0"
+                                Width="130" Height="40"
+                                Click="BtnModificar_Click">
+                                    <TextBlock Text="Modificar"
+                                       FontFamily="Segoe UI Semilight"
+                                       FontSize="15"/>
+                                </Button>
+
+                                <Button x:Name="BtnGuardar"
+                                Style="{StaticResource BtnHeader}"
+                                Margin="70 20 0 0"
+                                Width="130" Height="40"
+                                Click="BtnGuardar_Click">
+                                    <TextBlock Text="Guardar"
+                                       FontFamily="Segoe UI Semilight"
+                                       FontSize="15"/>
+                                </Button>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                </Grid>
-                    
-                
+
+                    </Grid>
+                </ScrollViewer>
+
             </Border>
         </Grid>
+
     </Grid>
 </Page>

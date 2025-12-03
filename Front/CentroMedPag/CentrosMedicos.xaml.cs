@@ -3,7 +3,7 @@ using Front.CentroMedPag.ServiciosCM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq; // Necesario para la función .Select() y .FirstOrDefault()
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 

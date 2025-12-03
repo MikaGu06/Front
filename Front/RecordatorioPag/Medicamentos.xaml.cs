@@ -229,6 +229,50 @@ namespace Front
                 RecordatoriosList.Items.Refresh();
             }
         }
+        // Botón Eliminar
+        // Botón Eliminar SOLO los recordatorios inactivos
+        private void btnEliminarRecordatorio_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var resp = MessageBox.Show(
+                    "¿Eliminar solo los recordatorios inactivos? Esta acción no se puede deshacer.",
+                    "Confirmar eliminación",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (resp != MessageBoxResult.Yes) return;
+
+                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
+                {
+                    con.Open();
+
+                    // 🔥 BORRAR SOLO LOS INACTIVOS
+                    string deleteQuery = "DELETE FROM Recordatorio WHERE estado = 0";
+                    using (var cmd = new SqlCommand(deleteQuery, con))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // 🔥 QUITAR DE LA LISTA EN MEMORIA Y DEL UI LOS INACTIVOS
+                recordatorios.RemoveAll(r => r.Estado == false);
+
+                for (int i = ListaRecordatorios.Count - 1; i >= 0; i--)
+                {
+                    if (!ListaRecordatorios[i].Estado)
+                        ListaRecordatorios.RemoveAt(i);
+                }
+
+                MostrarNotificacion("Se eliminaron todos los recordatorios inactivos.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar recordatorios: " + ex.Message);
+            }
+        }
+
         #endregion
+
     }
 }
