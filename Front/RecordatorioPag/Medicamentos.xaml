@@ -363,8 +363,14 @@
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
                                 <TextBlock Text="Medicamento" FontSize="16"/>
                             </StackPanel>
-                            <TextBox x:Name="txtRecMedicamento" Height="28"/>
-                        </StackPanel>
+                            <!-- ComboBox editable para autocompletado -->
+                            <ComboBox x:Name="cmbRecMedicamento"
+                                  Height="28"
+                                  FontSize="16"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  IsEditable="True"
+                                  IsTextSearchEnabled="True"/>
+                                            </StackPanel>
 
                         <!-- Hora inicio -->
                         <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">

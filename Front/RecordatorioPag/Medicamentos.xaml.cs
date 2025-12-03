@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
@@ -48,6 +49,7 @@ namespace Front
             }
 
             medServicio.CargarMedicamentos();
+            CargarMedicamentosEnCombo(); // autocompletado
             CargarRecordatorios();
             CargarRecordatoriosEnLista();
         }
@@ -140,14 +142,31 @@ namespace Front
 
                 MostrarNotificacion("Medicamento guardado correctamente.");
 
+                // limpiar campos
                 txtNombreMed.Clear();
                 txtDescMed.Clear();
                 txtDosisMed.Clear();
                 cmbDosisUnidad.SelectedIndex = -1;
+
+                // actualizar autocompletado
+                CargarMedicamentosEnCombo();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void CargarMedicamentosEnCombo()
+        {
+            try
+            {
+                var listaMedicamentos = medServicio.ListarMedicamentos();
+                cmbRecMedicamento.ItemsSource = listaMedicamentos.ConvertAll(m => m.Nombre);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error cargando medicamentos para autocompletado: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
@@ -161,14 +180,15 @@ namespace Front
                     throw new InvalidOperationException("Selecciona un día de inicio.");
                 if (!TimeSpan.TryParseExact(txtRecHoraInicio.Text.Trim(), "hh\\:mm", null, out TimeSpan hora))
                     throw new InvalidOperationException("La hora debe estar en formato HH:mm.");
-                if (string.IsNullOrWhiteSpace(txtRecMedicamento.Text))
+                if (string.IsNullOrWhiteSpace(cmbRecMedicamento.Text))
                     throw new InvalidOperationException("Debes ingresar el nombre del medicamento.");
                 if (cmbRecFrecuencia.SelectedItem == null)
                     throw new InvalidOperationException("Selecciona la frecuencia.");
 
                 int frecuencia = int.Parse(((ComboBoxItem)cmbRecFrecuencia.SelectedItem).Tag.ToString());
 
-                int idMed = medServicio.ObtenerIdPorNombre(txtRecMedicamento.Text.Trim());
+                string nombreMed = cmbRecMedicamento.Text.Trim();
+                int idMed = medServicio.ObtenerIdPorNombre(nombreMed);
                 if (idMed == 0)
                     throw new InvalidOperationException("El medicamento no existe en la base de datos.");
 
@@ -176,7 +196,7 @@ namespace Front
                 DateTime horaInicio = DateTime.Today + hora;
 
                 int nuevoID = recServicio.ObtenerNuevoId();
-                var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim(), ciPaciente);
+                var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, nombreMed, ciPaciente);
 
                 recServicio.AgregarRecordatorioConPaciente(nuevoRec, idMed, ciPaciente);
 
