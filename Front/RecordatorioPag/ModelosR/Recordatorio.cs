@@ -13,6 +13,7 @@ namespace Front.RecordatorioPag.ModelosR
         private bool estado;
         private string medicamentoNombre;
         private DateTime lastFired = DateTime.MinValue;
+        private int ciPaciente;
 
         public int Id_recordatorio
         {
@@ -55,9 +56,14 @@ namespace Front.RecordatorioPag.ModelosR
             get { return lastFired; }
             set { lastFired = value; }
         }
+        public int CiPaciente
+        {
+            get { return ciPaciente; }
+            set { ciPaciente = value; }
+        }
         public string EstadoBoton => Estado ? "Activo" : "Inactivo";
         public string FrecuenciaTexto => $"Cada {Frecuencia} horas";
-        public Recordatorio(int pid, DateTime pfecha, DateTime phoraInicio, int pfrecuencia, bool pestado, string pmedicamentoNombre)
+        public Recordatorio(int pid, DateTime pfecha, DateTime phoraInicio, int pfrecuencia, bool pestado, string pmedicamentoNombre, int pCiPaciente)
         {
             Id_recordatorio = pid;
             Fecha = pfecha;
@@ -65,6 +71,7 @@ namespace Front.RecordatorioPag.ModelosR
             Frecuencia = pfrecuencia;
             Estado = pestado;
             MedicamentoNombre = pmedicamentoNombre;
+            CiPaciente = pCiPaciente;
         }
 
         public override string ToString() => $"{MedicamentoNombre} - {Fecha.ToShortDateString()} {Hora_inicio.ToShortTimeString()}";
