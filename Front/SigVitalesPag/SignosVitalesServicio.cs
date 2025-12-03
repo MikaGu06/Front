@@ -104,7 +104,7 @@ namespace Front.SigVitalesPag
                     Fecha = Convert.ToDateTime(reader["fecha"]),
                     Hora = TimeSpan.Parse(reader["hora"].ToString()),
                     RitmoCardiaco = Convert.ToInt32(reader["ritmo_cardiaco"]),
-                    PresionArterial = Convert.ToInt32(reader["presion_arterial"]),
+                    PresionArterial = reader["presion_arterial"].ToString(),
                     Temperatura = Convert.ToDecimal(reader["temperatura"]),
                     Oxigenacion = Convert.ToInt32(reader["oxigenacion"])
                 });

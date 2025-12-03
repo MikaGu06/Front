@@ -90,13 +90,14 @@ namespace Front.SigVitalesPag
                 );
 
                 int nuevoId = servicio.ObtenerNuevoId();
+                string presionString = $"{valores.sistolica}-{valores.diastolica}";
                 var nuevoSigno = new ModeloSignosVitales(
                     nuevoId,
                     ciPaciente,
                     DateTime.Now.Date,
                     DateTime.Now.TimeOfDay,
                     valores.ritmo,
-                    valores.sistolica,
+                    presionString,
                     valores.temperatura,
                     valores.oxigeno
                 );

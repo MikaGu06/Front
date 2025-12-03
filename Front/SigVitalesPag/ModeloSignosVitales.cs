@@ -11,7 +11,7 @@ namespace Front.SigVitalesPag
         private DateTime fecha;
         private TimeSpan hora;
         private int ritmoCardiaco;
-        private int presionArterial;
+        private string presionArterial;
         private decimal temperatura;
         private int oxigenacion;
 
@@ -45,7 +45,7 @@ namespace Front.SigVitalesPag
             set { ritmoCardiaco = value; }
         }
 
-        public int PresionArterial
+        public string PresionArterial
         {
             get { return presionArterial; }
             set { presionArterial = value; }
@@ -68,7 +68,7 @@ namespace Front.SigVitalesPag
 
 
         public ModeloSignosVitales(int pIdSigno, int pCiPaciente, DateTime pFecha, TimeSpan pHora,
-                                  int pRitmoCardiaco, int pPresionArterial, decimal pTemperatura, int pOxigenacion)
+                                  int pRitmoCardiaco, string pPresionArterial, decimal pTemperatura, int pOxigenacion)
         {
             idSigno = pIdSigno;
             ciPaciente = pCiPaciente;
