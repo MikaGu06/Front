@@ -34,7 +34,6 @@ namespace Front
             {
                 "AMBULANCIA",
                 "CENTRO DE DIAGNOSTICO",
-                "CENTRO DE FISIOTERAPIA Y",
                 "CENTRO DE FISIOTERAPIA Y REHABILITACION",
                 "CENTRO MEDICO",
                 "CLINICA / HOSPITAL",
