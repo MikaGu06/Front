@@ -6,9 +6,7 @@ namespace Front.MiCuenta
 {
     public class ValidacionesMiCuenta
     {
-     
         /// Valida todos los campos de MiCuenta y lanza excepciones con mensajes claros.
-      
         public static void CuentaValidar(ModeloUsuario u)
         {
             // Campos obligatorios
@@ -24,7 +22,6 @@ namespace Front.MiCuenta
             {
                 throw new ArgumentException("Todos los campos deben estar completos.");
             }
-
             // Nombre completo
             if (u.Nombre.Length < 3 || u.Nombre.Length > 60 ||
                 !Regex.IsMatch(u.Nombre, @"^[a-zA-Z\s]+$") ||
@@ -38,27 +35,22 @@ namespace Front.MiCuenta
             {
                 throw new ArgumentException("La contraseña debe tener entre 6 y 20 caracteres.");
             }
-
             // Correo
             string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             if (!Regex.IsMatch(u.Correo, emailPattern) || u.Correo.Length > 100)
             {
                 throw new ArgumentException("Correo: formato inválido o más de 100 caracteres.");
             }
-
             // Teléfono
             if (!Regex.IsMatch(u.Telefono, @"^\d+$") || u.Telefono.Length < 7 || u.Telefono.Length > 15)
             {
                 throw new ArgumentException("Teléfono: solo números, 7-15 dígitos.");
             }
-
             // Dirección
             if (u.Direccion.Length > 100)
             {
                 throw new ArgumentException("Dirección: máximo 100 caracteres.");
             }
-
-
             // CI
             if (!Regex.IsMatch(u.CI, @"^\d+$"))
             {
@@ -68,47 +60,39 @@ namespace Front.MiCuenta
             {
                 throw new ArgumentException("CI: entre 5 y 15 dígitos.");
             }
-
             // Género
             string[] validosGenero = { "Masculino", "Femenino" };
             if (!validosGenero.Contains(u.Genero))
             {
                 throw new ArgumentException("Género: debe ser Masculino o Femenino.");
             }
-
             // Tipo de sangre
             string[] validosSangre = { "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-" };
             if (!validosSangre.Contains(u.TipoSangre))
             {
                 throw new ArgumentException("Tipo de sangre inválido (ej: A+, O-).");
             }
-
             // Fecha de nacimiento y coherencia con edad
             if (u.FechaNacimiento.Value.Date >= DateTime.Today)
             {
                 throw new ArgumentException("Fecha de nacimiento debe ser menor a hoy.");
             }
-
             int edadCalculada = DateTime.Today.Year - u.FechaNacimiento.Value.Year;
             if (u.FechaNacimiento.Value.Date > DateTime.Today.AddYears(-edadCalculada))
             {
                 edadCalculada--;
             }
-
             // Edad mínima
             if (edadCalculada < 13)
             {
                 throw new ArgumentException("Edad mínima permitida: 13 años.");
             }
-
             // Edad máxima
             if (edadCalculada > 120)
             {
                 throw new ArgumentException("Fecha de nacimiento inválida: no puede superar los 120 años.");
             }
-
         }
-
         public static bool CamposCompletos(ModeloUsuario u)
         {
             return
