@@ -18,7 +18,7 @@ namespace Front.SigVitalesPag
             CargarHistorial();
         }
 
-        //      CARGAR HISTORIAL
+        
         private void CargarHistorial()
         {
             try
@@ -51,7 +51,7 @@ namespace Front.SigVitalesPag
                 {
                     listaMostrar.Add(new
                     {
-                        Fecha = s.Fecha.ToString("dd/MM/yyyy"),
+                        FechaHora = $"{s.Fecha:dd/MM/yyyy}  {s.Hora:hh\\:mm}",
                         Ritmo = s.RitmoCardiaco,
                         Presion = s.PresionArterial,
                         Oxigenacion = s.Oxigenacion,
@@ -71,7 +71,8 @@ namespace Front.SigVitalesPag
             }
         }
 
-        //      GUARDAR SIGNO
+
+        //GUARDAR SIGNO
         private void Acceder_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try

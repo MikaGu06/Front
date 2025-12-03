@@ -79,6 +79,9 @@ namespace Front.SigVitalesPag
             temperatura = pTemperatura;
             oxigenacion = pOxigenacion;
         }
+        public string FechaHora => $"{fecha:dd/MM/yyyy}  {hora:HH:mm}";
         public ModeloSignosVitales() { }
+        
+
     }
 }

@@ -444,7 +444,7 @@
                                     <DataTemplate>
                                         <StackPanel Margin="0,10,0,10">
                                             <!-- Fecha -->
-                                            <TextBlock Text="{Binding Fecha}"
+                                            <TextBlock Text="{Binding FechaHora}"
                                        Style="{StaticResource EtiquetaCampo}"/>
 
                                             <!-- Contenedor claro -->

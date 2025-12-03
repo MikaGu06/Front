@@ -57,9 +57,7 @@ namespace Front.RecordatorioPag.ServicioR
             return lista;
         }
 
-        // ===========================
-        // AGREGAR RECORDATORIO Y ASOCIAR PACIENTE
-        // ===========================
+        
         public void AgregarRecordatorioConPaciente(Recordatorio rec, int idMed, int ciPaciente)
         {
             using (var con = GetConnection())
@@ -95,9 +93,7 @@ namespace Front.RecordatorioPag.ServicioR
             }
         }
 
-        // ===========================
-        // ACTUALIZAR ESTADO
-        // ===========================
+       
         public void ActualizarEstadoEnBD(Recordatorio rec)
         {
             using (var con = GetConnection())
@@ -113,9 +109,7 @@ namespace Front.RecordatorioPag.ServicioR
             }
         }
 
-        // ===========================
-        // OBTENER NUEVO ID
-        // ===========================
+      
         public int ObtenerNuevoId()
         {
             using (var con = GetConnection())
