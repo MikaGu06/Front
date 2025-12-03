@@ -10,66 +10,123 @@ namespace Front.RecordatorioPag.ServicioR
     {
         private List<Recordatorio> recordatorios = new List<Recordatorio>();
 
-        public List<Recordatorio> ListarRecordatorios() => recordatorios;
-
         private SqlConnection GetConnection()
         {
             return new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString);
         }
 
-        public void CargarRecordatorios()
+        // ===========================
+        // LISTAR RECORDATORIOS POR PACIENTE
+        // ===========================
+        public List<Recordatorio> ListarRecordatoriosPorPaciente(int ciPaciente)
         {
-            recordatorios.Clear();
+            var lista = new List<Recordatorio>();
+
             using (var con = GetConnection())
             {
                 con.Open();
                 string query = @"
-                    SELECT r.id_recordatorio, r.id_medicamento, r.fecha, r.hora_inicio, r.frecuencia, r.estado, m.nombre
+                    SELECT r.id_recordatorio, r.id_medicamento, r.fecha, r.hora_inicio, r.frecuencia, r.estado, m.nombre, pr.ci_paciente
                     FROM Recordatorio r
-                    JOIN Medicamento m ON r.id_medicamento = m.id_medicamento";
+                    JOIN pac_rec pr ON r.id_recordatorio = pr.id_recordatorio
+                    JOIN Medicamento m ON r.id_medicamento = m.id_medicamento
+                    WHERE pr.ci_paciente = @ci";
+
                 using (var cmd = new SqlCommand(query, con))
-                using (var reader = cmd.ExecuteReader())
                 {
-                    while (reader.Read())
+                    cmd.Parameters.AddWithValue("@ci", ciPaciente);
+
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        recordatorios.Add(new Recordatorio(
-                            reader.GetInt32(0),
-                            reader.GetDateTime(2),
-                            reader.GetDateTime(3),
-                            reader.GetInt32(4),
-                            reader.GetBoolean(5),
-                            reader.GetString(6)
-                        ));
+                        while (reader.Read())
+                        {
+                            lista.Add(new Recordatorio(
+                                reader.GetInt32(0),
+                                reader.GetDateTime(2),
+                                DateTime.Today + reader.GetTimeSpan(3),
+                                reader.GetInt32(4),
+                                reader.GetBoolean(5),
+                                reader.GetString(6),
+                                reader.GetInt32(7)
+                            ));
+                        }
                     }
                 }
             }
+
+            return lista;
         }
 
-        public int ObtenerNuevoId()
-        {
-            if (recordatorios.Count == 0) return 1;
-            return recordatorios[recordatorios.Count - 1].Id_recordatorio + 1;
-        }
-
-        public void AgregarRecordatorio(Recordatorio rec)
+        // ===========================
+        // AGREGAR RECORDATORIO Y ASOCIAR PACIENTE
+        // ===========================
+        public void AgregarRecordatorioConPaciente(Recordatorio rec, int idMed, int ciPaciente)
         {
             using (var con = GetConnection())
             {
                 con.Open();
-                string insertQuery = @"
+
+                // Insertar en Recordatorio
+                string insertRec = @"
                     INSERT INTO Recordatorio (id_recordatorio, id_medicamento, fecha, hora_inicio, frecuencia, estado)
-                    VALUES (@id, @idMed, @fecha, @hora, @frecuencia, 1)";
-                using (var cmd = new SqlCommand(insertQuery, con))
+                    VALUES (@id, @idMed, @fecha, @hora, @frecuencia, @estado)";
+                using (var cmd = new SqlCommand(insertRec, con))
                 {
                     cmd.Parameters.AddWithValue("@id", rec.Id_recordatorio);
-                    cmd.Parameters.AddWithValue("@idMed", rec.MedicamentoNombre);
+                    cmd.Parameters.AddWithValue("@idMed", idMed);
                     cmd.Parameters.AddWithValue("@fecha", rec.Fecha);
                     cmd.Parameters.AddWithValue("@hora", rec.Hora_inicio.TimeOfDay);
                     cmd.Parameters.AddWithValue("@frecuencia", rec.Frecuencia);
+                    cmd.Parameters.AddWithValue("@estado", rec.Estado);
+                    cmd.ExecuteNonQuery();
+                }
+
+                // Insertar en pac_rec
+                string insertPacRec = @"
+                    INSERT INTO pac_rec (id_recordatorio, ci_paciente, fecha)
+                    VALUES (@id, @ci, @fecha)";
+                using (var cmd = new SqlCommand(insertPacRec, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", rec.Id_recordatorio);
+                    cmd.Parameters.AddWithValue("@ci", ciPaciente);
+                    cmd.Parameters.AddWithValue("@fecha", rec.Fecha);
                     cmd.ExecuteNonQuery();
                 }
             }
-            recordatorios.Add(rec);
+        }
+
+        // ===========================
+        // ACTUALIZAR ESTADO
+        // ===========================
+        public void ActualizarEstadoEnBD(Recordatorio rec)
+        {
+            using (var con = GetConnection())
+            {
+                con.Open();
+                string query = "UPDATE Recordatorio SET estado = @estado WHERE id_recordatorio = @id";
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@estado", rec.Estado);
+                    cmd.Parameters.AddWithValue("@id", rec.Id_recordatorio);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        // ===========================
+        // OBTENER NUEVO ID
+        // ===========================
+        public int ObtenerNuevoId()
+        {
+            using (var con = GetConnection())
+            {
+                con.Open();
+                string query = "SELECT ISNULL(MAX(id_recordatorio), 0) FROM Recordatorio";
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    return (int)cmd.ExecuteScalar() + 1;
+                }
+            }
         }
     }
 }

@@ -76,23 +76,9 @@ namespace Front.SigVitalesPag
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(SesionUsuario.CI))
+                if (string.IsNullOrWhiteSpace(SesionUsuario.CI) || !int.TryParse(SesionUsuario.CI, out int ciPaciente))
                 {
-                    MessageBox.Show(
-                        "Debes registrar tus datos personales en MI CUENTA antes de guardar signos vitales.",
-                        "Paciente no válido",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-                    return;
-                }
-
-                if (!int.TryParse(SesionUsuario.CI, out int ciPaciente))
-                {
-                    MessageBox.Show(
-                        "El CI guardado en sesión no es válido. Vuelve a guardarlo en MI CUENTA.",
-                        "CI inválido",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                    MessageBox.Show("Debes registrar un CI válido en MI CUENTA.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -104,25 +90,21 @@ namespace Front.SigVitalesPag
                 );
 
                 int nuevoId = servicio.ObtenerNuevoId();
-
                 var nuevoSigno = new ModeloSignosVitales(
                     nuevoId,
-                    ciPaciente,              
+                    ciPaciente,
                     DateTime.Now.Date,
                     DateTime.Now.TimeOfDay,
                     valores.ritmo,
-                    valores.sistolica,        
+                    valores.sistolica,
                     valores.temperatura,
                     valores.oxigeno
                 );
 
-                servicio.AgregarSigno(nuevoSigno);
+                // Guardar en ambas tablas
+                servicio.AgregarSignoConPaciente(nuevoSigno);
 
-                MessageBox.Show(
-                    "Signo vital agregado correctamente.",
-                    "Éxito",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                MessageBox.Show("Signo vital agregado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 txtRitmoCardiaco.Clear();
                 txtPresionArterial.Clear();
@@ -133,13 +115,11 @@ namespace Front.SigVitalesPag
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"Error al agregar signo: {ex.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show($"Error al agregar signo: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
 
         private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {

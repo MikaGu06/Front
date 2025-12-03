@@ -1,4 +1,5 @@
-﻿using Front.RecordatorioPag.ModelosR;
+﻿using Front.Helpers;
+using Front.RecordatorioPag.ModelosR;
 using Front.RecordatorioPag.ServicioR;
 using Microsoft.Data.SqlClient;
 using System;
@@ -12,54 +13,56 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
-
 namespace Front
 {
     public partial class Medicamentos : Page
     {
-        private MedicamentoServicio medServicio = new MedicamentoServicio();
-        private List<Recordatorio> recordatorios = new List<Recordatorio>();
+        private readonly MedicamentoServicio medServicio;
+        private readonly RecordatorioServicio recServicio;
+        private List<Recordatorio> recordatorios;
         private DispatcherTimer timer;
 
-        // ObservableCollection para binding con XAML
         public ObservableCollection<Recordatorio> ListaRecordatorios { get; set; } = new ObservableCollection<Recordatorio>();
+
+        private int ciPaciente;
 
         public Medicamentos()
         {
             InitializeComponent();
 
-            // Ligar ItemsControl al ObservableCollection
+            medServicio = new MedicamentoServicio();
+            recServicio = new RecordatorioServicio();
+            recordatorios = new List<Recordatorio>();
+
             RecordatoriosList.ItemsSource = ListaRecordatorios;
 
-            // Inicializar timer de recordatorios
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(10);
+            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(10) };
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            // Cargar datos
+            // Obtener CI del paciente desde sesión
+            if (!int.TryParse(SesionUsuario.CI, out ciPaciente))
+            {
+                MessageBox.Show("Debes registrar tu CI en MI CUENTA para usar los recordatorios.", "CI inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             medServicio.CargarMedicamentos();
             CargarRecordatorios();
-            CargarRecordatoriosEnLista(); // Actualiza ObservableCollection para UI
+            CargarRecordatoriosEnLista();
         }
 
         #region Timer
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            RevisarRecordatorios();
-        }
+        private void Timer_Tick(object sender, EventArgs e) => RevisarRecordatorios();
 
         private void RevisarRecordatorios()
         {
             DateTime ahora = DateTime.Now;
-
             foreach (var rec in recordatorios)
             {
                 if (!rec.Estado) continue;
 
                 DateTime primerEvento = rec.Fecha.Date + rec.Hora_inicio.TimeOfDay;
-
                 DateTime next = primerEvento;
                 while (next < ahora)
                     next = next.AddHours(rec.Frecuencia);
@@ -67,20 +70,14 @@ namespace Front
                 if (Math.Abs((next - ahora).TotalSeconds) <= 10 && rec.LastFired < next)
                 {
                     rec.LastFired = ahora;
-
-                    // Sonido
                     SystemSounds.Exclamation.Play();
-
-                    // Notificación
                     MostrarNotificacion($"Es hora de tomar tu medicamento: {rec.MedicamentoNombre}");
                 }
             }
         }
-
         #endregion
 
-        #region Notificación Toast
-
+        #region Notificación
         private async void MostrarNotificacion(string mensaje)
         {
             NotificationText.Text = mensaje;
@@ -108,20 +105,17 @@ namespace Front
         {
             NotificationPanel.Visibility = Visibility.Collapsed;
         }
-
         #endregion
 
         #region Botones Navegación
-
         private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).MainFrame.Navigate(new Servicios());
+            if (NavigationService.CanGoBack)
+                NavigationService.GoBack();
         }
-
         #endregion
 
         #region Medicamentos
-
         private void btnAgregarMedicamento_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -156,11 +150,9 @@ namespace Front
                 MessageBox.Show(ex.Message);
             }
         }
-
         #endregion
 
         #region Recordatorios
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -183,89 +175,34 @@ namespace Front
                 DateTime fecha = dpRecDia.SelectedDate.Value;
                 DateTime horaInicio = DateTime.Today + hora;
 
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
-                {
-                    con.Open();
-                    string insertQuery = @"
-                        INSERT INTO Recordatorio (id_recordatorio, id_medicamento, fecha, hora_inicio, frecuencia, estado)
-                        VALUES (@id, @idMed, @fecha, @hora, @frecuencia, 1)";
-                    using (var cmd = new SqlCommand(insertQuery, con))
-                    {
-                        int nuevoID = ObtenerNuevoIdRecordatorio();
-                        cmd.Parameters.AddWithValue("@id", nuevoID);
-                        cmd.Parameters.AddWithValue("@idMed", idMed);
-                        cmd.Parameters.AddWithValue("@fecha", fecha);
-                        cmd.Parameters.AddWithValue("@hora", horaInicio.TimeOfDay);
-                        cmd.Parameters.AddWithValue("@frecuencia", frecuencia);
-                        cmd.ExecuteNonQuery();
+                int nuevoID = recServicio.ObtenerNuevoId();
+                var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim(), ciPaciente);
 
-                        var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim());
-                        recordatorios.Add(nuevoRec);
-                        ListaRecordatorios.Add(nuevoRec); // Actualiza UI
-                    }
-                }
+                recServicio.AgregarRecordatorioConPaciente(nuevoRec, idMed, ciPaciente);
+
+                recordatorios.Add(nuevoRec);
+                ListaRecordatorios.Add(nuevoRec);
 
                 MostrarNotificacion("Recordatorio creado correctamente.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Error al agregar recordatorio: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private int ObtenerNuevoIdRecordatorio()
-        {
-            int nuevoID = 1;
-            try
-            {
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
-                {
-                    con.Open();
-                    string query = "SELECT ISNULL(MAX(id_recordatorio), 0) FROM Recordatorio";
-                    using (var cmd = new SqlCommand(query, con))
-                        nuevoID = (int)cmd.ExecuteScalar() + 1;
-                }
-            }
-            catch { }
-            return nuevoID;
         }
 
         private void CargarRecordatorios()
         {
-            recordatorios.Clear();
             try
             {
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
-                {
-                    con.Open();
-                    string query = @"
-                        SELECT r.id_recordatorio, r.id_medicamento, r.fecha, r.hora_inicio, r.frecuencia, r.estado, m.nombre
-                        FROM Recordatorio r
-                        JOIN Medicamento m ON r.id_medicamento = m.id_medicamento";
-                    using (var cmd = new SqlCommand(query, con))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            recordatorios.Add(new Recordatorio(
-                                reader.GetInt32(0),
-                                reader.GetDateTime(2),
-                                DateTime.Today + reader.GetTimeSpan(3),
-                                reader.GetInt32(4),
-                                reader.GetBoolean(5),
-                                reader.GetString(6)
-                            ));
-                        }
-                    }
-                }
+                recordatorios = recServicio.ListarRecordatoriosPorPaciente(ciPaciente);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error cargando recordatorios: " + ex.Message);
+                MessageBox.Show($"Error cargando recordatorios: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        // Llenar ObservableCollection para XAML
         private void CargarRecordatoriosEnLista()
         {
             ListaRecordatorios.Clear();
@@ -273,13 +210,12 @@ namespace Front
                 ListaRecordatorios.Add(rec);
         }
 
-        // ToggleButton Checked/Unchecked
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleButton toggle && toggle.DataContext is Recordatorio rec)
             {
                 rec.Estado = true;
-                ActualizarEstadoEnBD(rec);
+                recServicio.ActualizarEstadoEnBD(rec);
                 RecordatoriosList.Items.Refresh();
             }
         }
@@ -289,24 +225,10 @@ namespace Front
             if (sender is ToggleButton toggle && toggle.DataContext is Recordatorio rec)
             {
                 rec.Estado = false;
-                ActualizarEstadoEnBD(rec);
+                recServicio.ActualizarEstadoEnBD(rec);
                 RecordatoriosList.Items.Refresh();
             }
         }
-
-        private void ActualizarEstadoEnBD(Recordatorio r)
-        {
-            string query = "UPDATE Recordatorio SET estado = @estado WHERE id_recordatorio = @id";
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@estado", r.Estado);
-                cmd.Parameters.AddWithValue("@id", r.Id_recordatorio);
-                cmd.ExecuteNonQuery();
-            }
-        }
-
         #endregion
     }
 }
