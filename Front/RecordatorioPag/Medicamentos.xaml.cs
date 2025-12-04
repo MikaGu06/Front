@@ -40,14 +40,22 @@ namespace Front
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            // Obtener CI del paciente desde sesión
-            if (!int.TryParse(SesionUsuario.CI, out ciPaciente))
+            // 🔹 Validar CI del paciente
+            if (string.IsNullOrWhiteSpace(SesionUsuario.CI) || !int.TryParse(SesionUsuario.CI, out ciPaciente))
             {
-                MessageBox.Show("Debes registrar tu CI en MI CUENTA para usar los recordatorios.", "CI inválido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+                    "Debes registrar un CI válido en MI CUENTA antes de usar los recordatorios y medicamentos.",
+                    "CI inválido",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                NavigationService?.GoBack();
                 return;
             }
 
-            medServicio.CargarMedicamentos();
+            // 🔹 Cargar medicamentos del paciente
+            medServicio.CargarMedicamentos(ciPaciente);
+
+            // 🔹 Cargar recordatorios del paciente
             CargarRecordatorios();
             CargarRecordatoriosEnLista();
         }
@@ -135,8 +143,12 @@ namespace Front
                     throw new InvalidOperationException("Debes seleccionar la unidad de dosis.");
 
                 int nuevoID = medServicio.ObtenerNuevoId();
-                var med = new Medicamento(nuevoID, nombre, descripcion, dosisValor, unidad);
+                var med = new Medicamento(nuevoID, nombre, descripcion, dosisValor, unidad, ciPaciente);
+
                 medServicio.AgregarMedicamento(med);
+
+                // 🔹 Recargar medicamentos del paciente
+                medServicio.CargarMedicamentos(ciPaciente);
 
                 MostrarNotificacion("Medicamento guardado correctamente.");
 
@@ -173,15 +185,18 @@ namespace Front
                     throw new InvalidOperationException("El medicamento no existe en la base de datos.");
 
                 DateTime fecha = dpRecDia.SelectedDate.Value;
-                DateTime horaInicio = DateTime.Today + hora;
+                DateTime horaInicio = fecha.Date + hora;
 
                 int nuevoID = recServicio.ObtenerNuevoId();
                 var nuevoRec = new Recordatorio(nuevoID, fecha, horaInicio, frecuencia, true, txtRecMedicamento.Text.Trim(), ciPaciente);
 
-                recServicio.AgregarRecordatorioConPaciente(nuevoRec, idMed, ciPaciente);
+                // 🔹 Guardar en BD usando tus dos métodos
+                recServicio.AgregarRecordatorio(nuevoRec, idMed);
+                recServicio.AsignarRecordatorioAPaciente(nuevoID, ciPaciente, fecha);
 
-                recordatorios.Add(nuevoRec);
-                ListaRecordatorios.Add(nuevoRec);
+                // 🔹 Recargar lista
+                CargarRecordatorios();
+                CargarRecordatoriosEnLista();
 
                 MostrarNotificacion("Recordatorio creado correctamente.");
             }
@@ -229,8 +244,7 @@ namespace Front
                 RecordatoriosList.Items.Refresh();
             }
         }
-        // Botón Eliminar
-        // Botón Eliminar SOLO los recordatorios inactivos
+
         private void btnEliminarRecordatorio_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -246,18 +260,16 @@ namespace Front
                 using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString))
                 {
                     con.Open();
-
-                    // 🔥 BORRAR SOLO LOS INACTIVOS
-                    string deleteQuery = "DELETE FROM Recordatorio WHERE estado = 0";
+                    string deleteQuery = "DELETE FROM Recordatorio WHERE estado = 0 AND id_recordatorio IN (SELECT id_recordatorio FROM pac_rec WHERE ci_paciente = @ci)";
                     using (var cmd = new SqlCommand(deleteQuery, con))
                     {
+                        cmd.Parameters.AddWithValue("@ci", ciPaciente);
                         cmd.ExecuteNonQuery();
                     }
                 }
 
-                // 🔥 QUITAR DE LA LISTA EN MEMORIA Y DEL UI LOS INACTIVOS
+                // Quitar de la lista en memoria y del UI
                 recordatorios.RemoveAll(r => r.Estado == false);
-
                 for (int i = ListaRecordatorios.Count - 1; i >= 0; i--)
                 {
                     if (!ListaRecordatorios[i].Estado)
@@ -271,8 +283,6 @@ namespace Front
                 MessageBox.Show("Error al eliminar recordatorios: " + ex.Message);
             }
         }
-
         #endregion
-
     }
 }
