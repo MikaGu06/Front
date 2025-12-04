@@ -11,6 +11,7 @@ namespace Front.RecordatorioPag.ModelosR
         private string descripcion;
         private decimal dosis;
         private string unidad;
+        private int ci_paciente;
         public int Id_medicamento
         {
             get { return id_medicamento; }
@@ -36,14 +37,23 @@ namespace Front.RecordatorioPag.ModelosR
             get { return unidad; }
             set { unidad = value; }
         }
+        public int CiPaciente
+        {
+            get { return ci_paciente; }
+            set { ci_paciente = value; }
 
-        public Medicamento(int pid, string pnombre, string pdescripcion, decimal pdosis, string punidad)
+        }
+        
+
+        public Medicamento(int pid, string pnombre, string pdescripcion, decimal pdosis, string punidad, int pciPaciente)
         {
             Id_medicamento = pid;
             Nombre = pnombre;
             Descripcion = pdescripcion;
             Dosis = pdosis;
             Unidad = punidad;
+            ci_paciente= pciPaciente;
+            
         }
 
         public override string ToString() => $"{Dosis} {Unidad}";

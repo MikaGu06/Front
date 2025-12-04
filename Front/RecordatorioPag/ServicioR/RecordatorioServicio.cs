@@ -15,9 +15,7 @@ namespace Front.RecordatorioPag.ServicioR
             return new SqlConnection(ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString);
         }
 
-        // ===========================
-        // LISTAR RECORDATORIOS POR PACIENTE
-        // ===========================
+       
         public List<Recordatorio> ListarRecordatoriosPorPaciente(int ciPaciente)
         {
             var lista = new List<Recordatorio>();
@@ -26,7 +24,7 @@ namespace Front.RecordatorioPag.ServicioR
             {
                 con.Open();
                 string query = @"
-                    SELECT r.id_recordatorio, r.id_medicamento, r.fecha, r.hora_inicio, r.frecuencia, r.estado, m.nombre, pr.ci_paciente
+                    SELECT r.id_recordatorio, r.id_medicamento, r.fecha, r.hora_inicio, r.frecuencia, r.estado, m.nombre
                     FROM Recordatorio r
                     JOIN pac_rec pr ON r.id_recordatorio = pr.id_recordatorio
                     JOIN Medicamento m ON r.id_medicamento = m.id_medicamento
@@ -40,14 +38,20 @@ namespace Front.RecordatorioPag.ServicioR
                     {
                         while (reader.Read())
                         {
+                            DateTime fecha = reader.GetDateTime(2);
+                            TimeSpan hora = reader.GetTimeSpan(3);
+                            DateTime fechaHoraInicio = fecha.Date + hora;
+
+                            string nombreMed = reader.IsDBNull(6) ? "" : reader.GetString(6);
+
                             lista.Add(new Recordatorio(
                                 reader.GetInt32(0),
-                                reader.GetDateTime(2),
-                                DateTime.Today + reader.GetTimeSpan(3),
+                                fecha,
+                                fechaHoraInicio,
                                 reader.GetInt32(4),
                                 reader.GetBoolean(5),
-                                reader.GetString(6),
-                                reader.GetInt32(7)
+                                nombreMed,
+                                ciPaciente
                             ));
                         }
                     }
@@ -58,17 +62,17 @@ namespace Front.RecordatorioPag.ServicioR
         }
 
         
-        public void AgregarRecordatorioConPaciente(Recordatorio rec, int idMed, int ciPaciente)
+        public void AgregarRecordatorio(Recordatorio rec, int idMed)
         {
             using (var con = GetConnection())
             {
                 con.Open();
+                string query = @"
+                    INSERT INTO Recordatorio 
+                        (id_recordatorio, id_medicamento, fecha, hora_inicio, frecuencia, estado, ci_paciente)
+                    VALUES (@id, @idMed, @fecha, @hora, @frecuencia, @estado, @ci)";
 
-                // Insertar en Recordatorio
-                string insertRec = @"
-                    INSERT INTO Recordatorio (id_recordatorio, id_medicamento, fecha, hora_inicio, frecuencia, estado)
-                    VALUES (@id, @idMed, @fecha, @hora, @frecuencia, @estado)";
-                using (var cmd = new SqlCommand(insertRec, con))
+                using (var cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@id", rec.Id_recordatorio);
                     cmd.Parameters.AddWithValue("@idMed", idMed);
@@ -76,24 +80,32 @@ namespace Front.RecordatorioPag.ServicioR
                     cmd.Parameters.AddWithValue("@hora", rec.Hora_inicio.TimeOfDay);
                     cmd.Parameters.AddWithValue("@frecuencia", rec.Frecuencia);
                     cmd.Parameters.AddWithValue("@estado", rec.Estado);
-                    cmd.ExecuteNonQuery();
-                }
-
-                // Insertar en pac_rec
-                string insertPacRec = @"
-                    INSERT INTO pac_rec (id_recordatorio, ci_paciente, fecha)
-                    VALUES (@id, @ci, @fecha)";
-                using (var cmd = new SqlCommand(insertPacRec, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", rec.Id_recordatorio);
-                    cmd.Parameters.AddWithValue("@ci", ciPaciente);
-                    cmd.Parameters.AddWithValue("@fecha", rec.Fecha);
+                    cmd.Parameters.AddWithValue("@ci", rec.CiPaciente); // 🔹 importante
                     cmd.ExecuteNonQuery();
                 }
             }
         }
 
-       
+        
+        public void AsignarRecordatorioAPaciente(int idRec, int ciPaciente, DateTime fecha)
+        {
+            using (var con = GetConnection())
+            {
+                con.Open();
+                string query = @"
+                    INSERT INTO pac_rec (id_recordatorio, ci_paciente, fecha)
+                    VALUES (@id, @ci, @fecha)";
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", idRec);
+                    cmd.Parameters.AddWithValue("@ci", ciPaciente);
+                    cmd.Parameters.AddWithValue("@fecha", fecha);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        
         public void ActualizarEstadoEnBD(Recordatorio rec)
         {
             using (var con = GetConnection())
@@ -109,7 +121,7 @@ namespace Front.RecordatorioPag.ServicioR
             }
         }
 
-      
+        
         public int ObtenerNuevoId()
         {
             using (var con = GetConnection())
