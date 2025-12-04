@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Front.CentroMedPag.ModelosCM
 {
-    internal class TelefonosCentro
+    public class TelefonosCentro
     {
         private int id_telefono;
         private int id_centro;

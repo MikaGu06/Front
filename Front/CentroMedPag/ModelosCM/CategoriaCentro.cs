@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Front.CentroMedPag.ModelosCM
 {
-    internal class CategoriaCentro
+    public class CategoriaCentro
     {
         private int id_categoria;
         private string nombre;
