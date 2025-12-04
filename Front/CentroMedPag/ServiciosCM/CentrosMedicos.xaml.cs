@@ -43,13 +43,13 @@ namespace Front
 
         private void CargarCategorias()
         {
-            
+            // Se mantiene la lista hardcodeada por solicitud
             ListaCategorias.ItemsSource = new List<string>
             {
                 "AMBULANCIA",
                 "CENTRO DE DIAGNOSTICO",
-                "CENTRO DE FISIOTERAPIA ",
-                
+                "CENTRO DE FISIOTERAPIA",
+                "CENTRO DE FISIOTERAPIA Y REHABILITACION",
                 "CENTRO MEDICO",
                 "CLINICA / HOSPITAL",
                 "CLINICA ODONTOLOGICA",
@@ -61,7 +61,7 @@ namespace Front
             ListaCategorias.SelectionChanged += ListaCategorias_SelectionChanged;
         }
 
-        
+
         private void ListaCategorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListaCategorias.SelectedItem == null) return;

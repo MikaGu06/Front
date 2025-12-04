@@ -61,7 +61,7 @@ namespace Front.INICIO
                     if (ciPaciente.HasValue)
                     {
                         // Tiene Paciente -> puede ir directo a Servicios
-                        this.NavigationService.Navigate(new Servicios());
+                        this.NavigationService.Navigate(new Front.MiCuenta.MiCuenta());
                     }
                     else
                     {
