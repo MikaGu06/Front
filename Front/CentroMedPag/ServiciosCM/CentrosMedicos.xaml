@@ -106,6 +106,12 @@
             <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
             <Setter Property="FontSize" Value="22"/>
             <Setter Property="Padding" Value="0"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Foreground" Value="#624695"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="CategoriaItemStyle" TargetType="ListBoxItem">
@@ -139,11 +145,25 @@
                     Click="BtnVolver_Click"/>
         </Grid>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,6,0,6">
-            <ToggleButton x:Name="Toggle" Style="{StaticResource ToggleStyle}">
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Margin="60,6,0,6">
+
+
+            <ToggleButton x:Name="Toggle"
+                  Style="{StaticResource ToggleStyle}">
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <ContentPresenter 
+    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Categorías"/>
-                    <TextBlock Text="  ▾" Margin="6,0,0,0"/>
+                    <TextBlock Text="Categorías" FontFamily="Segoe UI Semilight"/>
+                    <TextBlock Text="  ▾" FontFamily="Segoe UI Semilight" Margin="6,0,0,0"/>
                 </StackPanel>
             </ToggleButton>
 
