@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Front.CentroMedPag.ModelosCM
 {
-    internal class CentrosDeSalud
+    public class CentrosDeSalud
     {
         private int id_centro;
         private CategoriaCentro id_categoria;
@@ -13,6 +13,7 @@ namespace Front.CentroMedPag.ModelosCM
         private string link;
 
         public List<TelefonosCentro> Telefonos { get; set; }
+        public bool EsFavorito { get; set; } = false;
 
 
         public int Id_centro

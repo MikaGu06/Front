@@ -179,11 +179,13 @@
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1.5*"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="Institución" Style="{StaticResource TxtBl1}"/>
                             <TextBlock Grid.Column="1" Text="Dirección" Style="{StaticResource TxtBl1}" />
-                            <TextBlock Grid.Column="2" Text="Teléfono" Style="{StaticResource TxtBl1}" />
+                            <TextBlock Grid.Column="2" Text="Teléfono" Style="{StaticResource TxtBl1}" 
+                                       HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="3" Text="Ubicación" Style="{StaticResource TxtBl1}" HorizontalAlignment="Center"/>
                             <TextBlock Grid.Column="4" Text="WhatsApp" Style="{StaticResource TxtBl1}" HorizontalAlignment="Center"/>
                         </Grid>
@@ -198,57 +200,74 @@
                                             <ColumnDefinition Width="2*"/>
                                             <ColumnDefinition Width="2*"/>
                                             <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1.5*"/>
                                         </Grid.ColumnDefinitions>
 
+                                        <!-- Institución -->
                                         <TextBlock Text="{Binding Institucion}" 
-                                                   Style="{StaticResource TxtBl1}" 
-                                                   Grid.Column="0" 
-                                                   TextWrapping="Wrap"
-                                                   MaxWidth="200"
-                                                   VerticalAlignment="Center"/>
+                                           Style="{StaticResource TxtBl1}" 
+                                           Grid.Column="0" 
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"
+                                           VerticalAlignment="Center"/>
 
+                                        <!-- Dirección -->
                                         <TextBlock Text="{Binding Direccion}" 
-                                               Style="{StaticResource TxtBl1}" 
-                                               Grid.Column="1" 
-                                               TextWrapping="Wrap"
-                                               MaxWidth="300"
-                                               VerticalAlignment="Center"/>
+                                           Style="{StaticResource TxtBl1}" 
+                                           Grid.Column="1" 
+                                           TextWrapping="Wrap"
+                                           MaxWidth="300"
+                                           VerticalAlignment="Center"/>
 
-                                        <TextBlock Text="{Binding Telefono}" 
-                                               Style="{StaticResource TxtBl1}"
-                                               Grid.Column="2"
-                                               TextWrapping="Wrap" 
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"/>
+                                        <!-- Teléfonos -->
+                                        <ItemsControl Grid.Column="2" ItemsSource="{Binding Telefonos}" HorizontalAlignment="Center">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Telefono}" Style="{StaticResource TxtBl1}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
 
+                                        <!-- Botón Ubicación -->
                                         <Button Grid.Column="3"
-                                            Tag="{Binding LinkUbi}"
+                                            Tag="{Binding Link}"
                                             Click="AbrirMapa_Click"
                                             Width="30" Height="30"
                                             Background="Transparent"
                                             BorderThickness="0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center">
-
                                             <Image Source="/Imagenes/google-maps.png" Stretch="Uniform"/>
                                         </Button>
 
+                                        <!-- Botón WhatsApp -->
                                         <Button Grid.Column="4"
-                                                Tag="{Binding LinkTelf}"
-                                                Click="AbrirWhatsApp_Click"
-                                                Width="30" Height="30"
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Visibility="{Binding MostrarBotonWA, Converter={StaticResource BoolToVis}}">
-
+                                            Tag="{Binding Telefonos[0].LinkT}" 
+                                            Click="AbrirWhatsApp_Click"
+                                            Width="30" Height="30"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Visibility="{Binding Telefonos[0].Tienew, Converter={StaticResource BoolToVis}}">
                                             <Image Source="/Imagenes/whatsapp.png" Stretch="Uniform"/>
                                         </Button>
+
+                                        <!-- Favorito -->
+                                        <CheckBox Grid.Column="5"
+                                              Content="★ Favorito"
+                                              Tag="{Binding Id_centro}"
+                                              IsChecked="{Binding EsFavorito, Mode=TwoWay}"
+                                              Checked="CheckBoxFavorito_Checked"
+                                              Unchecked="CheckBoxFavorito_Unchecked"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Foreground="Gold"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                        
 
 
                     </StackPanel>
