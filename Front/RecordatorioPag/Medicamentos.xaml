@@ -145,11 +145,11 @@
 
         <!-- Botón Activo -->
         <Style x:Key="BotonEstado" TargetType="Button">
-            <Setter Property="Background" Value="#8B45FF"/>
+            <Setter Property="Background" Value="#0D1B40"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#8B45FF"/>
+            <Setter Property="BorderBrush" Value="#0D1B40"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
