@@ -286,6 +286,50 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- PANEL DE NOTIFICACIÓN (toast) -->
+        <Grid x:Name="ToastHost" HorizontalAlignment="Right" 
+              VerticalAlignment="Top" 
+              Margin="0,20,30,0" 
+              Visibility="Collapsed" 
+              Panel.ZIndex="9999">
+            <Border x:Name="ToastCard" 
+                    Background="#0D1B40" 
+                    CornerRadius="10" 
+                    Padding="12" 
+                    Opacity="0">
+                
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="⚠" 
+                               FontSize="18" 
+                               Margin="0,0,8,0" 
+                               Foreground="White"/>
+                    <StackPanel>
+                        <TextBlock x:Name="ToastTitle" 
+                                   Text="Atención" 
+                                   Foreground="White" 
+                                   FontWeight="Bold" 
+                                   FontSize="14"/>
+                        
+                        <TextBlock x:Name="ToastMessage" 
+                                   Text="Mensaje..." 
+                                   Foreground="White" 
+                                   FontSize="13" 
+                                   MaxWidth="320" 
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <Button Content="✕" 
+                            Width="24" 
+                            Height="24" 
+                            Margin="8,0,0,0" 
+                            VerticalAlignment="Top" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent" 
+                            Foreground="White" Click="BtnCerrarToast_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+
         <!-- BOTÓN VOLVER -->
         <Button Content="Volver" x:Name="BtnVolver"
         Style="{StaticResource BotonVolver}"

@@ -83,12 +83,22 @@ namespace Front.SigVitalesPag
                     return;
                 }
 
+                
                 var valores = ValidacionesSignosVitales.Validar(
                     txtRitmoCardiaco.Text,
                     txtPresionArterial.Text,
                     txtOxigenacion.Text,
                     txtTemperatura.Text
                 );
+
+                
+                if (!string.IsNullOrEmpty(valores.alerta))
+                {
+                    
+                    MostrarNotificacionToast("Atención médica recomendada", valores.alerta);
+
+                    
+                }
 
                 int nuevoId = servicio.ObtenerNuevoId();
                 string presionString = $"{valores.sistolica}-{valores.diastolica}";
@@ -103,9 +113,10 @@ namespace Front.SigVitalesPag
                     valores.oxigeno
                 );
 
-                // Guardar en ambas tablas
+                
                 servicio.AgregarSignoConPaciente(nuevoSigno);
 
+                
                 MessageBox.Show("Signo vital agregado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 txtRitmoCardiaco.Clear();
@@ -114,6 +125,11 @@ namespace Front.SigVitalesPag
                 txtTemperatura.Clear();
 
                 CargarHistorial();
+            }
+            catch (ArgumentException ex)
+            {
+                
+                MessageBox.Show(ex.Message, "Error de validación", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
@@ -128,5 +144,34 @@ namespace Front.SigVitalesPag
             if (NavigationService.CanGoBack)
                 NavigationService.GoBack();
         }
+
+        private async void MostrarNotificacionToast(string titulo, string mensaje)
+        {
+            try
+            {
+                ToastTitle.Text = titulo;
+                ToastMessage.Text = mensaje;
+                ToastHost.Visibility = Visibility.Visible;
+
+                var fadeIn = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200));
+                ToastCard.BeginAnimation(OpacityProperty, fadeIn);
+
+                // Mantener visible un par de segundos
+                await Task.Delay(6500);
+
+                var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(200));
+                ToastCard.BeginAnimation(OpacityProperty, fadeOut);
+
+                await Task.Delay(200);
+                ToastHost.Visibility = Visibility.Collapsed;
+            }
+            catch {  }
+        }
+
+        private void BtnCerrarToast_Click(object sender, RoutedEventArgs e)
+        {
+            ToastHost.Visibility = Visibility.Collapsed;
+        }
+
     }
 }
