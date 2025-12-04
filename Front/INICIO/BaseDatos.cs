@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Front.Data__bd_;
 using Front.Helpers;
 
@@ -51,34 +50,7 @@ namespace Front.INICIO
             return Convert.ToInt32(valor);
         }
 
-        /// Crea un registro básico en Paciente y devuelve su CI.
-        private int CrearPacienteBasico(string username, string phone)
-        {
-            Database db = new Database();
-
-            // Siguiente CI
-            string sqlNuevoCi = "SELECT ISNULL(MAX(ci_paciente), 0) + 1 FROM Paciente;";
-            DataTable tablaCi = db.EjecutarConsulta(sqlNuevoCi);
-            int nuevoCi = Convert.ToInt32(tablaCi.Rows[0][0]);
-
-            string correoTemporal = username + "@temp.com";
-
-            string insertPaciente = $@"
-                INSERT INTO Paciente
-                    (ci_paciente, id_tipo_sangre, id_centro, correo, nombre_completo, celular,
-                     direccion, sexo, foto_perfil, fecha_nacimiento)
-                VALUES
-                    ({nuevoCi}, 1, NULL, '{correoTemporal}', '{username}', '{phone}',
-                     NULL, NULL, NULL, GETDATE());
-            ";
-
-            db.EjecutarComando(insertPaciente);
-
-            return nuevoCi;
-        }
-
-
-        /// Registra un nuevo Usuario y crea su Paciente vinculado.
+        /// Registra un nuevo Usuario SIN crear Paciente temporal.
         public void RegistrarUsuario(string username, string phone, string password)
         {
             // Generar hash de la contraseña
@@ -89,13 +61,10 @@ namespace Front.INICIO
             Random r = new Random();
             int nuevoID = r.Next(200, 999);
 
-            // Crear Paciente básico
-            int ciPaciente = CrearPacienteBasico(username, phone);
-
-            // Insertar Usuario
+            // Insertar solo Usuario, ci_paciente queda NULL hasta que complete MiCuenta
             string insertQuery = $@"
                 INSERT INTO Usuario (id_usuario, ci_paciente, nombre_usuario, contrasena_hash, estado)
-                VALUES ({nuevoID}, {ciPaciente}, '{username}', {hashHex}, 1);
+                VALUES ({nuevoID}, NULL, '{username}', {hashHex}, 1);
             ";
 
             Database db = new Database();

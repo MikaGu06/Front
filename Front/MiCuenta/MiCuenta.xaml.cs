@@ -3,7 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,31 +19,65 @@ namespace Front.MiCuenta
         private readonly string _connectionString =
             ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString;
 
-        private string rutaImagenSeleccionada = null; // ruta de la imagen seleccionada
-        private byte[] fotoPerfilActual = null;       // bytes de la foto actual
-        private string usuarioActual;                 // nombre de usuario en sesión
+        private string rutaImagenSeleccionada = string.Empty; // ruta de la imagen seleccionada
+        private byte[] fotoPerfilActual = Array.Empty<byte>();       // bytes de la foto actual
+        private string usuarioActual = string.Empty;                  // nombre de usuario en sesión
+        private readonly bool _esRegistroNuevo;                       // indica si venimos de un registro nuevo
 
-        public MiCuenta()
+        public MiCuenta(bool esRegistroNuevo = false)
         {
             InitializeComponent();
 
-            // 1) Tomamos el usuario que inició sesión
-            usuarioActual = SesionUsuario.NombreUsuario;
+            _esRegistroNuevo = esRegistroNuevo;
 
-            // 2) Si hay usuario, cargamos sus datos desde la BD
-            if (!string.IsNullOrEmpty(usuarioActual))
+            // 1) Tomamos el usuario que inició sesión
+            usuarioActual = SesionUsuario.NombreUsuario ?? string.Empty;
+
+            if (string.IsNullOrEmpty(usuarioActual))
             {
-                CargarUsuarioDesdeBD();
+                MessageBox.Show("No hay usuario en sesión.", "Sesión",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
 
-            CargarDesdeSesion();
-            CargarFotoDesdeBaseDeDatos();
+            // 2) Comportamiento según origen
+            if (_esRegistroNuevo)
+            {
+                // Cuenta recién creada: solo usuario, teléfono y contraseña rellenados.
+                CargarSoloDatosBasicosDesdeSesion();
+            }
+            else
+            {
+                // Login normal: llenar todo desde la BD y luego desde Sesión.
+                CargarUsuarioDesdeBD();
+                CargarDesdeSesion();
+                CargarFotoDesdeBaseDeDatos();
+            }
+        }
+
+        /// Rellena solo usuario, teléfono y contraseña desde la sesión (registro nuevo).
+        private void CargarSoloDatosBasicosDesdeSesion()
+        {
+            TxtUsuario.Text = SesionUsuario.NombreUsuario ?? string.Empty;
+            TxtTelefono.Text = SesionUsuario.Telefono ?? string.Empty;
+            PsBoxContrasena.Password = SesionUsuario.Contrasena ?? string.Empty;
+
+            TxtNombre.Text = string.Empty;
+            TxtCorreo.Text = string.Empty;
+            TxtDireccion.Text = string.Empty;
+            TxtCI.Text = string.Empty;
+            DpFechaNacimiento.SelectedDate = null;
+            CbGenero.SelectedIndex = -1;
+            CbTipoSangre.SelectedIndex = -1;
+
+            fotoPerfilActual = Array.Empty<byte>();
+            FotoPerfil.Source = null;
         }
 
         /// Rellena el formulario con los datos de la sesión.
         private void CargarDesdeSesion()
         {
-            usuarioActual = SesionUsuario.NombreUsuario;
+            usuarioActual = SesionUsuario.NombreUsuario ?? string.Empty;
 
             if (!string.IsNullOrEmpty(usuarioActual))
                 TxtUsuario.Text = usuarioActual;
@@ -99,6 +133,7 @@ namespace Front.MiCuenta
                 FotoPerfil.Source = ConvertirBytesAImagen(fotoPerfilActual);
             }
         }
+
         private void CargarUsuarioDesdeBD()
         {
             try
@@ -129,12 +164,15 @@ namespace Front.MiCuenta
                         if (dr.Read())
                         {
                             // Llenamos la sesión con lo que viene de la BD
-                            SesionUsuario.NombreUsuario = dr["nombre_usuario"]?.ToString();
-                            SesionUsuario.Contrasena = dr["contrasena"]?.ToString();
-                            SesionUsuario.Telefono = dr["celular"]?.ToString();
-                            SesionUsuario.NombreCompleto = dr["nombre_completo"]?.ToString();
-                            SesionUsuario.Correo = dr["correo"]?.ToString();
-                            SesionUsuario.Direccion = dr["direccion"]?.ToString();
+                            SesionUsuario.NombreUsuario = dr["nombre_usuario"]?.ToString() ?? string.Empty;
+
+                            // NO sobreescribimos la contraseña de sesión con el hash binario
+                            // SesionUsuario.Contrasena = dr["contrasena"]?.ToString();
+
+                            SesionUsuario.Telefono = dr["celular"]?.ToString() ?? string.Empty;
+                            SesionUsuario.NombreCompleto = dr["nombre_completo"]?.ToString() ?? string.Empty;
+                            SesionUsuario.Correo = dr["correo"]?.ToString() ?? string.Empty;
+                            SesionUsuario.Direccion = dr["direccion"]?.ToString() ?? string.Empty;
 
                             if (dr["fecha_nacimiento"] != DBNull.Value)
                                 SesionUsuario.FechaNacimiento = Convert.ToDateTime(dr["fecha_nacimiento"]);
@@ -147,6 +185,10 @@ namespace Front.MiCuenta
                                 int sexo = Convert.ToInt32(dr["sexo"]);
                                 SesionUsuario.Genero = (sexo == 1) ? "Masculino" : "Femenino";
                             }
+                            else
+                            {
+                                SesionUsuario.Genero = string.Empty;
+                            }
 
                             // Tipo de sangre por id → lo convertimos a código (A+, O-, etc.)
                             if (dr["id_tipo_sangre"] != DBNull.Value)
@@ -154,8 +196,12 @@ namespace Front.MiCuenta
                                 int idTipo = Convert.ToInt32(dr["id_tipo_sangre"]);
                                 SesionUsuario.TipoSangre = ObtenerCodigoTipoSangre(idTipo);
                             }
+                            else
+                            {
+                                SesionUsuario.TipoSangre = string.Empty;
+                            }
 
-                            SesionUsuario.CI = dr["ci_paciente"]?.ToString();
+                            SesionUsuario.CI = dr["ci_paciente"]?.ToString() ?? string.Empty;
 
                             // Foto de perfil
                             if (dr["foto_perfil"] != DBNull.Value)
@@ -180,17 +226,17 @@ namespace Front.MiCuenta
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ModeloUsuario usuario = new ModeloUsuario(
-                TxtUsuario.Text,
-                PsBoxContrasena.Password,
-                TxtTelefono.Text,
-                TxtNombre.Text,
-                TxtCorreo.Text,
-                TxtDireccion.Text,
+                TxtUsuario.Text ?? string.Empty,
+                PsBoxContrasena.Password ?? string.Empty,
+                TxtTelefono.Text ?? string.Empty,
+                TxtNombre.Text ?? string.Empty,
+                TxtCorreo.Text ?? string.Empty,
+                TxtDireccion.Text ?? string.Empty,
                 DpFechaNacimiento.SelectedDate,
-                (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString(),
-                (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString(),
-                null,
-                TxtCI.Text
+                (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty,
+                (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty,
+                rutaImagenSeleccionada,
+                TxtCI.Text ?? string.Empty
             );
 
             //Verificando si faltan datos obligatorios
@@ -236,17 +282,17 @@ namespace Front.MiCuenta
             {
                 // 1) Crear modelo con los datos del formulario
                 ModeloUsuario usuario = new ModeloUsuario(
-                    TxtUsuario.Text,
-                    PsBoxContrasena.Password,
-                    TxtTelefono.Text,
-                    TxtNombre.Text,
-                    TxtCorreo.Text,
-                    TxtDireccion.Text,
+                    TxtUsuario.Text ?? string.Empty,
+                    PsBoxContrasena.Password ?? string.Empty,
+                    TxtTelefono.Text ?? string.Empty,
+                    TxtNombre.Text ?? string.Empty,
+                    TxtCorreo.Text ?? string.Empty,
+                    TxtDireccion.Text ?? string.Empty,
                     DpFechaNacimiento.SelectedDate,
-                    (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString(),
-                    (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString(),
+                    (CbGenero.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty,
+                    (CbTipoSangre.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? string.Empty,
                     rutaImagenSeleccionada,
-                    TxtCI.Text
+                    TxtCI.Text ?? string.Empty
                 );
 
                 // 2) Validar datos
@@ -310,7 +356,7 @@ namespace Front.MiCuenta
 
             if (ofd.ShowDialog() == true)
             {
-                rutaImagenSeleccionada = ofd.FileName;
+                rutaImagenSeleccionada = ofd.FileName ?? string.Empty;
 
                 try
                 {
@@ -359,7 +405,7 @@ namespace Front.MiCuenta
                     cmd.Parameters.AddWithValue("@user", usuarioActual);
 
                     conn.Open();
-                    object result = cmd.ExecuteScalar();
+                    object? result = cmd.ExecuteScalar();
 
                     if (result != DBNull.Value && result != null)
                     {
@@ -410,7 +456,7 @@ namespace Front.MiCuenta
                         "SELECT ci_paciente FROM Usuario WHERE nombre_usuario = @user", conn))
                     {
                         cmdGet.Parameters.AddWithValue("@user", usuarioActual);
-                        object result = cmdGet.ExecuteScalar();
+                        object? result = cmdGet.ExecuteScalar();
                         if (result != DBNull.Value && result != null)
                             ciPaciente = Convert.ToInt32(result);
                     }
@@ -470,8 +516,10 @@ namespace Front.MiCuenta
             if (!u.FechaNacimiento.HasValue)
                 throw new ArgumentException("Debe seleccionar una fecha de nacimiento.");
 
-
-            byte[] bytesFoto = fotoPerfilActual ?? SesionUsuario.FotoPerfil;
+            // Usar la foto actual si existe, en caso contrario la de sesión, y si no, arreglo vacío.
+            byte[] bytesFoto = fotoPerfilActual.Length > 0
+                ? fotoPerfilActual
+                : (SesionUsuario.FotoPerfil ?? Array.Empty<byte>());
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -487,7 +535,7 @@ namespace Front.MiCuenta
                             conn, tx))
                         {
                             cmdTipo.Parameters.AddWithValue("@codigo", u.TipoSangre);
-                            object resTipo = cmdTipo.ExecuteScalar();
+                            object? resTipo = cmdTipo.ExecuteScalar();
 
                             if (resTipo != null && resTipo != DBNull.Value)
                             {
@@ -525,6 +573,13 @@ namespace Front.MiCuenta
                             existePaciente = (int)cmdExiste.ExecuteScalar() > 0;
                         }
 
+                        // Valores sin nulls
+                        string correo = string.IsNullOrWhiteSpace(u.Correo) ? "" : u.Correo;
+                        string nombre = string.IsNullOrWhiteSpace(u.Nombre) ? "" : u.Nombre;
+                        string telefono = string.IsNullOrWhiteSpace(u.Telefono) ? "" : u.Telefono;
+                        string direccion = string.IsNullOrWhiteSpace(u.Direccion) ? "" : u.Direccion;
+                        int sexoInt = esMasculino ? 1 : 0; // 1 = Masculino, 0 = Femenino
+
                         if (!existePaciente)
                         {
                             // Insertar nuevo Paciente
@@ -532,26 +587,20 @@ namespace Front.MiCuenta
                                 @"INSERT INTO Paciente
                                   (ci_paciente, id_tipo_sangre, id_centro, correo, nombre_completo,
                                    celular, direccion, sexo, foto_perfil, fecha_nacimiento)
-                                  VALUES (@ci, @idTipo, NULL, @correo, @nombre,
+                                  VALUES (@ci, @idTipo, @idCentro, @correo, @nombre,
                                           @cel, @dir, @sexo, @foto, @fecha)",
                                 conn, tx))
                             {
                                 cmdInsertPac.Parameters.AddWithValue("@ci", ciNumerico);
                                 cmdInsertPac.Parameters.AddWithValue("@idTipo", idTipo);
-                                cmdInsertPac.Parameters.AddWithValue("@correo", u.Correo);
-                                cmdInsertPac.Parameters.AddWithValue("@nombre", u.Nombre);
-                                cmdInsertPac.Parameters.AddWithValue("@cel", (object)u.Telefono ?? DBNull.Value);
-                                cmdInsertPac.Parameters.AddWithValue("@dir", (object)u.Direccion ?? DBNull.Value);
-
-                                cmdInsertPac.Parameters.AddWithValue(
-                                    "@sexo",
-                                    u.Genero == null ? (object)DBNull.Value : (esMasculino ? 1 : 0));
-
-                                if (bytesFoto != null && bytesFoto.Length > 0)
-                                    cmdInsertPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = bytesFoto;
-                                else
-                                    cmdInsertPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value;
-
+                                // id_centro por defecto = 1 (ajustar según tu BD)
+                                cmdInsertPac.Parameters.AddWithValue("@idCentro", 1);
+                                cmdInsertPac.Parameters.AddWithValue("@correo", correo);
+                                cmdInsertPac.Parameters.AddWithValue("@nombre", nombre);
+                                cmdInsertPac.Parameters.AddWithValue("@cel", telefono);
+                                cmdInsertPac.Parameters.AddWithValue("@dir", direccion);
+                                cmdInsertPac.Parameters.AddWithValue("@sexo", sexoInt);
+                                cmdInsertPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = bytesFoto;
                                 cmdInsertPac.Parameters.AddWithValue("@fecha", u.FechaNacimiento.Value);
 
                                 cmdInsertPac.ExecuteNonQuery();
@@ -575,20 +624,12 @@ namespace Front.MiCuenta
                             {
                                 cmdUpdPac.Parameters.AddWithValue("@ci", ciNumerico);
                                 cmdUpdPac.Parameters.AddWithValue("@idTipo", idTipo);
-                                cmdUpdPac.Parameters.AddWithValue("@correo", u.Correo);
-                                cmdUpdPac.Parameters.AddWithValue("@nombre", u.Nombre);
-                                cmdUpdPac.Parameters.AddWithValue("@cel", (object)u.Telefono ?? DBNull.Value);
-                                cmdUpdPac.Parameters.AddWithValue("@dir", (object)u.Direccion ?? DBNull.Value);
-
-                                cmdUpdPac.Parameters.AddWithValue(
-                                    "@sexo",
-                                    u.Genero == null ? (object)DBNull.Value : (esMasculino ? 1 : 0));
-
-                                if (bytesFoto != null && bytesFoto.Length > 0)
-                                    cmdUpdPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = bytesFoto;
-                                else
-                                    cmdUpdPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = DBNull.Value;
-
+                                cmdUpdPac.Parameters.AddWithValue("@correo", correo);
+                                cmdUpdPac.Parameters.AddWithValue("@nombre", nombre);
+                                cmdUpdPac.Parameters.AddWithValue("@cel", telefono);
+                                cmdUpdPac.Parameters.AddWithValue("@dir", direccion);
+                                cmdUpdPac.Parameters.AddWithValue("@sexo", sexoInt);
+                                cmdUpdPac.Parameters.Add("@foto", SqlDbType.VarBinary).Value = bytesFoto;
                                 cmdUpdPac.Parameters.AddWithValue("@fecha", u.FechaNacimiento.Value);
 
                                 cmdUpdPac.ExecuteNonQuery();
@@ -627,7 +668,7 @@ namespace Front.MiCuenta
                 {
                     cmd.Parameters.AddWithValue("@id", idTipo);
                     conn.Open();
-                    object result = cmd.ExecuteScalar();
+                    object? result = cmd.ExecuteScalar();
                     return result?.ToString() ?? string.Empty;
                 }
             }
@@ -640,7 +681,7 @@ namespace Front.MiCuenta
 
         /// Convierte un arreglo de bytes en BitmapImage.
 
-        private BitmapImage ConvertirBytesAImagen(byte[] imageData)
+        private BitmapImage? ConvertirBytesAImagen(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)
                 return null;
