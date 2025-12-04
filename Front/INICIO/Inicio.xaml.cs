@@ -1,7 +1,7 @@
 ﻿using Front.Data__bd_;
 using Front.Helpers;
 using Front.INICIO;
-using Front.MiCuenta;  
+using Front.MiCuenta;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -120,7 +120,7 @@ namespace Front.INICIO
                 ValidacionesInicio validador = new ValidacionesInicio();
                 validador.ValidarRegistro(username, phone, password, confirmPassword);
 
-                // 2. CREAR Usuario + Paciente BÁSICO
+                // 2. CREAR Usuario (ya no crea Paciente básico)
                 BaseDatos db = new BaseDatos();
                 db.RegistrarUsuario(username, phone, password);
 
@@ -134,7 +134,8 @@ namespace Front.INICIO
                 MessageBox.Show(successMessageRegister, "Registro Exitoso",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
 
-                this.NavigationService.Navigate(new Front.MiCuenta.MiCuenta());
+                // Cuenta nueva: solo queremos usuario/teléfono/contraseña rellenados
+                this.NavigationService.Navigate(new Front.MiCuenta.MiCuenta(esRegistroNuevo: true));
             }
             catch (RegexMatchTimeoutException obj4)
             {
