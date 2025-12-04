@@ -515,30 +515,72 @@
 
                         </StackPanel>
 
-                        <!-- BOTONES -->
-                        <StackPanel Grid.Row="1" x:Name="BotonesModificarGuardar">
-                            <StackPanel Orientation="Horizontal">
-                                <Button x:Name="BtnModificar"
-                                Style="{StaticResource BtnHeader}"
-                                Margin="260 20 0 0"
-                                Width="130" Height="40"
-                                Click="BtnModificar_Click">
-                                    <TextBlock Text="Modificar"
-                                       FontFamily="Segoe UI Semilight"
-                                       FontSize="15"/>
-                                </Button>
 
-                                <Button x:Name="BtnGuardar"
-                                Style="{StaticResource BtnHeader}"
-                                Margin="70 20 0 0"
-                                Width="130" Height="40"
-                                Click="BtnGuardar_Click">
-                                    <TextBlock Text="Guardar"
-                                       FontFamily="Segoe UI Semilight"
-                                       FontSize="15"/>
-                                </Button>
+                        <StackPanel Grid.Row="1" Margin="0 20 0 0">
+
+                            <TextBlock Text="Centros médicos favoritos"
+                                   FontSize="24"
+                                   FontFamily="Segoe UI Variable Display Semibold"
+                                   Foreground="#002454"
+                                   Margin="50 0 0 10"/>
+
+                            <ItemsControl x:Name="ListaFavoritos"
+                                            Margin="50 0 50 20">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#e8f1ff"
+                                                CornerRadius="15"
+                                                Padding="15"
+                                                Margin="0 10 0 10"
+                                                BorderBrush="#c5d9ff"
+                                                BorderThickness="1">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Institucion}"
+                                                   FontSize="18"
+                                                   FontFamily="Segoe UI Semibold"
+                                                   Foreground="#002454"/>
+
+                                                <TextBlock Text="{Binding Direccion}"
+                                                   FontSize="14"
+                                                   Foreground="#123066"
+                                                   Margin="0 4 0 0"/>
+
+                                                <TextBlock Text="{Binding Telefonos}"
+                                                       FontSize="14"
+                                                       Foreground="#123066"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            
+                            <StackPanel x:Name="BotonesModificarGuardar">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="BtnModificar"
+                                            Style="{StaticResource BtnHeader}"
+                                            Margin="260 20 0 0"
+                                            Width="130" Height="40"
+                                            Click="BtnModificar_Click">
+                                        <TextBlock Text="Modificar"
+                                           FontFamily="Segoe UI Semilight"
+                                           FontSize="15"/>
+                                    </Button>
+
+                                    <Button x:Name="BtnGuardar"
+                                            Style="{StaticResource BtnHeader}"
+                                            Margin="70 20 0 0"
+                                            Width="130" Height="40"
+                                            Click="BtnGuardar_Click">
+                                                                <TextBlock Text="Guardar"
+                                                   FontFamily="Segoe UI Semilight"
+                                                   FontSize="15"/>
+                                    </Button>
+                                </StackPanel>
                             </StackPanel>
+
                         </StackPanel>
+
 
                     </Grid>
                 </ScrollViewer>

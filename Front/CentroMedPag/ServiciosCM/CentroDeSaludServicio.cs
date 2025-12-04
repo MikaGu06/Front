@@ -134,5 +134,69 @@ namespace Front.CentroMedPag.ServiciosCM
                 }
             }
         }
+        // devuelve los centros marcados como favoritos por un usuario (con teléfonos cargados)
+        public List<CentrosDeSalud> ObtenerFavoritosUsuario(int ciUsuario)
+        {
+            List<CentrosDeSalud> lista = new List<CentrosDeSalud>();
+
+            using (var con = GetConnection())
+            {
+                con.Open();
+
+                string query = @"
+            SELECT c.id_centro, c.id_categoria, c.institucion, c.direccion, c.gps_link,
+                   t.id_telefono, t.telefono, t.es_whatsapp, t.link_whatsapp
+            FROM dbo.Centro_de_Salud c
+            INNER JOIN dbo.pac_centro p ON c.id_centro = p.id_centro
+            LEFT JOIN dbo.Telefono_Centro t ON c.id_centro = t.id_centro
+            WHERE p.ci_paciente = @ciUsuario
+            ORDER BY p.fecha DESC;";
+
+                using (var cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ciUsuario", ciUsuario);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        Dictionary<int, CentrosDeSalud> dict = new Dictionary<int, CentrosDeSalud>();
+
+                        while (reader.Read())
+                        {
+                            int idCentro = reader.GetInt32(0);
+
+                            if (!dict.ContainsKey(idCentro))
+                            {
+                                var cat = new CategoriaCentro(reader.GetInt32(1), "");
+                                var centro = new CentrosDeSalud(
+                                    idCentro,
+                                    cat,
+                                    reader.IsDBNull(2) ? "" : reader.GetString(2),
+                                    reader.IsDBNull(3) ? "" : reader.GetString(3),
+                                    reader.IsDBNull(4) ? "" : reader.GetString(4)
+                                );
+                                dict[idCentro] = centro;
+                            }
+
+                            if (!reader.IsDBNull(5))
+                            {
+                                var tel = new TelefonosCentro(
+                                    reader.GetInt32(5),
+                                    idCentro,
+                                    reader.IsDBNull(6) ? "" : reader.GetString(6),
+                                    reader.IsDBNull(7) ? false : reader.GetBoolean(7),
+                                    reader.IsDBNull(8) ? "" : reader.GetString(8)
+                                );
+                                dict[idCentro].Telefonos.Add(tel);
+                            }
+                        }
+
+                        lista.AddRange(dict.Values);
+                    }
+                }
+            }
+
+            return lista;
+        }
+
     }
 }

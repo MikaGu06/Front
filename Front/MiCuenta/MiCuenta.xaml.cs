@@ -9,15 +9,19 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Front.CentroMedPag.ModelosCM;
 
 namespace Front.MiCuenta
 {
-    /// Página de edición de datos de la cuenta del usuario.
     public partial class MiCuenta : Page
     {
         // Cadena de conexión (igual que Database.cs)
         private readonly string _connectionString =
             ConfigurationManager.ConnectionStrings["cnHealthyU"].ConnectionString;
+
+        // campo de clase
+        private readonly Front.CentroMedPag.ServiciosCM.CentroDeSaludServicio centroServicio = new Front.CentroMedPag.ServiciosCM.CentroDeSaludServicio();
+
 
         private string rutaImagenSeleccionada = string.Empty; // ruta de la imagen seleccionada
         private byte[] fotoPerfilActual = Array.Empty<byte>();       // bytes de la foto actual
@@ -27,11 +31,13 @@ namespace Front.MiCuenta
         public MiCuenta(bool esRegistroNuevo = false)
         {
             InitializeComponent();
+            
 
             _esRegistroNuevo = esRegistroNuevo;
 
             // 1) Tomamos el usuario que inició sesión
             usuarioActual = SesionUsuario.NombreUsuario ?? string.Empty;
+
 
             if (string.IsNullOrEmpty(usuarioActual))
             {
@@ -52,8 +58,46 @@ namespace Front.MiCuenta
                 CargarUsuarioDesdeBD();
                 CargarDesdeSesion();
                 CargarFotoDesdeBaseDeDatos();
+                CargarFavoritos();
             }
         }
+
+        private void CargarFavoritos()
+        {
+            try
+            {
+                
+                if (string.IsNullOrWhiteSpace(SesionUsuario.CI) || !int.TryParse(SesionUsuario.CI, out int ciUsuario))
+                {
+                    
+                    ListaFavoritos.ItemsSource = null;
+                    return;
+                }
+
+                var favoritos = centroServicio.ObtenerFavoritosUsuario(ciUsuario);
+
+                
+                var ui = favoritos.Select(c => new
+                {
+                    Id_centro = c.Id_centro,
+                    Institucion = c.Institucion,
+                    Direccion = c.Direccion,
+                    Telefonos = c.Telefonos != null && c.Telefonos.Any()
+                                ? string.Join(" - ", c.Telefonos.Select(t => t.Telefono))
+                                : "No disponible",
+                    Link = c.Link
+                }).ToList();
+
+                ListaFavoritos.ItemsSource = ui;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error cargando favoritos: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ListaFavoritos.ItemsSource = null;
+            }
+        }
+
+
 
         /// Rellena solo usuario, teléfono y contraseña desde la sesión (registro nuevo).
         private void CargarSoloDatosBasicosDesdeSesion()
