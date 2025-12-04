@@ -14,11 +14,27 @@
 
         <!-- TIPOGRAFÍA GLOBAL -->
         <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="#002454"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Height" Value="Auto" />
         </Style>
 
         <Style TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Background" Value="#dae8fa"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+            <Setter Property="Foreground" Value="#002454"/>
+            <Setter Property="Padding" Value="15,0,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
         <Style TargetType="Button">
@@ -31,23 +47,37 @@
 
         <Style TargetType="ToggleButton">
             <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Background" Value="#dae8fa"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+            <Setter Property="Foreground" Value="#002454"/>
+            <Setter Property="Padding" Value="15,0,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+
         </Style>
 
         <!-- ComboBox -->
         <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
             <Setter Property="IsEditable" Value="True"/>
             <Setter Property="IsReadOnly" Value="True"/>
+
             <Setter Property="Margin" Value="0,0,0,0"/>
-            <Setter Property="Height" Value="28"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="25"/>
+
             <Setter Property="Background" Value="#dae8fa"/>
             <Setter Property="BorderBrush" Value="#dae8fa"/>
             <Setter Property="Foreground" Value="#002454"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontFamily" Value="Segoe UI Variable Display"/>
+
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
             <Setter Property="Padding" Value="10,0,10,0"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
 
 
@@ -55,12 +85,10 @@
         <Style x:Key="BotonAgrandable" TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#0D1B40"/>
-            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Padding" Value="8"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="250"/>
-            <Setter Property="Height" Value="55"/>
             <Setter Property="FontFamily" Value="Segoe UI Variable Display Semibold"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
             <Setter Property="RenderTransform">
                 <Setter.Value>
@@ -192,13 +220,76 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!--DatePicker-->
+        <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Foreground" Value="#002454"/>
+            <Setter Property="Background" Value="#dae8fa"/>
+            <Setter Property="BorderBrush" Value="#dae8fa"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Segoe UI Semilight"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Caja de texto corregida -->
+                            <DatePickerTextBox x:Name="PART_TextBox"
+                   Grid.Column="0"
+                   Background="#dae8fa"
+                   BorderBrush="#dae8fa"
+                   Foreground="#002454"
+                   FontSize="15"
+                   FontFamily="Segoe UI Semilight"
+                   VerticalContentAlignment="Center"
+                    Padding="8 0 0 0"/>
+
+                            <!-- Botón del calendario -->
+                            <Button x:Name="PART_Button"
+        Grid.Column="1"
+        Focusable="False"
+        Background="#c8dfff"
+        BorderBrush="#c8dfff"
+        Cursor="Hand">
+                                <Path Data="M3,0 L17,0 17,14 3,14 z"
+          Fill="#002454"
+          Stretch="Uniform"
+          Width="18"
+          Height="18"
+          Margin="5"/>
+                            </Button>
+
+                            <Popup x:Name="PART_Popup"
+       Placement="Bottom"
+       StaysOpen="False"
+       AllowsTransparency="True">
+                                <Border BorderBrush="#002454" BorderThickness="1">
+                                    <Calendar x:Name="PART_Calendar"
+                  Background="White"
+                  Foreground="#002454"/>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
 
     </Page.Resources>
 
     <!-- Contenido con Scroll -->
     <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <Grid Margin="16">
+        <Grid Margin="16" Cursor="">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -209,7 +300,7 @@
             </Grid.RowDefinitions>
 
             <!-- Encabezado -->
-            <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent">
+            <Grid Grid.Row="0" Height="80" Margin="0,0,0,16" Background="Transparent" Cursor="">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -234,12 +325,12 @@
                         Height="40"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
-                        Margin="20,0,0,0"
+                        Margin="0,0,30,0"
                         Click="BtnVolver_Click"/>
             </Grid>
 
             <!-- Formulario dividido en 2 columnas -->
-            <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3">
+            <Grid Grid.Row="1" Margin="0,0,0,20" Grid.RowSpan="3" Cursor="">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -248,13 +339,12 @@
 
                 <!-- Columna izquierda: formulario actual -->
                 <Border Grid.Column="0" Background="White"
-                        BorderBrush="#0A204A"
                         BorderThickness="2"
-                        CornerRadius="10"
+                        CornerRadius="30"
                         Padding="18"
-                        Margin="0,0,8,0">
+                        Margin="30,0,25,0">
 
-                    <Grid>
+                    <Grid HorizontalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -262,39 +352,37 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="96*"/>
-                            <ColumnDefinition Width="59*"/>
-                            <ColumnDefinition Width="37*"/>
-                        </Grid.ColumnDefinitions>
+
 
                         <StackPanel Grid.Row="0">
-                            <TextBlock Text="MEDICAMENTOS" FontSize="16"/>
+                            <TextBlock Text="Medicamentos" FontSize="20" Margin="10 0 0 0"
+                                       FontFamily="Segoe UI Semibold"  Height="40"
+                                       HorizontalAlignment="Center"/>
                         </StackPanel>
 
                         <!-- Nombre -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="1" Margin="10,10,0,10" Orientation="Horizontal" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                <TextBlock Text="Nombre" FontSize="16"/>
+                                <TextBlock Text="Nombre" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <TextBox x:Name="txtNombreMed" Height="28"/>
+                            <TextBox x:Name="txtNombreMed"/>
                         </StackPanel>
 
                         <!-- Descripcion -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="2" Margin="10" Grid.ColumnSpan="2" Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Descripción" FontSize="16"/>
+                                <TextBlock Text="Descripción" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <TextBox x:Name="txtDescMed" Height="28"/>
+                            <TextBox x:Name="txtDescMed"/>
                         </StackPanel>
 
                         <!-- Dosis -->
-                        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
-                                <TextBlock Text="Dosis" FontSize="16"/>
+                                <TextBlock Text="Dosis" FontSize="16" Width="100"/>
                             </StackPanel>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -303,11 +391,11 @@
                                 </Grid.ColumnDefinitions>
 
                                 <!-- Cantidad -->
-                                <TextBox x:Name="txtDosisMed" Height="28" Grid.Column="0" Margin="0,0,4,0" FontSize="16"/>
+                                <TextBox x:Name="txtDosisMed"  Grid.Column="0" FontSize="16" Width="140"/>
 
                                 <!-- Unidad -->
-                                <ComboBox x:Name="cmbDosisUnidad" Grid.Column="1" Height="28" FontSize="16"
-                                    Style="{StaticResource ComboBoxStyle}" Cursor="">
+                                <ComboBox x:Name="cmbDosisUnidad" Grid.Column="1" Margin="10 0 0 0"
+                                    Style="{StaticResource ComboBoxStyle}" Cursor="" Width="150">
                                     <ComboBoxItem Content="mg"/>
                                     <ComboBoxItem Content="g"/>
                                     <ComboBoxItem Content="ml"/>
@@ -318,56 +406,62 @@
                         <!-- Botón Añadir Medicamentos -->
                         <Button x:Name="btnAgregarMedicamento"
                                 Grid.Row="4" Grid.ColumnSpan="3"
-                                Content="AÑADIR MEDICAMENTOS"
-                                Margin="0,10,0,0"
+                                Content="Añadir medicamentos"
+                                Margin="0 70 0 0"
+                                Width="200" Height="40"
+                                HorizontalAlignment="Center"
                                 Style="{StaticResource BotonAgrandable}" 
                                 Click="btnAgregarMedicamento_Click"
-                                ToolTip="Agregar este medicamento"/>
+                                ToolTip="Agregar este medicamento"
+                                FontFamily="Segoe UI Semilight"
+                                FontSize="15"/>
                     </Grid>
                 </Border>
 
                 <!-- Columna derecha recordatorio-->
                 <Border Grid.Column="1" Background="White"
-                        BorderBrush="#0A204A"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Padding="18"
-                        Margin="0,0,8,0">
 
-                    <Grid>
+                        BorderThickness="2"
+                        CornerRadius="30"
+                        Padding="18"
+                        Margin="25,0,30,0" Cursor="">
+
+                    <Grid Cursor="" HorizontalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+
 
                         <StackPanel Grid.Row="0">
-                            <TextBlock Text="HORARIOS" FontSize="16"/>
+                            <TextBlock Text="Horarios" FontSize="20" Margin="10 0 0 0"
+                                       FontFamily="Segoe UI Semibold"  Height="40"
+                                       HorizontalAlignment="Center"/>
                         </StackPanel>
 
                         <!-- Día de inicio -->
-                        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="1"  Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                <TextBlock Text="Día Inicio" FontSize="16"/>
+                                <TextBlock Text="Día Inicio" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <DatePicker x:Name="dpRecDia" Height="28" FontSize="16"
-                                        FontFamily="Segoe UI Variable Display"/>
+                            <DatePicker Name="dpRecDia"
+                                             Style="{StaticResource DatePickerStyle}"
+                                             SelectedDateFormat="Short" Margin="10 0 0 0"/>
                         </StackPanel>
 
                         <!-- frecuencia-->
-                        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10">
+                        <StackPanel Grid.Row="2"  Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE121;"/>
-                                <TextBlock Text="Frecuencia" FontSize="16"/>
+                                <TextBlock Text="Frecuencia" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <ComboBox Style="{StaticResource ComboBoxStyle}" x:Name="cmbRecFrecuencia">
+                            <ComboBox Style="{StaticResource ComboBoxStyle}" Margin="10 0 0 0"
+                                      x:Name="cmbRecFrecuencia">
                                 <ComboBoxItem Content="2 horas" Tag="2"/>
                                 <ComboBoxItem Content="4 horas" Tag="4"/>
                                 <ComboBoxItem Content="6 horas" Tag="6"/>
@@ -379,44 +473,49 @@
                         </StackPanel>
 
                         <!-- Medicamento -->
-                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="10">
+                        <StackPanel Grid.Row="3" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center" >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE95E;"/>
-                                <TextBlock Text="Medicamento" FontSize="16"/>
+                                <TextBlock Text="Medicamento" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <TextBox x:Name="txtRecMedicamento" Height="28"/>
+                            <TextBox x:Name="txtRecMedicamento" />
                         </StackPanel>
 
                         <!-- Hora inicio -->
-                        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+                        <StackPanel Grid.Row="4" Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource IconoPequeno}" Text="&#xE787;"/>
-                                <TextBlock Text="Hora Inicio" FontSize="16"/>
+                                <TextBlock Text="Hora Inicio" FontSize="16" Width="100"/>
                             </StackPanel>
-                            <TextBox x:Name="txtRecHoraInicio" Height="28"/>
+                            <TextBox x:Name="txtRecHoraInicio" />
                         </StackPanel>
 
                         <!-- Botón Añadir Recordatorio -->
-                        <Button x:Name="btnAgregarRecordatorio"
-                                Grid.Row="3" Grid.ColumnSpan="1"
-                                Content="AÑADIR RECORDATORIO"
-                                Margin="0,10,0,0"
+                        <Button 
+                            x:Name="btnAgregarRecordatorio"
+                                Grid.Row="5"
+                                Content="Agregar Recordatorio"
+                                Margin="190 20 0 0"
+                                Width="200" Height="40"
+                                FontFamily="Segoe UI Semilight"
+                                FontSize="15"
                                 Style="{StaticResource BotonAgrandable}" 
                                 Click="Button_Click"
+                                HorizontalAlignment="Center"
                                 ToolTip="Agregar este recordatorio"/>
 
                         <!-- Botón Eliminar -->
                         <Button x:Name="btnEliminarRecordatorio"
-                                Grid.Row="3" Grid.ColumnSpan="2"
-                                Content="ELIMINAR"
-                                Margin="0 10 0 0"
-                                HorizontalAlignment="Right"
+                                Grid.Row="5" Grid.ColumnSpan="2"
+                                Content="Eliminar"
+                                Margin="0 20 300 0"
+                                Width="100" Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="Segoe UI Semilight"
+                                FontSize="15"
                                 Style="{StaticResource BotonAgrandable}" 
                                 ToolTip="Eliminar este recordatorio" 
                                 Click="btnEliminarRecordatorio_Click"/>
-
-
-
                     </Grid>
                 </Border>
             </Grid>
@@ -424,12 +523,12 @@
             <!-- Lista de Recordatorios (igual que antes, no requiere botón agrandable) -->
             <Border Grid.Row="3"
                     Background="White"
-                    BorderBrush="#0A204A"
-                    BorderThickness="2"
-                    CornerRadius="10"
-                    Padding="18" Margin="0,285,0,0" Grid.RowSpan="2">
 
-                <StackPanel>
+                    BorderThickness="2"
+                    CornerRadius="30"
+                    Padding="18" Margin="30,285,30,0" Grid.RowSpan="2" Cursor="">
+
+                <StackPanel Cursor="">
 
                     <TextBlock Text="RECORDATORIOS"
                    FontSize="20"/>
@@ -437,11 +536,12 @@
                     <TextBlock Text="Configura los días y horarios de Tomas"
                            FontSize="13"
                            Foreground="#555"
-                           Margin="0,0,0,14"/>
+                           Margin="0,0,0,14"
+                               Width="Auto"/>
 
                     <Border CornerRadius="10"
                         BorderBrush="#0A204A"
-                        BorderThickness="2"
+                        BorderThickness="1"
                         Padding="12">
 
                         <!-- ItemsControl para mostrar recordatorios-->
