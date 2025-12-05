@@ -53,6 +53,10 @@ namespace Front.INICIO
         /// Registra un nuevo Usuario SIN crear Paciente temporal.
         public void RegistrarUsuario(string username, string phone, string password)
         {
+            // VERIFICAR SI EL USUARIO YA EXISTE
+            if (UsuarioExiste(username))
+                throw new ArgumentException("ERROR: El nombre de usuario no está disponible.");
+
             // Generar hash de la contraseña
             byte[] hash = PasswordHelper.HashPassword(password);
             string hashHex = PasswordHelper.HashToHex(hash);
@@ -61,7 +65,7 @@ namespace Front.INICIO
             Random r = new Random();
             int nuevoID = r.Next(200, 999);
 
-            // Insertar solo Usuario, ci_paciente queda NULL hasta que complete MiCuenta
+            // Insertar solo Usuario
             string insertQuery = $@"
                 INSERT INTO Usuario (id_usuario, ci_paciente, nombre_usuario, contrasena_hash, estado)
                 VALUES ({nuevoID}, NULL, '{username}', {hashHex}, 1);
@@ -69,6 +73,34 @@ namespace Front.INICIO
 
             Database db = new Database();
             db.EjecutarComando(insertQuery);
+        }
+
+        public bool UsuarioExiste(string username)
+        {
+            string query = $@"
+                SELECT COUNT(*)
+                FROM Usuario
+                WHERE nombre_usuario = '{username}';";
+
+            Database db = new Database();
+            var tabla = db.EjecutarConsulta(query);
+            int count = Convert.ToInt32(tabla.Rows[0][0]);
+
+            return count > 0;
+        }
+        public bool CIPacienteExiste(string ciPaciente)
+        {
+            string query = $@"
+            SELECT COUNT(*)
+            FROM Usuario
+            WHERE ci_paciente = '{ciPaciente}';
+            ";
+
+            Database db = new Database();
+            var tabla = db.EjecutarConsulta(query);
+            int count = Convert.ToInt32(tabla.Rows[0][0]);
+
+            return count > 0;
         }
     }
 }

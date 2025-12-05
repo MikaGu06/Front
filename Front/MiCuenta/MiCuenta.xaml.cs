@@ -342,7 +342,21 @@ namespace Front.MiCuenta
                 // 2) Validar datos
                 ValidacionesMiCuenta.CuentaValidar(usuario);
 
-                // 3) Guardar en sesión
+                // 3️⃣ Validar que el CI no esté repetido
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM Paciente WHERE ci_paciente = @ci", conn))
+                {
+                    cmd.Parameters.AddWithValue("@ci", usuario.CI);
+                    conn.Open();
+                    int count = (int)cmd.ExecuteScalar();
+                    if (count > 0)
+                    {
+                        throw new ArgumentException("El CI ingresado ya está registrado. Por favor, ingrese otro CI.");
+                    }
+                }
+
+                // 4) Guardar en sesión
                 SesionUsuario.NombreUsuario = usuario.Usuario;
                 SesionUsuario.Contrasena = usuario.Contrasena;
                 SesionUsuario.Telefono = usuario.Telefono;
@@ -355,10 +369,10 @@ namespace Front.MiCuenta
                 SesionUsuario.CI = usuario.CI;
                 SesionUsuario.FotoPerfil = fotoPerfilActual;
 
-                // 4) Crear o actualizar Paciente
+                // 5) Crear o actualizar Paciente
                 GuardarPacienteDesdeMiCuenta(usuario);
 
-                // 5) Bloquear de nuevo el formulario
+                // 6) Bloquear formulario de nuevo
                 FormularioDatos.IsEnabled = false;
                 BtnGuardar.IsEnabled = false;
                 BtnModificar.IsEnabled = true;
@@ -386,6 +400,7 @@ namespace Front.MiCuenta
                     MessageBoxImage.Error);
             }
         }
+
 
         /// Permite seleccionar y actualizar la foto de perfil.
         private void BtnCambiarFoto_Click(object sender, RoutedEventArgs e)
@@ -629,16 +644,15 @@ namespace Front.MiCuenta
                             // Insertar nuevo Paciente
                             using (SqlCommand cmdInsertPac = new SqlCommand(
                                 @"INSERT INTO Paciente
-                                  (ci_paciente, id_tipo_sangre, id_centro, correo, nombre_completo,
+                                  (ci_paciente, id_tipo_sangre, correo, nombre_completo,
                                    celular, direccion, sexo, foto_perfil, fecha_nacimiento)
-                                  VALUES (@ci, @idTipo, @idCentro, @correo, @nombre,
+                                  VALUES (@ci, @idTipo, @correo, @nombre,
                                           @cel, @dir, @sexo, @foto, @fecha)",
                                 conn, tx))
                             {
                                 cmdInsertPac.Parameters.AddWithValue("@ci", ciNumerico);
                                 cmdInsertPac.Parameters.AddWithValue("@idTipo", idTipo);
-                                // id_centro por defecto = 1 (ajustar según tu BD)
-                                cmdInsertPac.Parameters.AddWithValue("@idCentro", 1);
+                                
                                 cmdInsertPac.Parameters.AddWithValue("@correo", correo);
                                 cmdInsertPac.Parameters.AddWithValue("@nombre", nombre);
                                 cmdInsertPac.Parameters.AddWithValue("@cel", telefono);
